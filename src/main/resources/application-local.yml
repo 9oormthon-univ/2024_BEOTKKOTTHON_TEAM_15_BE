@@ -1,0 +1,38 @@
+spring:
+  config:
+    activate:
+      on-profile: local # 환경이름설정
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${DB_URL_LOCAL}
+    username: ${DB_USERNAME_LOCAL}
+    password: ${DB_PW_LOCAL}
+
+
+## JWT Setting
+# echo 'spring-backend-beotkkotthon-newsletter-project-security-jwt-secret-keyyy' | base64
+jwt:
+  secret: ${JWT_SECRET}
+
+# aws
+cloud:
+  aws:
+    credentials:
+      accessKey: ${AWS_ACCESS_KEY}
+      secretKey: ${AWS_SECRET_KEY}
+    s3:
+      bucket: beotkkotthon-s3
+    region:
+      static: ap-northeast-2
+      auto: false
+    stack:
+      auto: false

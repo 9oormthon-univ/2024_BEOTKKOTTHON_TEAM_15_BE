@@ -1,0 +1,28 @@
+## Spring Setting
+spring:
+  application:
+    name: Newsletter_BE
+  profiles:
+    active: prod  # local or prod
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+## Logging Setting
+logging:
+  level:
+    beotkkotthon.Newsletter_BE: debug
+
+## Swagger Setting
+springdoc:
+  packages-to-scan: beotkkotthon.Newsletter_BE.web.controller
+  default-consumes-media-type: application/json;charset=UTF-8
+  default-produces-media-type: application/json;charset=UTF-8
+  swagger-ui:
+    path: /
+    # true: show Checking API response time
+    disable-swagger-default-url: true
+    display-request-duration: false
+    # alpha: sort by Alphabet, method: sort by HTTP status code
+    operations-sorter: method
+  writer-with-default-pretty-printer: true
