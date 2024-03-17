@@ -2,6 +2,7 @@ package beotkkotthon.Newsletter_BE.web.dto.request;
 
 import beotkkotthon.Newsletter_BE.domain.Member;
 import beotkkotthon.Newsletter_BE.domain.enums.Authority;
+import beotkkotthon.Newsletter_BE.domain.enums.NoticeStatus;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,6 +29,8 @@ public class MemberSignupRequestDto {
                 .password(passwordEncoder.encode(password))
                 .username(username)
                 .authority(Authority.ROLE_USER)
+                .imageUrl("__null__")
+                .noticeStatus(NoticeStatus.ACCEPTED)
                 .build();
     }
 }
