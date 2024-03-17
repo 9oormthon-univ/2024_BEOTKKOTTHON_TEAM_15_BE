@@ -24,7 +24,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @Slf4j
-@RestControllerAdvice(annotations = {RestController.class})
+@RestControllerAdvice(annotations = {RestController.class})  // REST 컨트롤러에서 발생하는 예외를 처리.
 public class ExceptionAdvice extends ResponseEntityExceptionHandler {
 
 
