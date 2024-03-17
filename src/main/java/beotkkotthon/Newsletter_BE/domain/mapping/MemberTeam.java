@@ -1,7 +1,6 @@
-package beotkkotthon.Newsletter_BE.domain;
+package beotkkotthon.Newsletter_BE.domain.mapping;
 
 import beotkkotthon.Newsletter_BE.domain.common.BaseEntity;
-import beotkkotthon.Newsletter_BE.domain.enums.Authority;
 import beotkkotthon.Newsletter_BE.domain.enums.RequestRole;
 import jakarta.persistence.*;
 import lombok.Getter;
