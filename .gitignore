@@ -35,9 +35,3 @@ out/
 
 ### VS Code ###
 .vscode/
-
-### mysql & jwt & swagger
-**/application-mysql.properties
-**/application-jwt.properties
-**/application-swagger.properties
-**/application-s3.properties
