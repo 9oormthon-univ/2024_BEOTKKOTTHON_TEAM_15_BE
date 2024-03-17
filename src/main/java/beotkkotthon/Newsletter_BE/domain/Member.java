@@ -29,14 +29,14 @@ public class Member extends BaseEntity implements Serializable {
     private String username;
 
     @Enumerated(EnumType.STRING)
-    private Authority authority;
+    private Authority authority;  // 초기값: ROLE_USER
 
     @Column(name = "image_url", columnDefinition = "TEXT")
-    private String imageUrl;
+    private String imageUrl;  // 초기값: __null__
 
     @Column(name = "notice_status")
     @Enumerated(EnumType.STRING)
-    private NoticeStatus noticeStatus;
+    private NoticeStatus noticeStatus;  // 초기값: ACCEPTED
 
 
     @Builder
