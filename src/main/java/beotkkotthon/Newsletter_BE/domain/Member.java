@@ -1,5 +1,6 @@
 package beotkkotthon.Newsletter_BE.domain;
 
+import beotkkotthon.Newsletter_BE.domain.common.BaseEntity;
 import beotkkotthon.Newsletter_BE.domain.enums.Authority;
 import jakarta.persistence.*;
 import lombok.Builder;
@@ -13,7 +14,7 @@ import java.io.Serializable;
 
 @Table(name = "member")
 @Entity
-public class Member implements Serializable {
+public class Member extends BaseEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
