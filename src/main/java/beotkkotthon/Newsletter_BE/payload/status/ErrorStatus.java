@@ -13,11 +13,21 @@ import java.util.function.Predicate;
 @RequiredArgsConstructor
 public enum ErrorStatus implements BaseErrorCode {
 
+    // Common_Error
     BAD_REQUEST(HttpStatus.BAD_REQUEST, "COMMON4000", "Bad request"),
     VALIDATION_ERROR(HttpStatus.BAD_REQUEST, "COMMON4001",  "Validation error"),
     NOT_FOUND(HttpStatus.NOT_FOUND, "COMMON4002", "Requested resource not found"),
     INTERNAL_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "COMMON5000",  "Internal error"),
-    DATA_ACCESS_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "COMMON5001",  "Data access error");
+    DATA_ACCESS_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "COMMON5001",  "Data access error"),
+
+    // Member_Error
+    EMAIL_ALREADY_EXISTS(HttpStatus.BAD_REQUEST, "MEMBER4000", "Email already exists"),
+
+    // Token Error
+    INVALID_TOKEN(HttpStatus.BAD_REQUEST,"TOKEN4000", "Invalid token"),
+
+    // Security Error
+    NOT_FOUND_CONTEXT(HttpStatus.NOT_FOUND,"Security4000", "SecurityContext not found");
 
     private final HttpStatus httpStatus;
     private final String code;
