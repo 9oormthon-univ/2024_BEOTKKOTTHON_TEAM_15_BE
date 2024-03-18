@@ -56,7 +56,7 @@ public class WebSecurityConfig {  // 스프링 시큐리티 구성요소 설정 
                         authorizeRequests
                                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                                 // .requestMatchers("/", "/login", "/signup", "/swagger-ui/**").permitAll()
-                                .requestMatchers("/**").permitAll()
+                                .requestMatchers("/**").permitAll()  // 개발초기때는 이걸로 사용. 차후 위의 주석 코드로 변경 및 추가할것.
                                 .anyRequest().authenticated()
                 )
 
