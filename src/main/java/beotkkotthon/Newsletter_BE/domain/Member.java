@@ -39,13 +39,6 @@ public class Member extends BaseEntity implements Serializable {
     private NoticeStatus noticeStatus;  // 초기값: ALLOW
 
 
-    @Builder
-    public Member(Long id, String email, String username) {
-        this.id = id;
-        this.email = email;
-        this.username = username;
-    }
-
     @Builder(builderClassName = "MemberJoinBuilder", builderMethodName = "MemberJoinBuilder")
     public Member(String email, String password, String username, Authority authority, String imageUrl, NoticeStatus noticeStatus) {
         // 이 빌더는 사용자 회원가입때만 사용할 용도
