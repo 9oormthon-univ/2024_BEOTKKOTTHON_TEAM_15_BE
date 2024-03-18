@@ -32,6 +32,6 @@ public class Team extends BaseEntity implements Serializable {
     @Column(name = "image_url", columnDefinition = "TEXT")
     private String imageUrl;  // 초기값: __null__
 
-    @Column(length = 100)
+    @Column(length = 200)
     private String link;
 }
