@@ -30,7 +30,7 @@ public class MemberSignupRequestDto {
                 .username(username)
                 .authority(Authority.ROLE_USER)
                 .imageUrl("__null__")
-                .noticeStatus(NoticeStatus.ACCEPTED)
+                .noticeStatus(NoticeStatus.ALLOW)
                 .build();
     }
 }

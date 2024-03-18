@@ -36,7 +36,7 @@ public class Member extends BaseEntity implements Serializable {
 
     @Column(name = "notice_status")
     @Enumerated(EnumType.STRING)
-    private NoticeStatus noticeStatus;  // 초기값: ACCEPTED
+    private NoticeStatus noticeStatus;  // 초기값: ALLOW
 
 
     @Builder

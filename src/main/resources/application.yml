@@ -3,7 +3,7 @@ spring:
   application:
     name: Newsletter_BE
   profiles:
-    active: local  # local or prod
+    active: prod  # local or prod
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
