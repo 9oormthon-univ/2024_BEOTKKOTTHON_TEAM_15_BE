@@ -20,17 +20,9 @@ public class TeamServiceImpl implements TeamService {
 
     private final TeamRepository teamRepository;
 
-
-    @Transactional(readOnly = true)
     @Override
-    public List<NewsResponseDto> findNewssByTeam(Long teamId) {
-
-        Team team = teamRepository.findById(teamId).orElseThrow(
+    public Team findById(Long id) {
+        return teamRepository.findById(id).orElseThrow(
                 () -> new GeneralException(ErrorStatus.TEAM_NOT_FOUND));
-        List<NewsResponseDto> newsResponseDtos = team.getNewsList().stream().map(NewsResponseDto::new)
-                .sorted(Comparator.comparing(NewsResponseDto::getModifiedTime, Comparator.reverseOrder()))  // 수정시각 기준 내림차순 정렬
-                .collect(Collectors.toList());
-
-        return newsResponseDtos;
     }
 }
