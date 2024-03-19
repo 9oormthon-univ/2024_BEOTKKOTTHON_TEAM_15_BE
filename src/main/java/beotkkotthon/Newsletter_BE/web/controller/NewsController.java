@@ -9,7 +9,9 @@ import beotkkotthon.Newsletter_BE.web.dto.response.MemberResponseDto;
 import beotkkotthon.Newsletter_BE.web.dto.response.NewsResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -21,8 +23,12 @@ public class NewsController {
 
 
     @PostMapping("/teams/{teamId}/news")
-    public ApiResponse<NewsResponseDto> createNews(@PathVariable Long teamId, @RequestBody NewsSaveRequestDto newsSaveRequestDto) {
-        NewsResponseDto newsResponseDto = newsService.createNews(teamId, newsSaveRequestDto);
+    public ApiResponse<NewsResponseDto> createNews(
+            @PathVariable Long teamId,
+            @RequestPart(value = "image1", required = false) MultipartFile image1,
+            @RequestPart(value = "image2", required = false) MultipartFile image2,
+            @RequestPart NewsSaveRequestDto newsSaveRequestDto) throws IOException {
+        NewsResponseDto newsResponseDto = newsService.createNews(teamId, image1, image2, newsSaveRequestDto);
         return ApiResponse.onCreate(newsResponseDto);
     }
 

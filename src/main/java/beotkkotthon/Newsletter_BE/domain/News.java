@@ -31,6 +31,12 @@ public class News extends BaseEntity implements Serializable {
     @Column(name = "limit_time")
     private LocalDateTime limitTime;
 
+    @Column(name = "image_url1", columnDefinition = "TEXT")
+    private String imageUrl1; // 초기값: __null__
+
+    @Column(name = "image_url2", columnDefinition = "TEXT")
+    private String imageUrl2; // 초기값: __null__
+
     @ManyToOne(fetch = FetchType.LAZY)  // Team-News 양방향매핑
     @JoinColumn(name = "team_id")
     private Team team;
@@ -45,7 +51,7 @@ public class News extends BaseEntity implements Serializable {
 
 
     @Builder(builderClassName = "NewsSaveBuilder", builderMethodName = "NewsSaveBuilder")
-    public News(String title, String content, Integer minute, Team team) {
+    public News(String title, String content, Integer minute, String imageUrl1, String imageUrl2, Team team) {
         // 이 빌더는 가정통신문 생성때만 사용할 용도
         this.title = title;
         this.content = content;
@@ -53,6 +59,9 @@ public class News extends BaseEntity implements Serializable {
         LocalDateTime currentTime = LocalDateTime.now();
         LocalDateTime resultTime = currentTime.plusMinutes(minute);
         this.limitTime = resultTime;
+
+        this.imageUrl1 = imageUrl1;
+        this.imageUrl2 = imageUrl2;
 
         this.team = team;
         // changeTeam(team);
