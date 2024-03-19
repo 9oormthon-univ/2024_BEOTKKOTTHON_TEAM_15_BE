@@ -60,8 +60,12 @@ public class TeamServiceImpl implements TeamService {
     public List<TeamResponseDto> searchTeam(String name) {
         List<Team> teams = teamRepository.findByNameContaining(name);
         return teams.stream().map(TeamResponseDto::new)
-                .sorted(Comparator.comparing(TeamResponseDto::getName))  // 이름 오름차순 정렬 후
-                .sorted(Comparator.comparing(TeamResponseDto::getCreatedTime, Comparator.reverseOrder()))  // 그룹 생성날짜 내림차순 정렬
-                .collect(Collectors.toList());  // 정렬 완료한 리스트 반환
+                .sorted(Comparator.comparing(TeamResponseDto::getId, Comparator.reverseOrder()))  // id 내림차순 정렬 후 (최신 생성순)
+                .sorted(Comparator.comparing(TeamResponseDto::getName))  // 이름 오름차순 정렬 (이름순)
+                .collect(Collectors.toList());  // 정렬 완료한 리스트 반환 (연속sorted 정렬은 마지막 순서의 기준이 가장 주요된 기준임.)
+//        return teams.stream().map(TeamResponseDto::new)
+//                .sorted(Comparator.comparing(TeamResponseDto::getName)
+//                        .thenComparing(TeamResponseDto::getId, Comparator.reverseOrder()))
+//                .collect(Collectors.toList());
     }
 }

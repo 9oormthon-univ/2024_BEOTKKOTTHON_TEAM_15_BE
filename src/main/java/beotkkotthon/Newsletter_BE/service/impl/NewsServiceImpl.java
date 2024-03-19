@@ -48,8 +48,9 @@ public class NewsServiceImpl implements NewsService {
 
         Team team = teamService.findById(teamId);
         List<NewsResponseDto> newsResponseDtos = team.getNewsList().stream().map(NewsResponseDto::new)
-                .sorted(Comparator.comparing(NewsResponseDto::getModifiedTime, Comparator.reverseOrder()))  // 수정시각 기준 내림차순 정렬
-                .collect(Collectors.toList());
+                .sorted(Comparator.comparing(NewsResponseDto::getId))  // id 내림차순 정렬 후 (최신 생성순)
+                .sorted(Comparator.comparing(NewsResponseDto::getModifiedTime, Comparator.reverseOrder()))  // 수정날짜 내림차순 정렬 (최신 수정순)
+                .collect(Collectors.toList());  // 정렬 완료한 리스트 반환 (연속sorted 정렬은 마지막 순서의 기준이 가장 주요된 기준임.)
 
         return newsResponseDtos;
     }
