@@ -16,7 +16,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 
-@Table(indexes = {@Index(name = "team_name_idx", columnList = "name")})  // 그룹이름 검색의 성능 향상을 위해, name컬럼에 DB Indexing 적용.
+@Table(indexes = {@Index(name = "team_name_idx", columnList = "name")})  // 그룹이름 검색의 성능 향상을 위해, name컬럼에 DB Indexing 적용. (인덱싱 관련해서는 나중에 리팩토링 할것.)
 @Entity
 public class Team extends BaseEntity implements Serializable {
 

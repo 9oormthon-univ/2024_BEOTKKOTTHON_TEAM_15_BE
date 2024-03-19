@@ -54,4 +54,14 @@ public class TeamServiceImpl implements TeamService {
 
         return new TeamResponseDto(team);
     }
+
+    @Transactional
+    @Override
+    public List<TeamResponseDto> searchTeam(String name) {
+        List<Team> teams = teamRepository.findByNameContaining(name);
+        return teams.stream().map(TeamResponseDto::new)
+                .sorted(Comparator.comparing(TeamResponseDto::getName))  // 이름 오름차순 정렬 후
+                .sorted(Comparator.comparing(TeamResponseDto::getCreatedTime, Comparator.reverseOrder()))  // 그룹 생성날짜 내림차순 정렬
+                .collect(Collectors.toList());  // 정렬 완료한 리스트 반환
+    }
 }

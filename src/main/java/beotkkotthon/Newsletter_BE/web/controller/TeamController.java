@@ -29,4 +29,10 @@ public class TeamController {
         TeamResponseDto teamResponseDto = teamService.createTeam(image, teamSaveRequestDto);
         return ApiResponse.onCreate(teamResponseDto);
     }
+
+    @GetMapping("/teams")
+    public ApiResponse<List<TeamResponseDto>> searchTeam(@RequestParam(value = "name", required = true) String name) {
+        List<TeamResponseDto> teamResponseDtos = teamService.searchTeam(name);
+        return ApiResponse.onSuccess(teamResponseDtos);
+    }
 }

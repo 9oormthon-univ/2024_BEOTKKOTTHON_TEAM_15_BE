@@ -13,4 +13,5 @@ public interface TeamService {
     Team findById(Long id);
 
     TeamResponseDto createTeam(MultipartFile image, TeamSaveRequestDto teamSaveRequestDto) throws IOException;
+    List<TeamResponseDto> searchTeam(String name);
 }
