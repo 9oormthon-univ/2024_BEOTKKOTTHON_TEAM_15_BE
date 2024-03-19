@@ -1,18 +1,20 @@
 package beotkkotthon.Newsletter_BE.domain;
 
 import beotkkotthon.Newsletter_BE.domain.common.BaseEntity;
-import beotkkotthon.Newsletter_BE.domain.enums.Authority;
-import beotkkotthon.Newsletter_BE.domain.enums.NoticeStatus;
+import beotkkotthon.Newsletter_BE.domain.mapping.MemberTeam;
+import beotkkotthon.Newsletter_BE.domain.mapping.Participation;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
 
-@Table(name = "team")
+@Table(indexes = {@Index(name = "team_name_idx", columnList = "name")})  // 그룹이름 검색의 성능 향상을 위해, name컬럼에 DB Indexing 적용.
 @Entity
 public class Team extends BaseEntity implements Serializable {
 
@@ -34,4 +36,16 @@ public class Team extends BaseEntity implements Serializable {
 
     @Column(length = 200)
     private String link;
+
+    // (읽기 전용 필드) mappedBy만 사용으로, 조회 용도로만 가능. JPA는 insert나 update할 때 읽기 전용 필드를 아예 보지 않아서, 값을 넣어도 아무일도 일어나지않음.
+    @OneToMany(mappedBy = "team")  // Team-News 양방향매핑
+    private List<News> newsList = new ArrayList<>();
+
+    // (읽기 전용 필드)
+    @OneToMany(mappedBy = "team")  // Team-Participation 양방향매핑
+    private List<Participation> participationList = new ArrayList<>();
+
+    // (읽기 전용 필드)
+    @OneToMany(mappedBy = "team")  // Team-MemberTeam 양방향매핑
+    private List<MemberTeam> memberTeamList = new ArrayList<>();
 }

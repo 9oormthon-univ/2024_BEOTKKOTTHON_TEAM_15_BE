@@ -1,9 +1,7 @@
 package beotkkotthon.Newsletter_BE.domain;
 
 import beotkkotthon.Newsletter_BE.domain.common.BaseEntity;
-import beotkkotthon.Newsletter_BE.domain.enums.Authority;
 import beotkkotthon.Newsletter_BE.domain.enums.CheckStatus;
-import beotkkotthon.Newsletter_BE.domain.enums.NoticeStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,4 +25,12 @@ public class NewsCheck extends BaseEntity implements Serializable {
 
     @Column(name = "check_time", columnDefinition = "BIGINT default 0")
     private Long checkTime;  // 초기값: 0
+
+    @OneToOne(fetch = FetchType.LAZY)  // Member-NewsCheck 단방향매핑 (Member에서 NewsCheck를 조회할 경우가 딱히 없기 때문.) (자식 엔티티)
+    @JoinColumn(name = "member_id")
+    private Member member;
+
+    @ManyToOne(fetch = FetchType.LAZY)  // News-NewsCheck 양방향매핑 (News에서 NewsCheck를 조회하기 때문.)
+    @JoinColumn(name = "news_id")
+    private News news;
 }
