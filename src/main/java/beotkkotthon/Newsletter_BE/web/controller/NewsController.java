@@ -1,5 +1,6 @@
 package beotkkotthon.Newsletter_BE.web.controller;
 
+import beotkkotthon.Newsletter_BE.converter.NewsConverter;
 import beotkkotthon.Newsletter_BE.domain.News;
 import beotkkotthon.Newsletter_BE.payload.ApiResponse;
 import beotkkotthon.Newsletter_BE.service.NewsService;
@@ -31,6 +32,13 @@ public class NewsController {
             @RequestPart NewsSaveRequestDto newsSaveRequestDto) throws IOException {
         NewsResponseDto newsResponseDto = newsService.createNews(teamId, memberId, image1, image2, newsSaveRequestDto);
         return ApiResponse.onCreate(newsResponseDto);
+    }
+
+    @GetMapping("/teams/news")
+    @Operation(summary = "미확인 가정통신문 목록 모두 조회(확인/미확인 구별X)")
+    public ApiResponse <NewsResponseDto.ShowNewsListDto> findAllNews() {
+        List<News> newsList = newsService.findAll();
+        return ApiResponse.onSuccess(NewsConverter.toShowNewsDtoList(newsList));
     }
 
     @GetMapping("/teams/{teamId}/news")

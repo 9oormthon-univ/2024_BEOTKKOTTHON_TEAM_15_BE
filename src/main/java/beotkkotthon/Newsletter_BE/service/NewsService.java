@@ -12,11 +12,11 @@ public interface NewsService {
 
     News findById(Long newsId);
 
+    List<News> findAll();
+
     NewsResponseDto createNews(Long teamId, Long memberId, MultipartFile image1, MultipartFile image2, NewsSaveRequestDto newsSaveRequestDto) throws IOException;
 
     List<NewsResponseDto> findNewsByTeam(Long teamId);
-
-    List<News> findAllNews();
 
     NewsResponseDto.ShowNewsDto getShowNewsDto(Long teamId, Long newsId);
 }

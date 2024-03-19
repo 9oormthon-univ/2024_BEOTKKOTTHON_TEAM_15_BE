@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -48,4 +49,11 @@ public class NewsResponseDto {
         LocalDateTime limitTime;
     }
 
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class ShowNewsListDto {
+        List<ShowNewsDto> showNewsDtoList;
+    }
 }
