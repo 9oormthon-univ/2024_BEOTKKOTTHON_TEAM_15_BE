@@ -1,5 +1,6 @@
 package beotkkotthon.Newsletter_BE.web.dto.request;
 
+import beotkkotthon.Newsletter_BE.domain.Member;
 import beotkkotthon.Newsletter_BE.domain.News;
 import beotkkotthon.Newsletter_BE.domain.Team;
 import lombok.Builder;
@@ -21,13 +22,14 @@ public class NewsSaveRequestDto {
         this.minute = minute;
     }
 
-    public News toEntity(Team team, String imageUrl1, String imageUrl2) {
+    public News toEntity(Member member, Team team, String imageUrl1, String imageUrl2) {
         return News.NewsSaveBuilder()
                 .title(title)
                 .content(content)
                 .minute(minute)
                 .imageUrl1(imageUrl1)
                 .imageUrl2(imageUrl2)
+                .member(member)
                 .team(team)
                 .build();
     }

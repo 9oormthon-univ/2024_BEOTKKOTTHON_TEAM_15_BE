@@ -22,10 +22,13 @@ public enum ErrorStatus implements BaseErrorCode {
 
     // Member_Error
     EMAIL_ALREADY_EXISTS(HttpStatus.BAD_REQUEST, "MEMBER4000", "Email already exists"),
+    MEMBER_NOT_FOUND(HttpStatus.BAD_REQUEST, "MEMBER4001","MEMBER not found"),
 
     // Team Error
     TEAM_NOT_FOUND(HttpStatus.BAD_REQUEST, "TEAM4000", "TEAM not found"),
 
+    //
+    NEWS_NOT_FOUND(HttpStatus.BAD_REQUEST, "NEWS4000", "News not found"),
     // Token Error
     INVALID_TOKEN(HttpStatus.BAD_REQUEST,"TOKEN4000", "Invalid token"),
 
