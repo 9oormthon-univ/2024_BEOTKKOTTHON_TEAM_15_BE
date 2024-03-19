@@ -13,13 +13,4 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 public class TeamController {
-
-    private final TeamService teamService;
-
-
-    @GetMapping("/team/{teamId}/news")
-    public ApiResponse<List<NewsResponseDto>> findNewssByTeam(@PathVariable Long teamId) {
-        List<NewsResponseDto> newsResponseDtos = teamService.findNewssByTeam(teamId);
-        return ApiResponse.onSuccess(newsResponseDtos);
-    }
 }
