@@ -21,11 +21,13 @@ public class NewsSaveRequestDto {
         this.minute = minute;
     }
 
-    public News toEntity(Team team) {
+    public News toEntity(Team team, String imageUrl1, String imageUrl2) {
         return News.NewsSaveBuilder()
                 .title(title)
                 .content(content)
                 .minute(minute)
+                .imageUrl1(imageUrl1)
+                .imageUrl2(imageUrl2)
                 .team(team)
                 .build();
     }
