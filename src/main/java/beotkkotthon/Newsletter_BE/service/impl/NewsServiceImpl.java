@@ -3,14 +3,14 @@ package beotkkotthon.Newsletter_BE.service.impl;
 import beotkkotthon.Newsletter_BE.converter.NewsConverter;
 import beotkkotthon.Newsletter_BE.domain.Member;
 import beotkkotthon.Newsletter_BE.domain.News;
+import beotkkotthon.Newsletter_BE.domain.NewsCheck;
 import beotkkotthon.Newsletter_BE.domain.Team;
+import beotkkotthon.Newsletter_BE.domain.enums.CheckStatus;
 import beotkkotthon.Newsletter_BE.payload.exception.GeneralException;
 import beotkkotthon.Newsletter_BE.payload.status.ErrorStatus;
+import beotkkotthon.Newsletter_BE.repository.NewsCheckRepository;
 import beotkkotthon.Newsletter_BE.repository.NewsRepository;
-import beotkkotthon.Newsletter_BE.service.ImageUploadService;
-import beotkkotthon.Newsletter_BE.service.MemberService;
-import beotkkotthon.Newsletter_BE.service.NewsService;
-import beotkkotthon.Newsletter_BE.service.TeamService;
+import beotkkotthon.Newsletter_BE.service.*;
 import beotkkotthon.Newsletter_BE.web.dto.request.NewsSaveRequestDto;
 import beotkkotthon.Newsletter_BE.web.dto.response.NewsResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +31,7 @@ public class NewsServiceImpl implements NewsService {
     private final ImageUploadService imageUploadService;
     private final TeamService teamService;
     private final MemberService memberService;
+    private final NewsCheckRepository newsCheckRepository;
 
     @Override
     public News findById(Long newsId) {
@@ -51,7 +52,25 @@ public class NewsServiceImpl implements NewsService {
         String imageUrl1 = imageUploadService.uploadImage(image1);
         String imageUrl2 = imageUploadService.uploadImage(image2);
         News news = newsSaveRequestDto.toEntity(member, team, imageUrl1, imageUrl2);
+
         newsRepository.save(news);
+
+//         나중에 멤버팀 테이블에서 멤버 리스트 불러옴 -> 각 멤버의 NewsCheck 테이블 생성
+//        memberTeamRepository.findMembersByTeam(team)
+//                .stream()
+//                .map(m -> NewsCheck.NewsCheckCreateBuilder()
+//                        .checkStatus(CheckStatus.NOT_READ)
+//                        .member(m)
+//                        .news(news)
+//                        .build())
+//                .forEach(newsCheckRepository::save);
+
+        NewsCheck newsCheck = NewsCheck.NewsCheckCreateBuilder()
+                .checkStatus(CheckStatus.NOT_READ)
+                .member(member)
+                .news(news)
+                .build();
+        newsCheckRepository.save(newsCheck);
 
         return new NewsResponseDto(news);
     }

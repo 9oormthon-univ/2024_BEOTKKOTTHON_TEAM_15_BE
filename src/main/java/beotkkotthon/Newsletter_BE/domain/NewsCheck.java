@@ -3,6 +3,7 @@ package beotkkotthon.Newsletter_BE.domain;
 import beotkkotthon.Newsletter_BE.domain.common.BaseEntity;
 import beotkkotthon.Newsletter_BE.domain.enums.CheckStatus;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -10,7 +11,6 @@ import java.io.Serializable;
 
 @Getter
 @NoArgsConstructor
-
 @Table(name = "news_check")
 @Entity
 public class NewsCheck extends BaseEntity implements Serializable {
@@ -33,4 +33,18 @@ public class NewsCheck extends BaseEntity implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)  // News-NewsCheck 양방향매핑 (News에서 NewsCheck를 조회하기 때문.)
     @JoinColumn(name = "news_id")
     private News news;
+
+
+    @Builder(builderClassName = "NewsCheckCreateBuilder", builderMethodName = "NewsCheckCreateBuilder")
+    public NewsCheck (CheckStatus checkStatus, Member member, News news, Long checkTime) {
+        this.checkStatus = CheckStatus.NOT_READ;
+        this.member = member;
+        this.news = news;
+        this.checkTime = checkTime;
+    }
+
+    public NewsCheck updateStatus(CheckStatus updatedStatus) {
+        this.checkStatus = updatedStatus;
+        return this;
+    }
 }

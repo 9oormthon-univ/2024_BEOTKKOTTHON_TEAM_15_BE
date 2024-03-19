@@ -3,6 +3,7 @@ package beotkkotthon.Newsletter_BE.web.controller;
 import beotkkotthon.Newsletter_BE.converter.NewsConverter;
 import beotkkotthon.Newsletter_BE.domain.News;
 import beotkkotthon.Newsletter_BE.payload.ApiResponse;
+import beotkkotthon.Newsletter_BE.service.NewsCheckService;
 import beotkkotthon.Newsletter_BE.service.NewsService;
 import beotkkotthon.Newsletter_BE.web.dto.request.NewsSaveRequestDto;
 import beotkkotthon.Newsletter_BE.web.dto.response.NewsResponseDto;
@@ -20,12 +21,13 @@ import java.util.List;
 public class NewsController {
 
     private final NewsService newsService;
+    private final NewsCheckService newsCheckService;
 
 
     @PostMapping("/teams/{teamId}/news")
     @Operation(summary = "가정통신문 발행")
     public ApiResponse<NewsResponseDto> createNews(
-            @PathVariable Long teamId,
+            @PathVariable(name = "teamId") Long teamId,
             @RequestPart(value = "memberId", required = true) Long memberId,
             @RequestPart(value = "image1", required = false) MultipartFile image1,
             @RequestPart(value = "image2", required = false) MultipartFile image2,
@@ -43,16 +45,17 @@ public class NewsController {
 
     @GetMapping("/teams/{teamId}/news")
     @Operation(summary = "팀별 가정통신문 조회")
-    public ApiResponse<List<NewsResponseDto>> findNewsByTeam(@PathVariable Long teamId) {
+    public ApiResponse<List<NewsResponseDto>> findNewsByTeam(@PathVariable(name = "teamId") Long teamId) {
         List<NewsResponseDto> newsResponseDtos = newsService.findNewsByTeam(teamId);
         return ApiResponse.onSuccess(newsResponseDtos);
     }
 
     @GetMapping("/teams/{teamId}/news/{newsId}")
     @Operation(summary = "가정통신문 상세 조회")
-    public ApiResponse<NewsResponseDto.ShowNewsDto> findNewsById(@PathVariable Long teamId, @PathVariable Long newsId) {
+    public ApiResponse<NewsResponseDto.ShowNewsDto> findNewsById( @RequestPart(name = "memberId") Long memberId,
+                                                                  @PathVariable(name = "teamId") Long teamId,
+                                                                  @PathVariable(name = "newsId") Long newsId) {
+        newsCheckService.readNews(memberId, newsId);
         return ApiResponse.onSuccess(newsService.getShowNewsDto(teamId, newsId));
     }
-
-
 }
