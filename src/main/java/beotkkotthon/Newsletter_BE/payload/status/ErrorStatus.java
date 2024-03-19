@@ -21,7 +21,8 @@ public enum ErrorStatus implements BaseErrorCode {
     DATA_ACCESS_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "COMMON5001",  "Data access error"),
 
     // Member_Error
-    EMAIL_ALREADY_EXISTS(HttpStatus.BAD_REQUEST, "MEMBER4000", "Email already exists"),
+    MEMBER_NOT_FOUND(HttpStatus.BAD_REQUEST, "MEMBER4000", "MEMBER not found"),
+    EMAIL_ALREADY_EXISTS(HttpStatus.BAD_REQUEST, "MEMBER4001", "Email already exists"),
 
     // Team Error
     TEAM_NOT_FOUND(HttpStatus.BAD_REQUEST, "TEAM4000", "TEAM not found"),

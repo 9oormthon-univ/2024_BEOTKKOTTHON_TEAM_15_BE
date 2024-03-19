@@ -31,8 +31,11 @@ public class TeamController {
     }
 
     @GetMapping("/teams")
-    public ApiResponse<List<TeamResponseDto>> searchTeam(@RequestParam(value = "name", required = true) String name) {
-        List<TeamResponseDto> teamResponseDtos = teamService.searchTeam(name);
+    public ApiResponse<List<TeamResponseDto>> findTeamsByMember(  // 그룹명 검색 or 초대링크 클릭 or 내가 가입한 팀 목록 조회
+            @RequestParam(value = "name", required = false) String name,
+            @RequestParam(value = "link", required = false) String link) {  // 이번 해커톤에서는 MVP로써, link는 사용하지 않을 예정임.
+
+        List<TeamResponseDto> teamResponseDtos = teamService.findTeamsByMember(name, link);
         return ApiResponse.onSuccess(teamResponseDtos);
     }
 }

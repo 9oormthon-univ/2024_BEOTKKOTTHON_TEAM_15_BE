@@ -5,6 +5,8 @@ import beotkkotthon.Newsletter_BE.domain.Member;
 import beotkkotthon.Newsletter_BE.domain.Team;
 import beotkkotthon.Newsletter_BE.domain.enums.Role;
 import beotkkotthon.Newsletter_BE.domain.mapping.MemberTeam;
+import beotkkotthon.Newsletter_BE.payload.exception.GeneralException;
+import beotkkotthon.Newsletter_BE.payload.status.ErrorStatus;
 import beotkkotthon.Newsletter_BE.repository.MemberRepository;
 import beotkkotthon.Newsletter_BE.service.MemberService;
 import beotkkotthon.Newsletter_BE.service.TeamService;
@@ -27,6 +29,12 @@ public class MemberServiceImpl implements MemberService {
     private final MemberRepository memberRepository;
     private final TeamService teamService;
 
+
+    @Override
+    public Member findById(Long id) {
+        return memberRepository.findById(id).orElseThrow(
+                () -> new GeneralException(ErrorStatus.MEMBER_NOT_FOUND));
+    }
 
     @Transactional(readOnly = true)
     @Override
