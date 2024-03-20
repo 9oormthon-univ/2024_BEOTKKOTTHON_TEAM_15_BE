@@ -10,7 +10,8 @@ import org.springframework.http.HttpStatus;
 @AllArgsConstructor
 public enum SuccessStatus implements BaseCode {
     OK(HttpStatus.OK, "COMMON200", "Your request has been successfully performed."),
-    CREATED(HttpStatus.CREATED, "COMMON201", "Resource creation successfully performed.");
+    CREATED(HttpStatus.CREATED, "COMMON201", "Resource creation successfully performed."),
+    NO_CONTENT(HttpStatus.NO_CONTENT, "COMMON204", "Your request was successfully executed.");
 
     private final HttpStatus httpStatus;
     private final String code;

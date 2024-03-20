@@ -23,7 +23,7 @@ public class ImageUploadServiceImpl implements ImageUploadService {
     @Override
     public String uploadImage(MultipartFile file) throws IOException {
         if (file == null) {
-            return null;
+            return "__null__";  // 없을때 초기값을 "__null__"로 지정.
         }
 
         ObjectMetadata metadata = new ObjectMetadata();

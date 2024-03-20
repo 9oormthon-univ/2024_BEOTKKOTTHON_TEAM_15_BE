@@ -7,4 +7,5 @@ import java.util.Optional;
 public interface MemberService {
 
     Member findById(Long memberId);
+    MemberListResponseDto findMembersByTeam(Long teamId);
 }
