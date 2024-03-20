@@ -18,7 +18,6 @@ public class TeamController {
 
     private final TeamService teamService;
 
-
     @PostMapping("/teams")
     public ApiResponse<TeamResponseDto> createTeam(
             @RequestPart(value = "image", required = false) MultipartFile image,
