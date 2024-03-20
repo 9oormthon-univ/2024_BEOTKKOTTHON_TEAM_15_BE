@@ -21,6 +21,8 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -49,6 +51,11 @@ public class MemberServiceImpl implements MemberService {
         Integer leaderCount = 0, memberCount = 0;  // 주의: 본인을 제외한 숫자 카운팅임.
         Role myRole = null;
 
+    @Override
+    public Member findById(Long memberId) {
+        return memberRepository.findById(memberId).orElseThrow(
+                () -> new GeneralException(ErrorStatus.MEMBER_NOT_FOUND));
+      
         List<MemberTeam> memberTeamList = team.getMemberTeamList();
         for(int i=0; i<memberTeamList.size(); i++) {
             Role role = memberTeamList.get(i).getRole();
