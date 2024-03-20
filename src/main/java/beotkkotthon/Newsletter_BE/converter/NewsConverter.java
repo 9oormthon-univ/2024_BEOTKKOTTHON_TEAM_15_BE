@@ -28,6 +28,5 @@ public class NewsConverter {
         return NewsResponseDto.ShowNewsListDto.builder()
                 .showNewsDtoList(showNewsDtoList)
                 .build();
-
     }
 }

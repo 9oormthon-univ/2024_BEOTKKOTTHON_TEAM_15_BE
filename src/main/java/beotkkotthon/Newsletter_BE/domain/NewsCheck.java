@@ -26,7 +26,7 @@ public class NewsCheck extends BaseEntity implements Serializable {
     @Column(name = "check_time", columnDefinition = "BIGINT default 0")
     private Long checkTime;  // 초기값: 0
 
-    @OneToOne(fetch = FetchType.LAZY)  // Member-NewsCheck 단방향매핑 (Member에서 NewsCheck를 조회할 경우가 딱히 없기 때문.) (자식 엔티티)
+    @ManyToOne(fetch = FetchType.LAZY)  // Member-NewsCheck 양방향으로 변경 (Member에서 NewsCheck 미확인/확인 목록 조회에 사용) (자식 엔티티)
     @JoinColumn(name = "member_id")
     private Member member;
 
@@ -34,9 +34,8 @@ public class NewsCheck extends BaseEntity implements Serializable {
     @JoinColumn(name = "news_id")
     private News news;
 
-
-    @Builder(builderClassName = "NewsCheckCreateBuilder", builderMethodName = "NewsCheckCreateBuilder")
-    public NewsCheck (CheckStatus checkStatus, Member member, News news, Long checkTime) {
+    @Builder(builderClassName = "NewsCheckBuilder", builderMethodName = "NewsCheckCreateBuilder")
+    public NewsCheck (Member member, News news, Long checkTime) {
         this.checkStatus = CheckStatus.NOT_READ;
         this.member = member;
         this.news = news;

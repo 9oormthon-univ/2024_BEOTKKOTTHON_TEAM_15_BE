@@ -46,33 +46,24 @@ public class NewsServiceImpl implements NewsService {
 
     @Transactional
     @Override
-    public NewsResponseDto createNews(Long teamId, Long memberId, MultipartFile image1, MultipartFile image2, NewsSaveRequestDto newsSaveRequestDto) throws IOException {
+    public NewsResponseDto createNews(Long teamId, Long writerId, Long teamMemberId, MultipartFile image1, MultipartFile image2, NewsSaveRequestDto newsSaveRequestDto) throws IOException {
         Team team = teamService.findById(teamId);
-        Member member = memberService.findById(memberId);
+        Member writer = memberService.findById(writerId);
+        Member teamMember = memberService.findById(teamMemberId);
         String imageUrl1 = imageUploadService.uploadImage(image1);
         String imageUrl2 = imageUploadService.uploadImage(image2);
-        News news = newsSaveRequestDto.toEntity(member, team, imageUrl1, imageUrl2);
 
+        News news = newsSaveRequestDto.toEntity(writer, team, imageUrl1, imageUrl2);
         newsRepository.save(news);
 
-//         나중에 멤버팀 테이블에서 멤버 리스트 불러옴 -> 각 멤버의 NewsCheck 테이블 생성
-//        memberTeamRepository.findMembersByTeam(team)
-//                .stream()
-//                .map(m -> NewsCheck.NewsCheckCreateBuilder()
-//                        .checkStatus(CheckStatus.NOT_READ)
-//                        .member(m)
-//                        .news(news)
-//                        .build())
-//                .forEach(newsCheckRepository::save);
-
-        NewsCheck newsCheck = NewsCheck.NewsCheckCreateBuilder()
-                .checkStatus(CheckStatus.NOT_READ)
-                .member(member)
-                .news(news)
-                .build();
-        newsCheckRepository.save(newsCheck);
-
+//        나중에 멤버팀 테이블에서 멤버 리스트 불러옴 -> 각 멤버의 NewsCheck 테이블 생성
+        setNewsCheck(teamMember, news);
         return new NewsResponseDto(news);
+    }
+
+    private void setNewsCheck(Member member, News news) {
+        NewsCheck newsCheck = NewsCheck.NewsCheckCreateBuilder().news(news).member(member).build();
+        newsCheckRepository.save(newsCheck);
     }
 
     @Transactional(readOnly = true)
@@ -91,5 +82,18 @@ public class NewsServiceImpl implements NewsService {
     public NewsResponseDto.ShowNewsDto getShowNewsDto(Long teamId, Long newsId) {
         News news = findById(newsId);
         return NewsConverter.toShowNewsDto(news);
+    }
+
+    @Override
+    public List<NewsResponseDto> notReadNewslist(Long memberId) {
+        Member member = memberService.findById(memberId);
+        List<NewsCheck> notReadNewsChecks = newsCheckRepository.findByMember(member);
+
+        List<NewsResponseDto> notReadNewsDtos = notReadNewsChecks.stream()
+                .filter(newsCheck -> newsCheck.getCheckStatus() == CheckStatus.NOT_READ)
+                .map(newsCheck -> new NewsResponseDto(newsCheck.getNews()))
+                .collect(Collectors.toList());
+
+        return notReadNewsDtos;
     }
 }

@@ -23,22 +23,22 @@ public class NewsController {
     private final NewsService newsService;
     private final NewsCheckService newsCheckService;
 
-
     @PostMapping("/teams/{teamId}/news")
     @Operation(summary = "가정통신문 발행")
     public ApiResponse<NewsResponseDto> createNews(
             @PathVariable(name = "teamId") Long teamId,
-            @RequestPart(value = "memberId", required = true) Long memberId,
+            @RequestPart(value = "writerId", required = true) Long memberId,
+            @RequestPart(value = "teamMemberId", required = true) Long teamMemberId,
             @RequestPart(value = "image1", required = false) MultipartFile image1,
             @RequestPart(value = "image2", required = false) MultipartFile image2,
             @RequestPart NewsSaveRequestDto newsSaveRequestDto) throws IOException {
-        NewsResponseDto newsResponseDto = newsService.createNews(teamId, memberId, image1, image2, newsSaveRequestDto);
+        NewsResponseDto newsResponseDto = newsService.createNews(teamId, memberId, teamMemberId, image1, image2, newsSaveRequestDto);
         return ApiResponse.onCreate(newsResponseDto);
     }
 
     @GetMapping("/teams/news")
     @Operation(summary = "미확인 가정통신문 목록 모두 조회(확인/미확인 구별X)")
-    public ApiResponse <NewsResponseDto.ShowNewsListDto> findAllNews() {
+    public ApiResponse<NewsResponseDto.ShowNewsListDto> findAllNews() {
         List<News> newsList = newsService.findAll();
         return ApiResponse.onSuccess(NewsConverter.toShowNewsDtoList(newsList));
     }
@@ -52,10 +52,17 @@ public class NewsController {
 
     @GetMapping("/teams/{teamId}/news/{newsId}")
     @Operation(summary = "가정통신문 상세 조회")
-    public ApiResponse<NewsResponseDto.ShowNewsDto> findNewsById( @RequestPart(name = "memberId") Long memberId,
-                                                                  @PathVariable(name = "teamId") Long teamId,
-                                                                  @PathVariable(name = "newsId") Long newsId) {
+    public ApiResponse<NewsResponseDto.ShowNewsDto> findNewsById(@RequestPart(name = "memberId") Long memberId,
+                                                                 @PathVariable(name = "teamId") Long teamId,
+                                                                 @PathVariable(name = "newsId") Long newsId) {
         newsCheckService.readNews(memberId, newsId);
         return ApiResponse.onSuccess(newsService.getShowNewsDto(teamId, newsId));
+    }
+
+    @GetMapping("/news")
+    @Operation(summary = "미확인 가정통신문 목록 조회")
+    public ApiResponse<List<NewsResponseDto>> notReadNews(@RequestPart(name = "memberId") Long memberId) {
+        List<NewsResponseDto> notReadNewsList = newsService.notReadNewslist(memberId);
+        return ApiResponse.onSuccess(notReadNewsList);
     }
 }
