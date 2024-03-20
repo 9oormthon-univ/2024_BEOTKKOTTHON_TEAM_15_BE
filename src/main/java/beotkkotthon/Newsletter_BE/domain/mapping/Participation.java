@@ -4,7 +4,9 @@ import beotkkotthon.Newsletter_BE.domain.Member;
 import beotkkotthon.Newsletter_BE.domain.Team;
 import beotkkotthon.Newsletter_BE.domain.common.BaseEntity;
 import beotkkotthon.Newsletter_BE.domain.enums.RequestRole;
+import beotkkotthon.Newsletter_BE.domain.enums.Role;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -32,4 +34,13 @@ public class Participation extends BaseEntity implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)  // Team-Participation 양방향매핑 (Team에서 Participation를 조회하기 때문.)
     @JoinColumn(name = "team_id")
     private Team team;
+
+
+    @Builder(builderClassName = "ParticipationSaveBuilder", builderMethodName = "ParticipationSaveBuilder")
+    public Participation(RequestRole requestRole, Member member, Team team) {
+        // 이 빌더는 참여신청 생성때만 사용할 용도
+        this.requestRole = requestRole;
+        this.member = member;
+        this.team = team;
+    }
 }

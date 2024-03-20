@@ -1,9 +1,12 @@
 package beotkkotthon.Newsletter_BE.service.impl;
 
+import beotkkotthon.Newsletter_BE.config.security.util.SecurityUtil;
+import beotkkotthon.Newsletter_BE.domain.Member;
 import beotkkotthon.Newsletter_BE.domain.News;
 import beotkkotthon.Newsletter_BE.domain.Team;
 import beotkkotthon.Newsletter_BE.payload.exception.GeneralException;
 import beotkkotthon.Newsletter_BE.payload.status.ErrorStatus;
+import beotkkotthon.Newsletter_BE.repository.MemberRepository;
 import beotkkotthon.Newsletter_BE.repository.NewsRepository;
 import beotkkotthon.Newsletter_BE.repository.TeamRepository;
 import beotkkotthon.Newsletter_BE.service.ImageUploadService;
@@ -26,6 +29,7 @@ import java.util.stream.Collectors;
 public class NewsServiceImpl implements NewsService {
 
     private final NewsRepository newsRepository;
+    private final MemberRepository memberRepository;
     private final ImageUploadService imageUploadService;
     private final TeamService teamService;
 
@@ -33,10 +37,13 @@ public class NewsServiceImpl implements NewsService {
     @Transactional
     @Override
     public NewsResponseDto createNews(Long teamId, MultipartFile image1, MultipartFile image2, NewsSaveRequestDto newsSaveRequestDto) throws IOException {
-        Team team = teamService.findById(teamId);
         String imageUrl1 = imageUploadService.uploadImage(image1);
         String imageUrl2 = imageUploadService.uploadImage(image2);
-        News news = newsSaveRequestDto.toEntity(team, imageUrl1, imageUrl2);
+
+        Team team = teamService.findById(teamId);
+        Member member = memberRepository.findById(SecurityUtil.getCurrentMemberId()).orElseThrow(
+                () -> new GeneralException(ErrorStatus.MEMBER_NOT_FOUND));
+        News news = newsSaveRequestDto.toEntity(member, team, imageUrl1, imageUrl2);
         newsRepository.save(news);
 
         return new NewsResponseDto(news);
@@ -48,8 +55,9 @@ public class NewsServiceImpl implements NewsService {
 
         Team team = teamService.findById(teamId);
         List<NewsResponseDto> newsResponseDtos = team.getNewsList().stream().map(NewsResponseDto::new)
-                .sorted(Comparator.comparing(NewsResponseDto::getModifiedTime, Comparator.reverseOrder()))  // 수정시각 기준 내림차순 정렬
-                .collect(Collectors.toList());
+                .sorted(Comparator.comparing(NewsResponseDto::getId, Comparator.reverseOrder()))  // id 내림차순 정렬 후 (최신 생성순)
+                .sorted(Comparator.comparing(NewsResponseDto::getModifiedTime, Comparator.reverseOrder()))  // 수정날짜 내림차순 정렬 (최신 수정순)
+                .collect(Collectors.toList());  // 정렬 완료한 리스트 반환 (연속sorted 정렬은 마지막 순서의 기준이 가장 주요된 기준임.)
 
         return newsResponseDtos;
     }
