@@ -71,7 +71,7 @@ public class ParticipationServiceImpl implements ParticipationService {
         // 참여승인 받고자 하는 사용자
         Team team = teamService.findById(teamId);
         Member member = memberService.findById(participationRequestDto.getMemberId());
-        if(memberTeamRepository.existByMemberAndTeam(member, team)) {
+        if(memberTeamRepository.existsByMemberAndTeam(member, team)) {
             throw new GeneralException(ErrorStatus.BAD_REQUEST, "이미 해당 그룹에 가입되어있는 사용자입니다.");
         }
 

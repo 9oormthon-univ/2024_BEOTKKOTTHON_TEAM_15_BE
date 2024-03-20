@@ -8,8 +8,8 @@ import beotkkotthon.Newsletter_BE.domain.mapping.MemberTeam;
 import beotkkotthon.Newsletter_BE.payload.exception.GeneralException;
 import beotkkotthon.Newsletter_BE.payload.status.ErrorStatus;
 import beotkkotthon.Newsletter_BE.repository.MemberRepository;
+import beotkkotthon.Newsletter_BE.repository.TeamRepository;
 import beotkkotthon.Newsletter_BE.service.MemberService;
-import beotkkotthon.Newsletter_BE.service.TeamService;
 import beotkkotthon.Newsletter_BE.web.dto.response.MemberListResponseDto;
 import beotkkotthon.Newsletter_BE.web.dto.response.MemberResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +27,8 @@ import java.util.List;
 public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
-    private final TeamService teamService;
+    private final TeamRepository teamRepository;
+//    private final TeamService teamService;  // 순환참조 문제로 주석처리. 대신 TeamRespository 이용하기.
 
 
     @Override
@@ -40,7 +41,8 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public MemberListResponseDto findMembersByTeam(Long teamId) {
         Long memberId = SecurityUtil.getCurrentMemberId();
-        Team team = teamService.findById(teamId);
+        Team team = teamRepository.findById(teamId).orElseThrow(
+                () -> new GeneralException(ErrorStatus.TEAM_NOT_FOUND));
 
         List<MemberResponseDto> leaderList = new ArrayList<>();
         List<MemberResponseDto> memberList = new ArrayList<>();
