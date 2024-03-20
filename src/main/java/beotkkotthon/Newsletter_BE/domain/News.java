@@ -51,7 +51,7 @@ public class News extends BaseEntity implements Serializable {
 
 
     @Builder(builderClassName = "NewsSaveBuilder", builderMethodName = "NewsSaveBuilder")
-    public News(String title, String content, Integer minute, String imageUrl1, String imageUrl2, Team team) {
+    public News(String title, String content, Integer minute, String imageUrl1, String imageUrl2, Member member, Team team) {
         // 이 빌더는 가정통신문 생성때만 사용할 용도
         this.title = title;
         this.content = content;
@@ -63,6 +63,7 @@ public class News extends BaseEntity implements Serializable {
         this.imageUrl1 = imageUrl1;
         this.imageUrl2 = imageUrl2;
 
+        this.member = member;
         this.team = team;
         // changeTeam(team);
     }

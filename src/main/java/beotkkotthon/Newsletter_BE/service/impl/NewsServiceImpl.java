@@ -1,9 +1,12 @@
 package beotkkotthon.Newsletter_BE.service.impl;
 
+import beotkkotthon.Newsletter_BE.config.security.util.SecurityUtil;
+import beotkkotthon.Newsletter_BE.domain.Member;
 import beotkkotthon.Newsletter_BE.domain.News;
 import beotkkotthon.Newsletter_BE.domain.Team;
 import beotkkotthon.Newsletter_BE.payload.exception.GeneralException;
 import beotkkotthon.Newsletter_BE.payload.status.ErrorStatus;
+import beotkkotthon.Newsletter_BE.repository.MemberRepository;
 import beotkkotthon.Newsletter_BE.repository.NewsRepository;
 import beotkkotthon.Newsletter_BE.repository.TeamRepository;
 import beotkkotthon.Newsletter_BE.service.ImageUploadService;
@@ -26,6 +29,7 @@ import java.util.stream.Collectors;
 public class NewsServiceImpl implements NewsService {
 
     private final NewsRepository newsRepository;
+    private final MemberRepository memberRepository;
     private final ImageUploadService imageUploadService;
     private final TeamService teamService;
 
@@ -33,10 +37,13 @@ public class NewsServiceImpl implements NewsService {
     @Transactional
     @Override
     public NewsResponseDto createNews(Long teamId, MultipartFile image1, MultipartFile image2, NewsSaveRequestDto newsSaveRequestDto) throws IOException {
-        Team team = teamService.findById(teamId);
         String imageUrl1 = imageUploadService.uploadImage(image1);
         String imageUrl2 = imageUploadService.uploadImage(image2);
-        News news = newsSaveRequestDto.toEntity(team, imageUrl1, imageUrl2);
+
+        Team team = teamService.findById(teamId);
+        Member member = memberRepository.findById(SecurityUtil.getCurrentMemberId()).orElseThrow(
+                () -> new GeneralException(ErrorStatus.MEMBER_NOT_FOUND));
+        News news = newsSaveRequestDto.toEntity(member, team, imageUrl1, imageUrl2);
         newsRepository.save(news);
 
         return new NewsResponseDto(news);

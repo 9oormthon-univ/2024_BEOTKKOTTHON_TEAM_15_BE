@@ -93,7 +93,8 @@ public class TeamServiceImpl implements TeamService {
             //                .collect(Collectors.toList());
         }
         else if(name == null && link != null) {  // 초대링크를 누른 경우
-            Team team = teamRepository.findByLink(link).orElseThrow(
+            String findLink = "/teams?link=" + link;
+            Team team = teamRepository.findByLink(findLink).orElseThrow(
                     () -> new GeneralException(ErrorStatus.TEAM_NOT_FOUND));
             List<TeamResponseDto> teamResponseDtoList = new ArrayList<>();
             teamResponseDtoList.add(new TeamResponseDto(team));
