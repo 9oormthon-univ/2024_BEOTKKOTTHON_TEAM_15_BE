@@ -3,6 +3,7 @@ package beotkkotthon.Newsletter_BE.service.impl;
 import beotkkotthon.Newsletter_BE.config.security.util.SecurityUtil;
 import beotkkotthon.Newsletter_BE.domain.Member;
 import beotkkotthon.Newsletter_BE.domain.Team;
+import beotkkotthon.Newsletter_BE.domain.enums.RequestRole;
 import beotkkotthon.Newsletter_BE.domain.enums.Role;
 import beotkkotthon.Newsletter_BE.domain.mapping.MemberTeam;
 import beotkkotthon.Newsletter_BE.domain.mapping.Participation;
@@ -54,7 +55,7 @@ public class ParticipationServiceImpl implements ParticipationService {
             Participation participation = participationList.get(i);
             Member member = participation.getMember();
             ParticipationResponseDto participationResponseDto = new ParticipationResponseDto(
-                    participation.getRequestRole(), participation.getCreatedTime(),
+                    participation.getId(), participation.getRequestRole(), participation.getCreatedTime(),
                     member.getId(), member.getEmail(), member.getUsername()
             );
             participationResponseDtoList.add(participationResponseDto);
@@ -88,6 +89,7 @@ public class ParticipationServiceImpl implements ParticipationService {
         if(participation.getRequestRole().name() == "LEADER") newRole = Role.LEADER;
 
         if(participationRequestDto.getIsAccept() == true) {  // 수락인 경우
+            team.teamSizeUp();  // 인원수 체킹 및 teamSize를 +1하기 위해, 이 코드먼저 실행.
             MemberTeam memberTeam = MemberTeam.MemberTeamSaveBuilder()
                     .role(newRole)
                     .member(member)
@@ -95,6 +97,31 @@ public class ParticipationServiceImpl implements ParticipationService {
                     .build();
             memberTeamRepository.save(memberTeam);
         }
-        participationRepository.delete(participation);  // 수락이든 거절이던간에 Participation에서 제거해주어야함.
+        participationRepository.delete(participation);  // 수락이든 거절이든간에 Participation에서 제거해주어야함.
+    }
+
+    @Transactional
+    @Override
+    public ParticipationResponseDto createParticipation(Long teamId, String requestRole) {
+        // 현재 로그인된 사용자
+        Long loginMemberId = SecurityUtil.getCurrentMemberId();
+        Member loginMember = memberService.findById(loginMemberId);
+        Team team = teamService.findById(teamId);
+        RequestRole newRequestRole = RequestRole.MEMBER;
+        if(requestRole == "LEADER") newRequestRole = RequestRole.LEADER;
+
+        Participation participation = Participation.ParticipationSaveBuilder()
+                .requestRole(newRequestRole)
+                .member(loginMember)
+                .team(team)
+                .build();
+        participationRepository.save(participation);
+
+        ParticipationResponseDto participationResponseDto = new ParticipationResponseDto(
+                participation.getId(), participation.getRequestRole(), participation.getCreatedTime(),
+                loginMember.getId(), loginMember.getEmail(), loginMember.getUsername()
+        );
+
+        return participationResponseDto;
     }
 }

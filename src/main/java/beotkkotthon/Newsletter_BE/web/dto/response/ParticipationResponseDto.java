@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 public class ParticipationResponseDto {
 
     // Participation 정보 관련
+    private Long requestId;
     private RequestRole requestRole;
     private LocalDateTime requestCreatedTime;
 

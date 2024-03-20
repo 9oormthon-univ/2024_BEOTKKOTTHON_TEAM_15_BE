@@ -29,4 +29,10 @@ public class ParticipationController {
         participationService.acceptParticipation(teamId, participationRequestDto);
         return ApiResponse.onSuccess(null);  // 반환값이 없지만 PostMapping 이므로, onUpdateDelete(null);말고 onSuccess(null);로 사용.
     }
+
+    @PostMapping("/teams/{teamId}")
+    public ApiResponse<ParticipationResponseDto> createParticipation(@PathVariable Long teamId, @RequestParam(value = "requestrole", required = true) String requestRole) {
+        ParticipationResponseDto participationResponseDto = participationService.createParticipation(teamId, requestRole);
+        return ApiResponse.onSuccess(participationResponseDto);
+    }
 }
