@@ -17,7 +17,7 @@ public class ParticipationController {
     private final ParticipationService participationService;
 
 
-    @PostMapping("/teams/{teamId}/participations")
+    @GetMapping("/teams/{teamId}/participations")
     public ApiResponse<List<ParticipationResponseDto>> findParticipationByTeam(@PathVariable Long teamId) {
         List<ParticipationResponseDto> participationResponseDtoList = participationService.findParticipationByTeam(teamId);
         return ApiResponse.onSuccess(participationResponseDtoList);
