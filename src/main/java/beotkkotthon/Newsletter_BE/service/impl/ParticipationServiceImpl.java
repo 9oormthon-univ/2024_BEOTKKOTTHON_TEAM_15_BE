@@ -61,7 +61,7 @@ public class ParticipationServiceImpl implements ParticipationService {
             participationResponseDtoList.add(participationResponseDto);
         }
 
-        participationResponseDtoList.sort(Comparator.comparing(ParticipationResponseDto::getRequestCreatedTime));  // 팀참여 신청 날짜최신순 정렬
+        participationResponseDtoList.sort(Comparator.comparing(ParticipationResponseDto::getRequestCreatedTime).reversed());  // 팀참여 신청 날짜최신순 정렬 (날짜 내림차순)
         return participationResponseDtoList;
     }
 
