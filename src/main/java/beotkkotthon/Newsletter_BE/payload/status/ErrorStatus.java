@@ -30,6 +30,9 @@ public enum ErrorStatus implements BaseErrorCode {
     // MemberTeam Error
     MEMBERTEAM_NOT_FOUND(HttpStatus.BAD_REQUEST, "MEMBERTEAM4000", "MEMBERTEAM not found"),
 
+    // Participation Error
+    PARTICIPATION_NOT_FOUND(HttpStatus.BAD_REQUEST, "PARTICIPATION4000", "PARTICIPATION not found"),
+
     // Token Error
     INVALID_TOKEN(HttpStatus.BAD_REQUEST,"TOKEN4000", "Invalid token"),
 

@@ -3,6 +3,8 @@ package beotkkotthon.Newsletter_BE.domain;
 import beotkkotthon.Newsletter_BE.domain.common.BaseEntity;
 import beotkkotthon.Newsletter_BE.domain.mapping.MemberTeam;
 import beotkkotthon.Newsletter_BE.domain.mapping.Participation;
+import beotkkotthon.Newsletter_BE.payload.exception.GeneralException;
+import beotkkotthon.Newsletter_BE.payload.status.ErrorStatus;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -60,5 +62,18 @@ public class Team extends BaseEntity implements Serializable {
         this.teamSize = teamSize;
         this.imageUrl = imageUrl;
         this.link = link;
+    }
+
+
+    // 수정(업데이트) 기능
+    public void teamSizeUp() {
+        if(this.teamSize == 300)  // 최대 300명 제한
+            throw new GeneralException(ErrorStatus.BAD_REQUEST, "그룹 탈퇴 ERROR - Team의 인원수가 최대치이므로 추가할 수 없습니다.");
+        this.teamSize += 1;
+    }
+    public void teamSizeDown() {
+        if(this.teamSize <= 1)  // CREATOR는 그룹에서 탈퇴가 불가능하며, teamSize가 0이하로 내려가서도 안된다.
+            throw new GeneralException(ErrorStatus.BAD_REQUEST, "그룹 탈퇴 ERROR - Team의 인원수가 최소치이므로 탈퇴할 수 없습니다.");
+        this.teamSize -= 1;
     }
 }

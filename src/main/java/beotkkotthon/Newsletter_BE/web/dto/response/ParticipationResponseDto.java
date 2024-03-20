@@ -17,7 +17,7 @@ public class ParticipationResponseDto {
     private LocalDateTime requestCreatedTime;
 
     // Member 정보 관련
-    private Long id;
+    private Long memberId;
     private String email;
     private String username;
 }

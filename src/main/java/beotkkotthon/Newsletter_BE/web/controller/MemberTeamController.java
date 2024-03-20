@@ -17,8 +17,8 @@ public class MemberTeamController {
 
 
     @DeleteMapping("/teams/{teamId}/members/{memberId}")
-    public ApiResponse<MemberListResponseDto> deleteMemberTeam(@PathVariable Long teamId, @PathVariable Long memberId) {  // 그룹의 멤버 탈퇴 (본인 탈퇴는 가능. 멤버 탈퇴는 LEADER와 CREATOR만 가능. 리더 탈퇴는 CREATOR만 가능.)
-        MemberListResponseDto memberListResponseDto = memberTeamService.deleteMemberTeam(teamId, memberId);
-        return ApiResponse.onSuccess(memberListResponseDto);
+    public ApiResponse deleteMemberTeam(@PathVariable Long teamId, @PathVariable Long memberId) {  // 그룹의 멤버 탈퇴 (본인 탈퇴는 가능. 멤버 탈퇴는 LEADER와 CREATOR만 가능. 리더 탈퇴는 CREATOR만 가능.)
+        memberTeamService.deleteMemberTeam(teamId, memberId);
+        return ApiResponse.onUpdateDelete(null);
     }
 }
