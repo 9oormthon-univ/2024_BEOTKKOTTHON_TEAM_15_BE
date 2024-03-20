@@ -66,4 +66,12 @@ public class NewsController {
         List<NewsResponseDto> notReadNewsList = newsService.notReadNewslist(memberId, teamId);
         return ApiResponse.onSuccess(notReadNewsList);
     }
+
+    @GetMapping("/{memberId}/news")
+    @Operation(summary = "내가 발행한 가정통신문 목록 조회")
+    public ApiResponse<List<NewsResponseDto>> findNewsByWriter(@PathVariable(name = "memberId") Long memberId,
+                                                               @RequestParam(name = "teamId", required = false) Long teamId) {
+        List<NewsResponseDto> newsResponseDtos = newsService.findNewsByMember(memberId, teamId);
+        return ApiResponse.onSuccess(newsResponseDtos);
+    }
 }

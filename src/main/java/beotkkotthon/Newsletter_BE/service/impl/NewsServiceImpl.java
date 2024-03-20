@@ -106,4 +106,30 @@ public class NewsServiceImpl implements NewsService {
         }
         return notReadNewsDtos;
     }
+
+    @Override
+    public List<NewsResponseDto> findNewsByMember(Long memberId, Long teamId) {
+
+        Member member = memberService.findById(memberId);
+        List<NewsResponseDto> newsResponseDtos;
+
+        if (teamId != null) {
+            Team team = teamService.findById(teamId);
+            newsResponseDtos = team.getNewsList().stream()
+                    .filter(news -> news.getMember().getUsername().equals(member.getUsername()))
+                    .map(NewsResponseDto::new)
+                    .sorted(Comparator.comparing(NewsResponseDto::getModifiedTime, Comparator.reverseOrder()))
+                    .collect(Collectors.toList());
+        } else {
+            List<News> newsList = newsRepository.findAll().stream()
+                    .filter(news -> news.getMember().getUsername().equals(member.getUsername()))
+                    .collect(Collectors.toList());
+
+            newsResponseDtos = newsList.stream()
+                    .map(NewsResponseDto::new)
+                    .sorted(Comparator.comparing(NewsResponseDto::getModifiedTime, Comparator.reverseOrder()))
+                    .collect(Collectors.toList());
+        }
+        return newsResponseDtos;
+    }
 }

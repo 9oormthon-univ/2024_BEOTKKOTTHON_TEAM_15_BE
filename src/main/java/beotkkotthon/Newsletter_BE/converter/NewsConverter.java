@@ -13,6 +13,7 @@ public class NewsConverter {
         return ShowNewsDto.builder()
                 .newsId(news.getId())
                 .title(news.getTitle())
+                .writer(news.getMember().getUsername())
                 .content(news.getContent())
                 .imageUrl1(news.getImageUrl1())
                 .imageUrl2(news.getImageUrl2())
