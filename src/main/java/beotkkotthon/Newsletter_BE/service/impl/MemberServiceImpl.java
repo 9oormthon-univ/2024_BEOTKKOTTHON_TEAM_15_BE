@@ -54,7 +54,7 @@ public class MemberServiceImpl implements MemberService {
             Role role = memberTeamList.get(i).getRole();
             if(memberTeamList.get(i).getMember().getId() != memberId) {  // 본인이 아닐때
                 Member member = memberTeamList.get(i).getMember();
-                if(role.name() == "MEMBER") {
+                if(role.name().equals("MEMBER")) {
                     memberList.add(new MemberResponseDto(member));
                     memberCount++;
                 }

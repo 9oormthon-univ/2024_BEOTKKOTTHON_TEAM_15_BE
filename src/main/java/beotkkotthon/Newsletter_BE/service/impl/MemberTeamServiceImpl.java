@@ -49,7 +49,7 @@ public class MemberTeamServiceImpl implements MemberTeamService {
         Role loginRole = loginMemberTeam.getRole();  // 로그인 사용자의 Role
 
         if(memberId == loginMemberId) {  // 본인 탈퇴인 경우
-            if(outRole == Role.CREATOR) {
+            if(outRole.equals(Role.CREATOR)) {
                 throw new GeneralException(ErrorStatus.BAD_REQUEST, "그룹 탈퇴 ERROR - 본인 CREATOR 탈퇴는 불가능");
             }
             else {
@@ -58,12 +58,12 @@ public class MemberTeamServiceImpl implements MemberTeamService {
             }
         }
         else {  // 타인 퇴출일 경우
-            if(loginRole == Role.CREATOR) {
+            if(loginRole.equals(Role.CREATOR)) {
                 team.teamSizeDown();  // 인원수 체킹 후 delete를 위해, 이 코드먼저 실행.
                 memberTeamRepository.delete(memberTeam);  // success - 본인이 CREATOR라면, 타인 전부 퇴출 가능.
             }
-            else if(loginRole == Role.LEADER) {
-                if(outRole == Role.LEADER || outRole == Role.CREATOR) {
+            else if(loginRole.equals(Role.LEADER)) {
+                if(outRole.equals(Role.LEADER) || outRole.equals(Role.CREATOR)) {
                     throw new GeneralException(ErrorStatus.BAD_REQUEST, "그룹 탈퇴 권한 ERROR - LEADER는 LEADER or CREATOR인 타인 퇴출 불가능");
                 }
                 else {

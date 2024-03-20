@@ -80,13 +80,13 @@ public class ParticipationServiceImpl implements ParticipationService {
         Member loginMember = memberService.findById(loginMemberId);
         MemberTeam loginMemberTeam = memberTeamService.findByMemberAndTeam(loginMember, team);
         Role loginRole = loginMemberTeam.getRole();  // 로그인 사용자의 Role
-        if(loginRole == Role.MEMBER) {
+        if(loginRole.equals(Role.MEMBER)) {
             throw new GeneralException(ErrorStatus.BAD_REQUEST, "참여신청 승인 권한 ERROR - Member는 승인 권한이 없습니다.");
         }
 
         Participation participation = findByMemberAndTeam(member, team);
         Role newRole = Role.MEMBER;
-        if(participation.getRequestRole().name() == "LEADER") newRole = Role.LEADER;
+        if(participation.getRequestRole().name().equals("LEADER")) newRole = Role.LEADER;
 
         if(participationRequestDto.getIsAccept() == true) {  // 수락인 경우
             team.teamSizeUp();  // 인원수 체킹 및 teamSize를 +1하기 위해, 이 코드먼저 실행.
@@ -103,12 +103,11 @@ public class ParticipationServiceImpl implements ParticipationService {
     @Transactional
     @Override
     public ParticipationResponseDto createParticipation(Long teamId, String requestRole) {
-        // 현재 로그인된 사용자
         Long loginMemberId = SecurityUtil.getCurrentMemberId();
         Member loginMember = memberService.findById(loginMemberId);
         Team team = teamService.findById(teamId);
         RequestRole newRequestRole = RequestRole.MEMBER;
-        if(requestRole == "LEADER") newRequestRole = RequestRole.LEADER;
+        if(requestRole.equals("LEADER")) newRequestRole = RequestRole.LEADER;
 
         Participation participation = Participation.ParticipationSaveBuilder()
                 .requestRole(newRequestRole)
