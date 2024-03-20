@@ -4,10 +4,12 @@ import beotkkotthon.Newsletter_BE.config.security.util.SecurityUtil;
 import beotkkotthon.Newsletter_BE.domain.Member;
 import beotkkotthon.Newsletter_BE.domain.News;
 import beotkkotthon.Newsletter_BE.domain.Team;
+import beotkkotthon.Newsletter_BE.domain.enums.Role;
 import beotkkotthon.Newsletter_BE.domain.mapping.MemberTeam;
 import beotkkotthon.Newsletter_BE.payload.exception.GeneralException;
 import beotkkotthon.Newsletter_BE.payload.status.ErrorStatus;
 import beotkkotthon.Newsletter_BE.repository.MemberRepository;
+import beotkkotthon.Newsletter_BE.repository.MemberTeamRepository;
 import beotkkotthon.Newsletter_BE.repository.TeamRepository;
 import beotkkotthon.Newsletter_BE.service.ImageUploadService;
 import beotkkotthon.Newsletter_BE.service.MemberService;
@@ -33,6 +35,7 @@ import java.util.stream.Collectors;
 public class TeamServiceImpl implements TeamService {
 
     private final TeamRepository teamRepository;
+    private final MemberTeamRepository memberTeamRepository;
     private final ImageUploadService imageUploadService;
     private final MemberService memberService;
 
@@ -58,6 +61,18 @@ public class TeamServiceImpl implements TeamService {
 
         Team team = teamSaveRequestDto.toEntity(imageUrl, link);
         teamRepository.save(team);
+
+        Long loginMemberId = SecurityUtil.getCurrentMemberId();
+        Member loginMember = memberService.findById(loginMemberId);
+
+        // 그룹에 CREATOR로 save 시킴
+        Role role = Role.CREATOR;
+        MemberTeam memberTeam = MemberTeam.MemberTeamSaveBuilder()
+                .role(role)
+                .member(loginMember)
+                .team(team)
+                .build();
+        memberTeamRepository.save(memberTeam);
 
         return new TeamResponseDto(team);
     }
