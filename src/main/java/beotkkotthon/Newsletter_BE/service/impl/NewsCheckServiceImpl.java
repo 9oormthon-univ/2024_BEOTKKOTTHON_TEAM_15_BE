@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -37,5 +38,11 @@ public class NewsCheckServiceImpl implements NewsCheckService {
             newNewsCheck.updateStatus(CheckStatus.READ);
             newsCheckRepository.save(newNewsCheck);
         }
+    }
+
+    @Override
+    public List<NewsCheck> findByMember(Long memberId) {
+        Member member = memberService.findById(memberId);
+        return newsCheckRepository.findByMember(member);
     }
 }

@@ -56,5 +56,6 @@ public class NewsResponseDto {
     @AllArgsConstructor
     public static class ShowNewsListDto {
         List<ShowNewsDto> showNewsDtoList;
+        List<NewsCheckResponseDto.NewsCheckDto> newsCheckResponseDtoList;
     }
 }

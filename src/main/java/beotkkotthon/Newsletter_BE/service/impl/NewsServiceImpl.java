@@ -72,6 +72,7 @@ public class NewsServiceImpl implements NewsService {
 
         Team team = teamService.findById(teamId);
         List<NewsResponseDto> newsResponseDtos = team.getNewsList().stream().map(NewsResponseDto::new)
+                .sorted(Comparator.comparing(NewsResponseDto::getId))
                 .sorted(Comparator.comparing(NewsResponseDto::getModifiedTime, Comparator.reverseOrder()))  // 수정시각 기준 내림차순 정렬
                 .collect(Collectors.toList());
 
@@ -97,11 +98,15 @@ public class NewsServiceImpl implements NewsService {
                         return newsCheck != null && newsCheck.getCheckStatus() == CheckStatus.NOT_READ;
                     })
                     .map(NewsResponseDto::new)
+                    .sorted(Comparator.comparing(NewsResponseDto::getId))
+                    .sorted(Comparator.comparing(NewsResponseDto::getModifiedTime, Comparator.reverseOrder()))
                     .collect(Collectors.toList());
         } else {
             notReadNewsDtos = newsCheckRepository.findByMember(member).stream()
                     .filter(newsCheck -> newsCheck.getCheckStatus() == CheckStatus.NOT_READ)
                     .map(newsCheck -> new NewsResponseDto(newsCheck.getNews()))
+                    .sorted(Comparator.comparing(NewsResponseDto::getId))
+                    .sorted(Comparator.comparing(NewsResponseDto::getModifiedTime, Comparator.reverseOrder()))
                     .collect(Collectors.toList());
         }
         return notReadNewsDtos;
@@ -116,17 +121,19 @@ public class NewsServiceImpl implements NewsService {
         if (teamId != null) {
             Team team = teamService.findById(teamId);
             newsResponseDtos = team.getNewsList().stream()
-                    .filter(news -> news.getMember().getUsername().equals(member.getUsername()))
+                    .filter(news -> news.getMember().getId().equals(member.getId()))
                     .map(NewsResponseDto::new)
+                    .sorted(Comparator.comparing(NewsResponseDto::getId))
                     .sorted(Comparator.comparing(NewsResponseDto::getModifiedTime, Comparator.reverseOrder()))
                     .collect(Collectors.toList());
         } else {
             List<News> newsList = newsRepository.findAll().stream()
-                    .filter(news -> news.getMember().getUsername().equals(member.getUsername()))
+                    .filter(news -> news.getMember().getId().equals(member.getId()))
                     .collect(Collectors.toList());
 
             newsResponseDtos = newsList.stream()
                     .map(NewsResponseDto::new)
+                    .sorted(Comparator.comparing(NewsResponseDto::getId))
                     .sorted(Comparator.comparing(NewsResponseDto::getModifiedTime, Comparator.reverseOrder()))
                     .collect(Collectors.toList());
         }

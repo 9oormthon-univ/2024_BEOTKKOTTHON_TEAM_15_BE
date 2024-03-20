@@ -16,6 +16,7 @@ public class NewsCheckResponseDto {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class NewsCheckDto {
+        Long newsId;
         CheckStatus checkStatus;
         Long checkTime;
     }

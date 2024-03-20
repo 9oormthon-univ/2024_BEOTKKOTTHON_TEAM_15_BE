@@ -2,6 +2,7 @@ package beotkkotthon.Newsletter_BE.web.controller;
 
 import beotkkotthon.Newsletter_BE.converter.NewsConverter;
 import beotkkotthon.Newsletter_BE.domain.News;
+import beotkkotthon.Newsletter_BE.domain.NewsCheck;
 import beotkkotthon.Newsletter_BE.payload.ApiResponse;
 import beotkkotthon.Newsletter_BE.service.NewsCheckService;
 import beotkkotthon.Newsletter_BE.service.NewsService;
@@ -37,10 +38,11 @@ public class NewsController {
     }
 
     @GetMapping("/teams/news")
-    @Operation(summary = "미확인 가정통신문 목록 모두 조회(확인/미확인 구별X)")
-    public ApiResponse<NewsResponseDto.ShowNewsListDto> findAllNews() {
+    @Operation(summary = "가정통신문 목록 모두 조회(하단그룹-메인)")
+    public ApiResponse<NewsResponseDto.ShowNewsListDto> findAllNews(@RequestPart(name = "memberId") Long memberId) {
         List<News> newsList = newsService.findAll();
-        return ApiResponse.onSuccess(NewsConverter.toShowNewsDtoList(newsList));
+        List<NewsCheck> newsCheckList = newsCheckService.findByMember(memberId);
+        return ApiResponse.onSuccess(NewsConverter.toShowNewsDtoList(newsList, newsCheckList));
     }
 
     @GetMapping("/teams/{teamId}/news")
@@ -60,7 +62,7 @@ public class NewsController {
     }
 
     @GetMapping("/news")
-    @Operation(summary = "미확인 가정통신문 목록 조회")
+    @Operation(summary = "미확인 가정통신문 전체 목록 조회")
     public ApiResponse<List<NewsResponseDto>> notReadNews(@RequestPart(name = "memberId") Long memberId,
                                                           @RequestParam(name = "teamId", required = false) Long teamId) {
         List<NewsResponseDto> notReadNewsList = newsService.notReadNewslist(memberId, teamId);
