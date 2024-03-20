@@ -20,5 +20,5 @@ public interface NewsService {
 
     NewsResponseDto.ShowNewsDto getShowNewsDto(Long teamId, Long newsId);
 
-    List<NewsResponseDto> notReadNewslist(Long memberId);
+    List<NewsResponseDto> notReadNewslist(Long memberId, Long teamId);
 }
