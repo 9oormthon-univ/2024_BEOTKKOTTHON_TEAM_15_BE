@@ -109,6 +109,10 @@ public class ParticipationServiceImpl implements ParticipationService {
         RequestRole newRequestRole = RequestRole.MEMBER;
         if(requestRole.equals("LEADER")) newRequestRole = RequestRole.LEADER;
 
+        if(participationRepository.existsByMemberAndTeam(loginMember, team)) {
+            throw new GeneralException(ErrorStatus.BAD_REQUEST, "해당 그룹에 이미 가입 신청한 사용자입니다.");
+        }
+
         Participation participation = Participation.ParticipationSaveBuilder()
                 .requestRole(newRequestRole)
                 .member(loginMember)

@@ -12,4 +12,5 @@ import java.util.Optional;
 public interface ParticipationRepository extends JpaRepository<Participation, Long> {
     Optional<Participation> findByMemberAndTeam(Member member, Team team);
     List<Participation> findAllByTeam(Team team);
+    boolean existsByMemberAndTeam(Member member, Team team);
 }
