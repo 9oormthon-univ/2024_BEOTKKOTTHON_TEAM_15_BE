@@ -34,7 +34,6 @@ public class AuthController {
     @Operation(summary = "로그인 [jwt X]")
     public ApiResponse<TokenDto> login(@RequestBody MemberLoginRequestDto memberLoginRequestDto) {
         TokenDto tokenDto = authService.login(memberLoginRequestDto);  // 로그인.
-        notificationService.saveNotification(new FcmTokenRequestDto(memberLoginRequestDto.getFcmToken()));  // 로그인 시, fcm토큰 DB에 저장.
         return ApiResponse.onSuccess(tokenDto);
     }
 

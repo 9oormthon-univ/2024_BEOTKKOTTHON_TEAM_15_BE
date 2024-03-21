@@ -34,7 +34,7 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Transactional
     @Override
-    public void saveNotification(FcmTokenRequestDto fcmTokenRequestDto) {  // 로그인 시, fcm토큰 DB에 저장.
+    public void saveNotification(FcmTokenRequestDto fcmTokenRequestDto) {  // 로그인 직후 바로, fcm토큰 DB에 저장.
         Member member = memberRepository.findById(SecurityUtil.getCurrentMemberId())
                 .orElseThrow(() -> new GeneralException(ErrorStatus.MEMBER_NOT_FOUND));
 
