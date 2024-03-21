@@ -22,7 +22,7 @@ public class MemberTeamController {
 
 
     @DeleteMapping("/teams/{teamId}/members/{memberId}")
-    @Operation(summary = "그룹의 사용자 탈퇴")
+    @Operation(summary = "그룹의 사용자 탈퇴 [jwt O]")
     @Parameters(value = {
             @Parameter(name = "teamId", description = "팀의 아이디, path variable 입니다."),
             @Parameter(name = "memberId", description = "회원의 아이디, path variable 입니다.")

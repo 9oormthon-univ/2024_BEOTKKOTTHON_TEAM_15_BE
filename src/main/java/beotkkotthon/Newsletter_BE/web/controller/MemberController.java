@@ -25,7 +25,7 @@ public class MemberController {
 
 
     @GetMapping("/teams/{teamId}/members")
-    @Operation(summary = "본인을 제외한 그룹 멤버&리더 리스트 조회")
+    @Operation(summary = "본인을 제외한 그룹 멤버&리더 리스트 조회 [jwt O]")
     @Parameter(name = "teamId", description = "팀의 아이디, path variable 입니다.")
     public ApiResponse<MemberListResponseDto> findMembersByTeam(@PathVariable Long teamId) {
         MemberListResponseDto memberListResponseDto = memberService.findMembersByTeam(teamId);

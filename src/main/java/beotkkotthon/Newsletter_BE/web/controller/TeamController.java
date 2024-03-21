@@ -22,7 +22,7 @@ public class TeamController {
     private final TeamService teamService;
 
     @PostMapping("/teams")
-    @Operation(summary = "CREATOR로써 그룹 생성")
+    @Operation(summary = "CREATOR로써 그룹 생성 [jwt O]")
     public ApiResponse<TeamResponseDto> createTeam(
             @RequestPart(value = "image", required = false) MultipartFile image,
             @RequestPart TeamSaveRequestDto teamSaveRequestDto) throws IOException {
@@ -32,7 +32,7 @@ public class TeamController {
     }
 
     @GetMapping("/teams")
-    @Operation(summary = "nameO linkX 그룹명 검색 / nameX linkO 초대링크 클릭 / nameX linkX 내가 가입한 팀 목록 조회")
+    @Operation(summary = "nameO linkX 그룹명 검색 / nameX linkO 초대링크 클릭 / nameX linkX 내가 가입한 팀 목록 조회 [jwt O]")
     public ApiResponse<List<TeamResponseDto>> findTeamsByMember(  // 그룹명 검색 or 초대링크 클릭 or 내가 가입한 팀 목록 조회
             @RequestParam(value = "name", required = false) String name,
             @RequestParam(value = "link", required = false) String link) {  // 이번 해커톤에서는 MVP로써, link는 사용하지 않을 예정임.

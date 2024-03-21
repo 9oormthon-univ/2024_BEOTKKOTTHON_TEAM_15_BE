@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class RootController {
 
     @GetMapping("/health")
-    @Operation(summary = "서버 헬스체크")
+    @Operation(summary = "서버 헬스체크 [jwt X]")
     public String healthCheck() {
         return "Fighting!!!️";
     }
