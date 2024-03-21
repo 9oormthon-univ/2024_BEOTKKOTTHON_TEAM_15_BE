@@ -49,7 +49,7 @@ public class NewsServiceImpl implements NewsService {
 
     @Transactional
     @Override
-    public NewsResponseDto createNews(Long teamId, Long teamMemberId, MultipartFile image1, MultipartFile image2, NewsSaveRequestDto newsSaveRequestDto) throws IOException {
+    public NewsResponseDto createNews(Long teamId, MultipartFile image1, MultipartFile image2, NewsSaveRequestDto newsSaveRequestDto) throws IOException {
         Team team = teamService.findById(teamId);
 
         Long loginMemberId = SecurityUtil.getCurrentMemberId();
@@ -57,7 +57,6 @@ public class NewsServiceImpl implements NewsService {
         MemberTeam loginMemberTeam = memberTeamService.findByMemberAndTeam(writer, team);
         Role loginRole = loginMemberTeam.getRole();
 
-        Member teamMember = memberService.findById(teamMemberId);
         String imageUrl1 = imageUploadService.uploadImage(image1);
         String imageUrl2 = imageUploadService.uploadImage(image2);
 
@@ -65,8 +64,10 @@ public class NewsServiceImpl implements NewsService {
             News news = newsSaveRequestDto.toEntity(writer, team, imageUrl1, imageUrl2);
             newsRepository.save(news);
 
-            //        나중에 멤버팀 테이블에서 멤버 리스트 불러옴 -> 각 멤버의 NewsCheck 테이블 생성
-            setNewsCheck(teamMember, news);
+            List<MemberTeam> teamMembers = memberTeamService.findByTeamId(teamId);
+
+            teamMembers.stream()
+                    .forEach(memberTeam -> setNewsCheck(memberTeam.getMember(), news));
             return new NewsResponseDto(news);
         } else {
             throw new GeneralException(ErrorStatus.BAD_REQUEST, "리더권한 없음");
@@ -156,16 +157,18 @@ public class NewsServiceImpl implements NewsService {
     @Override
     public List<News> findAllNewsByMember(Long memberId, Long teamId) {
         Member member = memberService.findById(memberId);
-        System.out.println(teamId);
+
         if (teamId != null) {
             Team team = teamService.findById(teamId);
-            if (member.getMemberTeamList().stream().anyMatch(mt -> mt.getTeam().getId().equals(teamId))) {
-                return team.getNewsList().stream()
-                        .sorted(Comparator.comparing(News::getId))
-                        .sorted(Comparator.comparing(News::getModifiedTime, Comparator.reverseOrder()))
-                        .collect(Collectors.toList());
+            if (team == memberTeamService.findByMemberAndTeam(member, team).getTeam()) {
+                if (member.getMemberTeamList().stream().anyMatch(mt -> mt.getTeam().getId().equals(teamId))) {
+                    return team.getNewsList().stream()
+                            .sorted(Comparator.comparing(News::getId))
+                            .sorted(Comparator.comparing(News::getModifiedTime, Comparator.reverseOrder()))
+                            .collect(Collectors.toList());
+                }
             } else {
-                throw new GeneralException(ErrorStatus.TEAM_NOT_FOUND);
+                throw new GeneralException(ErrorStatus.MEMBERTEAM_NOT_FOUND);
             }
         } else {
             List<Team> teams = member.getMemberTeamList().stream()
@@ -177,6 +180,8 @@ public class NewsServiceImpl implements NewsService {
                     .sorted(Comparator.comparing(News::getId))
                     .sorted(Comparator.comparing(News::getModifiedTime, Comparator.reverseOrder()))
                     .collect(Collectors.toList());
+
         }
+        throw new GeneralException(ErrorStatus.TEAM_NOT_FOUND);
     }
 }
