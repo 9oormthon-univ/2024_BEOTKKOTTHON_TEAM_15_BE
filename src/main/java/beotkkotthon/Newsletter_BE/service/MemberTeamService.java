@@ -11,5 +11,5 @@ public interface MemberTeamService {
     MemberTeam findByMemberAndTeam(Member member, Team team);
     void deleteMemberTeam(Long teamId, Long memberId);  // 그룹의 멤버 탈퇴 (본인 탈퇴는 가능. 멤버 탈퇴는 LEADER와 CREATOR만 가능. 리더 탈퇴는 CREATOR만 가능.)
 
-    List<MemberTeam> findByTeamId(Long teamId);
+    List<MemberTeam> findAllByTeam(Team team);
 }

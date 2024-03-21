@@ -100,11 +100,11 @@ public class ParticipationServiceImpl implements ParticipationService {
         }
         participationRepository.delete(participation);  // 수락이든 거절이든간에 Participation에서 제거해주어야함.
 
-        // 그룹신청 승연여부결과를 신청자에게 알림 발송 (fcm 알림 전송)
-        String title = "그룹 가입 성공", message = "그룹 가입을 승인받았습니다.";
+        // 그룹신청 승인여부결과를 신청자에게 알림 발송 (fcm 알림 전송)
+        String title = "그룹 가입 성공", message = "'" + team.getName() + "' 그룹 가입이 승인되었습니다.";
         if(participationRequestDto.getIsAccept() == false) {
             title = "그룹 가입 실패";
-            message = "그룹 가입이 거절되었습니다.";
+            message = "'" + team.getName() + "' 그룹 가입이 거절되었습니다.";
         }
         Optional<NotificationDto> opNotificationDto = notificationService.makeMessage(member.getId(), title, message);
         if(opNotificationDto.isPresent()) {
