@@ -7,6 +7,7 @@ import beotkkotthon.Newsletter_BE.web.dto.response.TeamResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -21,7 +22,7 @@ public class TeamController {
 
     private final TeamService teamService;
 
-    @PostMapping("/teams")
+    @PostMapping(value = "/teams", consumes = {MediaType.APPLICATION_JSON_VALUE , MediaType.MULTIPART_FORM_DATA_VALUE})
     @Operation(summary = "CREATOR로써 그룹 생성 [jwt O]")
     public ApiResponse<TeamResponseDto> createTeam(
             @RequestPart(value = "image", required = false) MultipartFile image,
