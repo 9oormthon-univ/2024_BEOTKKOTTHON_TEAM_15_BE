@@ -23,7 +23,7 @@ public class ParticipationController {
     private final ParticipationService participationService;
 
     @GetMapping("/teams/{teamId}/participations")
-    @Operation(summary = "그룹의 참여신청자 목록 조회")
+    @Operation(summary = "그룹의 참여신청자 목록 조회 [jwt O]")
     @Parameter(name = "teamId", description = "팀의 아이디, path variable 입니다.")
     public ApiResponse<List<ParticipationResponseDto>> findParticipationByTeam(@PathVariable Long teamId) {
         List<ParticipationResponseDto> participationResponseDtoList = participationService.findParticipationByTeam(teamId);
@@ -31,7 +31,7 @@ public class ParticipationController {
     }
 
     @PostMapping("/teams/{teamId}/participations")  // RequestBody가 필요하기도 했고, 서비스 클래스에서 DB save 로직도 있으므로, @PostMapping을 사용.
-    @Operation(summary = "그룹의 참여신청자 수락/거절")
+    @Operation(summary = "그룹의 참여신청자 수락/거절 [jwt O]")
     @Parameter(name = "teamId", description = "팀의 아이디, path variable 입니다.")
     public ApiResponse acceptParticipation(@PathVariable Long teamId, @RequestBody ParticipationRequestDto participationRequestDto) {  // 새멤버 수락/거절 결과 Participation에서 해당 데이터 삭제 후, 수락일 경우 MemberTeam에도 추가.
         participationService.acceptParticipation(teamId, participationRequestDto);
@@ -39,7 +39,7 @@ public class ParticipationController {
     }
 
     @PostMapping("/teams/{teamId}")
-    @Operation(summary = "현재 로그인된 사용자가 그룹에 참여신청")
+    @Operation(summary = "현재 로그인된 사용자가 그룹에 참여신청 [jwt O]")
     @Parameter(name = "teamId", description = "팀의 아이디, path variable 입니다.")
     public ApiResponse<ParticipationResponseDto> createParticipation(@PathVariable Long teamId, @RequestParam(value = "requestrole", required = true) String requestRole) {
         ParticipationResponseDto participationResponseDto = participationService.createParticipation(teamId, requestRole);

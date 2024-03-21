@@ -24,14 +24,14 @@ public class AuthController {
 
 
     @PostMapping("/signup")
-    @Operation(summary = "회원가입")
+    @Operation(summary = "회원가입 [jwt X]")
     public ApiResponse<MemberResponseDto> signUp(@RequestBody MemberSignupRequestDto memberSignupRequestDto) {
         MemberResponseDto memberResponseDto = authService.signup(memberSignupRequestDto);
         return ApiResponse.onCreate(memberResponseDto);
     }
 
     @PostMapping("/login")
-    @Operation(summary = "로그인")
+    @Operation(summary = "로그인 [jwt X]")
     public ApiResponse<TokenDto> login(@RequestBody MemberLoginRequestDto memberLoginRequestDto) {
         TokenDto tokenDto = authService.login(memberLoginRequestDto);  // 로그인.
         notificationService.saveNotification(new FcmTokenRequestDto(memberLoginRequestDto.getFcmToken()));  // 로그인 시, fcm토큰 DB에 저장.
@@ -39,7 +39,7 @@ public class AuthController {
     }
 
     @DeleteMapping("/logout")
-    @Operation(summary = "로그아웃")
+    @Operation(summary = "로그아웃 [jwt O]")
     public ApiResponse logout() {  // 로그아웃 시, fcm토큰 DB에서 삭제.
         notificationService.deleteNotification();
         return ApiResponse.onUpdateDelete(null);
