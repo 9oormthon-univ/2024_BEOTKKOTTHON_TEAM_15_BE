@@ -11,14 +11,12 @@ public class MemberLoginRequestDto {
 
     private String email;
     private String password;
-    private String fcmToken;
 
 
     @Builder
-    public MemberLoginRequestDto(String email, String password, String fcmToken) {
+    public MemberLoginRequestDto(String email, String password) {
         this.email = email;
         this.password = password;
-        this.fcmToken = fcmToken;
     }
 
 

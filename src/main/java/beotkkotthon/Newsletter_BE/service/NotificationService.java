@@ -7,7 +7,7 @@ import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 
 public interface NotificationService {
-    void saveNotification(FcmTokenRequestDto fcmTokenRequestDto);  // 로그인 시, fcm토큰 DB에 저장.
+    void saveNotification(FcmTokenRequestDto fcmTokenRequestDto);  // 로그인 직후 바로, fcm토큰 DB에 저장.
     String getNotificationToken();
     void sendNotification(NotificationDto notificationDto) throws ExecutionException, InterruptedException;
     void deleteNotification();  // 로그아웃 시, fcm토큰 DB에서 삭제.
