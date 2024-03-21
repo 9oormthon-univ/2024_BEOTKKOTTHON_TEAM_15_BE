@@ -43,8 +43,8 @@ public class NewsController {
 
     @GetMapping("/teams/news")
     @Operation(summary = "가정통신문 목록 모두 조회(하단그룹-메인)")
-    public ApiResponse<NewsResponseDto.ShowNewsListDto> findAllNews(){
-        List<News> newsList = newsService.findAll();
+    public ApiResponse<NewsResponseDto.ShowNewsListDto> findAllNews(@RequestParam(value = "teamId", required = false) Long teamId){
+        List<News> newsList = newsService.findAllNewsByMember(SecurityUtil.getCurrentMemberId(), teamId);
         List<NewsCheck> newsCheckList = newsCheckService.findByMember(SecurityUtil.getCurrentMemberId());
         return ApiResponse.onSuccess(NewsConverter.toShowNewsDtoList(newsList, newsCheckList));
     }

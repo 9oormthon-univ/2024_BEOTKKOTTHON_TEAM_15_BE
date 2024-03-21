@@ -12,8 +12,6 @@ public interface NewsService {
 
     News findById(Long newsId);
 
-    List<News> findAll();
-
     NewsResponseDto createNews(Long teamId, Long teamMemberId, MultipartFile image1, MultipartFile image2, NewsSaveRequestDto newsSaveRequestDto) throws IOException;
 
     List<NewsResponseDto> findNewsByTeam(Long teamId);
@@ -23,4 +21,5 @@ public interface NewsService {
     List<NewsResponseDto> notReadNewslist(Long memberId, Long teamId);
 
     List<NewsResponseDto> findNewsByMember(Long memberId, Long teamId);
+    List<News> findAllNewsByMember(Long memberId, Long teamId);
 }
