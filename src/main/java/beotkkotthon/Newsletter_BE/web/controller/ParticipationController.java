@@ -22,7 +22,6 @@ public class ParticipationController {
 
     private final ParticipationService participationService;
 
-
     @GetMapping("/teams/{teamId}/participations")
     @Operation(summary = "그룹의 참여신청자 목록 조회")
     @Parameter(name = "teamId", description = "팀의 아이디, path variable 입니다.")
