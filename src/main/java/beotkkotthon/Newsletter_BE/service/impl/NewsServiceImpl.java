@@ -70,7 +70,7 @@ public class NewsServiceImpl implements NewsService {
                     .forEach(memberTeam -> setNewsCheck(memberTeam.getMember(), news));
             return new NewsResponseDto(news);
         } else {
-            throw new GeneralException(ErrorStatus.BAD_REQUEST, "리더권한 없음");
+            throw new GeneralException(ErrorStatus.NOT_AUTHORIZED, "리더 권한 없음");
         }
     }
 
