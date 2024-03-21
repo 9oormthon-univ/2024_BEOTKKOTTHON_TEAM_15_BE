@@ -32,7 +32,7 @@ public class NewsController {
     private final NewsCheckService newsCheckService;
 
     @PostMapping(value = "/teams/{teamId}/news", consumes = {MediaType.APPLICATION_JSON_VALUE , MediaType.MULTIPART_FORM_DATA_VALUE})
-    @Operation(summary = "가정통신문 발행 [jwt O]")
+    @Operation(summary = "가정통신문 발행 & 발행자 제외한 그룹 전인원에게 푸시 알림 [jwt O]")
     @Parameter(name = "teamId", description = "팀의 아이디, path variable 입니다.")
     public ApiResponse<NewsResponseDto> createNews(
             @PathVariable(name = "teamId") Long teamId,

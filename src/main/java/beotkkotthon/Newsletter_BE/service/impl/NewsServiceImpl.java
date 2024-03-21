@@ -18,6 +18,7 @@ import beotkkotthon.Newsletter_BE.service.*;
 import beotkkotthon.Newsletter_BE.web.dto.request.NewsSaveRequestDto;
 import beotkkotthon.Newsletter_BE.web.dto.response.NewsResponseDto;
 import beotkkotthon.Newsletter_BE.web.dto.response.NewsResponseDto.ShowNewsDto;
+import beotkkotthon.Newsletter_BE.web.dto.response.NotificationDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,7 +28,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
+
 
 @Service
 @RequiredArgsConstructor
@@ -39,6 +43,8 @@ public class NewsServiceImpl implements NewsService {
     private final MemberService memberService;
     private final NewsCheckRepository newsCheckRepository;
     private final MemberTeamService memberTeamService;
+    private final NotificationService notificationService;
+
 
     @Override
     public News findById(Long newsId) {
@@ -63,10 +69,24 @@ public class NewsServiceImpl implements NewsService {
             News news = newsSaveRequestDto.toEntity(writer, team, imageUrl1, imageUrl2);
             newsRepository.save(news);
 
-            List<MemberTeam> teamMembers = memberTeamService.findByTeamId(teamId);
+            List<MemberTeam> memberTeams = memberTeamService.findAllByTeam(team);
+            for (MemberTeam memberTeam : memberTeams) {
+                setNewsCheck(memberTeam.getMember(), news);
 
-            teamMembers.stream()
-                    .forEach(memberTeam -> setNewsCheck(memberTeam.getMember(), news));
+                // 가정통신문 발행자를 제외한 나머지 그룹원들에게 fcm 푸시 알림 발송.
+                String title = "공지 발생", message = "'" + team.getName() + "' 그룹의 공지가 올라왔습니다.";
+                Optional<NotificationDto> opNotificationDto = notificationService.makeMessage(memberTeam.getMember().getId(), title, message);
+                if(memberTeam.getMember().getId() != loginMemberId && opNotificationDto.isPresent()) {
+                    NotificationDto notificationDto = opNotificationDto.get();
+                    try {
+                        notificationService.sendNotification(notificationDto);
+                    }
+                    catch (ExecutionException | InterruptedException ex) {
+                        throw new GeneralException(ErrorStatus.INTERNAL_ERROR, ex.getMessage());
+                    }
+                }
+            }
+
             return new NewsResponseDto(news);
         } else {
             throw new GeneralException(ErrorStatus.NOT_AUTHORIZED, "리더 권한 없음");

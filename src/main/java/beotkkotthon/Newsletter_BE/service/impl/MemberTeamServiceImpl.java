@@ -79,8 +79,9 @@ public class MemberTeamServiceImpl implements MemberTeamService {
         }
     }
 
+    @Transactional(readOnly = true)
     @Override
-    public List<MemberTeam> findByTeamId(Long teamId) {
-        return memberTeamRepository.findByTeamId(teamId);
+    public List<MemberTeam> findAllByTeam(Team team) {
+        return memberTeamRepository.findAllByTeam(team);
     }
 }
