@@ -8,10 +8,13 @@ import beotkkotthon.Newsletter_BE.service.AuthService;
 import beotkkotthon.Newsletter_BE.web.dto.request.MemberLoginRequestDto;
 import beotkkotthon.Newsletter_BE.web.dto.request.MemberSignupRequestDto;
 import beotkkotthon.Newsletter_BE.web.dto.response.MemberResponseDto;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-@CrossOrigin(origins = "*", allowedHeaders = "*")
+@CrossOrigin("*")
+@Tag(name = "Auth")
 @RestController
 @RequiredArgsConstructor
 public class AuthController {
@@ -21,12 +24,14 @@ public class AuthController {
 
 
     @PostMapping("/signup")
+    @Operation(summary = "회원가입")
     public ApiResponse<MemberResponseDto> signUp(@RequestBody MemberSignupRequestDto memberSignupRequestDto) {
         MemberResponseDto memberResponseDto = authService.signup(memberSignupRequestDto);
         return ApiResponse.onCreate(memberResponseDto);
     }
 
     @PostMapping("/login")
+    @Operation(summary = "로그인")
     public ApiResponse<TokenDto> login(@RequestBody MemberLoginRequestDto memberLoginRequestDto) {
         TokenDto tokenDto = authService.login(memberLoginRequestDto);  // 로그인.
         notificationService.saveNotification(new FcmTokenRequestDto(memberLoginRequestDto.getFcmToken()));  // 로그인 시, fcm토큰 DB에 저장.
@@ -34,6 +39,7 @@ public class AuthController {
     }
 
     @DeleteMapping("/logout")
+    @Operation(summary = "로그아웃")
     public ApiResponse logout() {  // 로그아웃 시, fcm토큰 DB에서 삭제.
         notificationService.deleteNotification();
         return ApiResponse.onUpdateDelete(null);
