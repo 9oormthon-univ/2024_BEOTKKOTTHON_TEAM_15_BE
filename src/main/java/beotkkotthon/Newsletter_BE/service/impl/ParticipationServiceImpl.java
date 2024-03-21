@@ -91,17 +91,36 @@ public class ParticipationServiceImpl implements ParticipationService {
 
         if(participationRequestDto.getIsAccept() == true) {  // 수락인 경우
             team.teamSizeUp();  // 인원수 체킹 및 teamSize를 +1하기 위해, 이 코드먼저 실행.
-            MemberTeam memberTeam = MemberTeam.MemberTeamSaveBuilder()
+            MemberTeam memberTeamEntity = MemberTeam.MemberTeamSaveBuilder()
                     .role(newRole)
                     .member(member)
                     .team(team)
                     .build();
-            memberTeamRepository.save(memberTeam);
+            memberTeamRepository.save(memberTeamEntity);
+
+            // 방금한 가입한 본인 및 MEMBER들을 제외하고, LEADER & CREATOR 들에게 푸시 알림 발송.
+            List<MemberTeam> memberTeams = memberTeamService.findAllByTeam(team);
+            for (MemberTeam memberTeam : memberTeams) {
+                if(memberTeam.getMember().getId() != loginMemberId && (!memberTeam.getRole().equals(Role.MEMBER))) {
+                    String title = "그룹 신규인원 발생";
+                    String message = "'" + team.getName() + "' 그룹에 '" + member.getUsername() + "'님이 참여했습니다.";
+                    Optional<NotificationDto> opNotificationDto = notificationService.makeMessage(member.getId(), title, message);
+
+                    if (opNotificationDto.isPresent()) {
+                        NotificationDto notificationDto = opNotificationDto.get();
+                        try {
+                            notificationService.sendNotification(notificationDto);
+                        } catch (ExecutionException | InterruptedException ex) {
+                            throw new GeneralException(ErrorStatus.INTERNAL_ERROR, ex.getMessage());
+                        }
+                    }
+                }
+            }
         }
         participationRepository.delete(participation);  // 수락이든 거절이든간에 Participation에서 제거해주어야함.
 
-        // 그룹신청 승인여부결과를 신청자에게 알림 발송 (fcm 알림 전송)
-        String title = "그룹 가입 성공", message = "'" + team.getName() + "' 그룹 가입이 승인되었습니다.";
+        // 그룹신청 승인여부결과를 신청자에게 푸시 알림 발송.
+        String title = "그룹 가입 성공", message = "'" + team.getName() + "' 그룹에 가입이 승인되었습니다.";
         if(participationRequestDto.getIsAccept() == false) {
             title = "그룹 가입 실패";
             message = "'" + team.getName() + "' 그룹 가입이 거절되었습니다.";
