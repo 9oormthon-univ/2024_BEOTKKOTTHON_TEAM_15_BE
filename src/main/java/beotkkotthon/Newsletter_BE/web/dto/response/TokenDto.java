@@ -1,4 +1,4 @@
-package beotkkotthon.Newsletter_BE.config.security.jwt;
+package beotkkotthon.Newsletter_BE.web.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class TokenDto {
+public class TokenDto {  // jwt Token ResponseDto
 
     private String grantType;
     private String accessToken;

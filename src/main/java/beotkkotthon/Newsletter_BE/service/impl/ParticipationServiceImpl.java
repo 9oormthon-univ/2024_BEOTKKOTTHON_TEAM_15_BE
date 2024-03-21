@@ -11,11 +11,9 @@ import beotkkotthon.Newsletter_BE.payload.exception.GeneralException;
 import beotkkotthon.Newsletter_BE.payload.status.ErrorStatus;
 import beotkkotthon.Newsletter_BE.repository.MemberTeamRepository;
 import beotkkotthon.Newsletter_BE.repository.ParticipationRepository;
-import beotkkotthon.Newsletter_BE.service.MemberService;
-import beotkkotthon.Newsletter_BE.service.MemberTeamService;
-import beotkkotthon.Newsletter_BE.service.ParticipationService;
-import beotkkotthon.Newsletter_BE.service.TeamService;
+import beotkkotthon.Newsletter_BE.service.*;
 import beotkkotthon.Newsletter_BE.web.dto.request.ParticipationRequestDto;
+import beotkkotthon.Newsletter_BE.web.dto.response.NotificationDto;
 import beotkkotthon.Newsletter_BE.web.dto.response.ParticipationResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +23,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.ExecutionException;
 
 @Service
 @RequiredArgsConstructor
@@ -36,6 +36,7 @@ public class ParticipationServiceImpl implements ParticipationService {
     private final TeamService teamService;
     private final MemberService memberService;
     private final MemberTeamService memberTeamService;
+    private final NotificationService notificationService;
 
 
     @Override
@@ -98,6 +99,23 @@ public class ParticipationServiceImpl implements ParticipationService {
             memberTeamRepository.save(memberTeam);
         }
         participationRepository.delete(participation);  // 수락이든 거절이든간에 Participation에서 제거해주어야함.
+
+        // 그룹신청 승연여부결과를 신청자에게 알림 발송 (fcm 알림 전송)
+        String title = "그룹 가입 성공", message = "그룹 가입을 승인받았습니다.";
+        if(participationRequestDto.getIsAccept() == false) {
+            title = "그룹 가입 실패";
+            message = "그룹 가입이 거절되었습니다.";
+        }
+        Optional<NotificationDto> opNotificationDto = notificationService.makeMessage(member.getId(), title, message);
+        if(opNotificationDto.isPresent()) {
+            NotificationDto notificationDto = opNotificationDto.get();
+            try {
+                notificationService.sendNotification(notificationDto);
+            }
+            catch (ExecutionException | InterruptedException ex) {
+                throw new GeneralException(ErrorStatus.INTERNAL_ERROR, ex.getMessage());
+            }
+        }
     }
 
     @Transactional

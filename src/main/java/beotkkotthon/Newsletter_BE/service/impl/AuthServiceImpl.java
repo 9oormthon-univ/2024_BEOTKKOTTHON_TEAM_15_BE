@@ -1,6 +1,7 @@
 package beotkkotthon.Newsletter_BE.service.impl;
 
-import beotkkotthon.Newsletter_BE.config.security.jwt.TokenDto;
+import beotkkotthon.Newsletter_BE.service.NotificationService;
+import beotkkotthon.Newsletter_BE.web.dto.response.TokenDto;
 import beotkkotthon.Newsletter_BE.config.security.jwt.TokenProvider;
 import beotkkotthon.Newsletter_BE.domain.Member;
 import beotkkotthon.Newsletter_BE.payload.exception.GeneralException;

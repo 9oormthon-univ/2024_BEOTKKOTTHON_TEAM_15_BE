@@ -2,6 +2,7 @@ package beotkkotthon.Newsletter_BE.config.security.jwt;
 
 import beotkkotthon.Newsletter_BE.payload.exception.GeneralException;
 import beotkkotthon.Newsletter_BE.payload.status.ErrorStatus;
+import beotkkotthon.Newsletter_BE.web.dto.response.TokenDto;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
