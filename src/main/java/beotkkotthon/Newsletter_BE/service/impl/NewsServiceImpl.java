@@ -32,7 +32,6 @@ import java.util.stream.Collectors;
 public class NewsServiceImpl implements NewsService {
 
     private final NewsRepository newsRepository;
-    private final MemberRepository memberRepository;
     private final ImageUploadService imageUploadService;
     private final TeamService teamService;
     private final MemberService memberService;
@@ -51,9 +50,10 @@ public class NewsServiceImpl implements NewsService {
 
     @Transactional
     @Override
-    public NewsResponseDto createNews(Long teamId, Long writerId, Long teamMemberId, MultipartFile image1, MultipartFile image2, NewsSaveRequestDto newsSaveRequestDto) throws IOException {
+    public NewsResponseDto createNews(Long teamId, Long teamMemberId, MultipartFile image1, MultipartFile image2, NewsSaveRequestDto newsSaveRequestDto) throws IOException {
         Team team = teamService.findById(teamId);
-        Member writer = memberService.findById(writerId);
+        Long loginMemberId = SecurityUtil.getCurrentMemberId();
+        Member writer = memberService.findById(loginMemberId);
         Member teamMember = memberService.findById(teamMemberId);
         String imageUrl1 = imageUploadService.uploadImage(image1);
         String imageUrl2 = imageUploadService.uploadImage(image2);
@@ -119,8 +119,8 @@ public class NewsServiceImpl implements NewsService {
 
     @Override
     public List<NewsResponseDto> findNewsByMember(Long memberId, Long teamId) {
-
         Member member = memberService.findById(memberId);
+
         List<NewsResponseDto> newsResponseDtos;
 
         if (teamId != null) {
