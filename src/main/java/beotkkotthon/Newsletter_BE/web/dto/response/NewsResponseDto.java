@@ -1,7 +1,6 @@
 package beotkkotthon.Newsletter_BE.web.dto.response;
 
 import beotkkotthon.Newsletter_BE.domain.News;
-import beotkkotthon.Newsletter_BE.domain.Team;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -48,6 +47,8 @@ public class NewsResponseDto {
         String imageUrl1;
         String imageUrl2;
         LocalDateTime limitTime;
+        int readMemberCount;
+        int notReadMemberCount;
     }
 
     @Builder
@@ -57,5 +58,14 @@ public class NewsResponseDto {
     public static class ShowNewsListDto {
         List<ShowNewsDto> showNewsDtoList;
         List<NewsCheckResponseDto.NewsCheckDto> newsCheckResponseDtoList;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class NewsDetailDto{
+        ShowNewsDto showNewsDto;
+        List<NewsCheckResponseDto.NewsCheckDto> newsCheckDtoList;
     }
 }

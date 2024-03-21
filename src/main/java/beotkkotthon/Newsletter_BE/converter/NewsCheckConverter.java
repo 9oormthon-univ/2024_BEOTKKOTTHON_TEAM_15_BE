@@ -11,6 +11,7 @@ public class NewsCheckConverter {
                 .newsId(newsCheck.getNews().getId())
                 .checkStatus(newsCheck.getCheckStatus())
                 .checkTime(newsCheck.getCheckTime())
+                .username(newsCheck.getMember().getUsername())
                 .build();
     }
 }

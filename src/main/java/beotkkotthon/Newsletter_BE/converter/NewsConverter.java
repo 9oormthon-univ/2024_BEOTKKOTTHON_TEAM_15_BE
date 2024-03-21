@@ -20,6 +20,8 @@ public class NewsConverter {
                 .imageUrl1(news.getImageUrl1())
                 .imageUrl2(news.getImageUrl2())
                 .limitTime(news.getLimitTime())
+                .readMemberCount(0)
+                .notReadMemberCount(news.getTeam().getTeamSize())
                 .build();
     }
 
