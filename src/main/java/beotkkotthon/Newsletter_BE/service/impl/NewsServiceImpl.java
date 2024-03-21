@@ -1,6 +1,5 @@
 package beotkkotthon.Newsletter_BE.service.impl;
 
-import beotkkotthon.Newsletter_BE.converter.NewsConverter;
 import beotkkotthon.Newsletter_BE.config.security.util.SecurityUtil;
 
 import beotkkotthon.Newsletter_BE.domain.Member;
@@ -14,11 +13,11 @@ import beotkkotthon.Newsletter_BE.payload.exception.GeneralException;
 import beotkkotthon.Newsletter_BE.payload.status.ErrorStatus;
 
 import beotkkotthon.Newsletter_BE.repository.NewsCheckRepository;
-import beotkkotthon.Newsletter_BE.repository.MemberRepository;
 import beotkkotthon.Newsletter_BE.repository.NewsRepository;
 import beotkkotthon.Newsletter_BE.service.*;
 import beotkkotthon.Newsletter_BE.web.dto.request.NewsSaveRequestDto;
 import beotkkotthon.Newsletter_BE.web.dto.response.NewsResponseDto;
+import beotkkotthon.Newsletter_BE.web.dto.response.NewsResponseDto.ShowNewsDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -93,9 +92,22 @@ public class NewsServiceImpl implements NewsService {
     }
 
     @Override
-    public NewsResponseDto.ShowNewsDto getShowNewsDto(Long teamId, Long newsId) {
+    public ShowNewsDto getShowNewsDto(Long memberId, Long teamId, Long newsId, int count) {
         News news = findById(newsId);
-        return NewsConverter.toShowNewsDto(news);
+        Team team = teamService.findById(teamId);
+        count = countReadMember(memberId, teamId, newsId);
+
+        return ShowNewsDto.builder()
+                .newsId(news.getId())
+                .title(news.getTitle())
+                .writer(news.getMember().getUsername())
+                .content(news.getContent())
+                .imageUrl1(news.getImageUrl1())
+                .imageUrl2(news.getImageUrl2())
+                .limitTime(news.getLimitTime())
+                .readMemberCount(count)
+                .notReadMemberCount(team.getTeamSize() - count)
+                .build();
     }
 
     @Override
@@ -183,5 +195,25 @@ public class NewsServiceImpl implements NewsService {
 
         }
         throw new GeneralException(ErrorStatus.TEAM_NOT_FOUND);
+    }
+
+    @Override
+    public int countReadMember(Long memberId, Long teamId, Long newsId) {
+        Member member = memberService.findById(memberId);
+        Team team = teamService.findById(teamId);
+        News news = findById(newsId);
+        List<NewsCheck> newsChecks = newsCheckRepository.findByNews(news);
+
+        int checkedCount = 0;
+
+        MemberTeam loginMemberTeam = memberTeamService.findByMemberAndTeam(member, team);
+        Role loginRole = loginMemberTeam.getRole();
+
+        if (loginRole.equals(Role.LEADER) || loginRole.equals(Role.CREATOR)) {
+            checkedCount = (int) newsChecks.stream()
+                    .filter(newsCheck -> newsCheck.getCheckStatus() == CheckStatus.READ)
+                    .count();
+        }
+        return checkedCount;
     }
 }

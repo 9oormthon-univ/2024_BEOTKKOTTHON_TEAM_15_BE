@@ -16,10 +16,13 @@ public interface NewsService {
 
     List<NewsResponseDto> findNewsByTeam(Long teamId);
 
-    NewsResponseDto.ShowNewsDto getShowNewsDto(Long teamId, Long newsId);
+    NewsResponseDto.ShowNewsDto getShowNewsDto(Long memberId, Long teamId, Long newsId, int count);
 
     List<NewsResponseDto> notReadNewslist(Long memberId, Long teamId);
 
     List<NewsResponseDto> findNewsByMember(Long memberId, Long teamId);
+
+    int countReadMember(Long memberId, Long teamId, Long newsId);
+
     List<News> findAllNewsByMember(Long memberId, Long teamId);
 }
