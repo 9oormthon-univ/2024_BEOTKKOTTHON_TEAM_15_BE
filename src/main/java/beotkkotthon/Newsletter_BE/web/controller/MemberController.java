@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-@CrossOrigin("*")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @Tag(name = "Member")
 @RestController
 @RequiredArgsConstructor
