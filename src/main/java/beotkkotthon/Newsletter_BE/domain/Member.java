@@ -49,6 +49,10 @@ public class Member extends BaseEntity implements Serializable {
     @OneToMany(mappedBy = "member")  // Member-News 양방향매핑
     private List<News> newsList = new ArrayList<>();
 
+    // (읽기 전용 필드)
+    @OneToOne(mappedBy = "member")  // Member-Notification 양방향매핑
+    private Notification notification;
+
 
     @Builder(builderClassName = "MemberJoinBuilder", builderMethodName = "MemberJoinBuilder")
     public Member(String email, String password, String username, Authority authority, String imageUrl, NoticeStatus noticeStatus) {
