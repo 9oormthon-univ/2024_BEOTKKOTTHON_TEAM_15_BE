@@ -1,6 +1,3 @@
-server:
-  port: 5000
-
 spring:
   config:
     activate:
@@ -17,20 +14,20 @@ spring:
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: ${DB_URL_PROD}
-    username: ${DB_USERNAME_PROD}
-    password: ${DB_PW_PROD}
+    url: jdbc:mysql://beotkkotthon-dev.cwsu2gsusmej.ap-northeast-2.rds.amazonaws.com:3306/beotkkot?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: root
+    password: beotkkot15!
 
 ## JWT Setting
 jwt:
-  secret: ${JWT_SECRET}
+  secret: c3ByaW5nLWJhY2tlbmQtYmVvdGtrb3R0aG9uLW5ld3NsZXR0ZXItcHJvamVjdC1zZWN1cml0eS1qd3Qtc2VjcmV0LWtleXl5Cg==
 
 # aws
 cloud:
   aws:
     credentials:
-      accessKey: ${AWS_ACCESS_KEY}
-      secretKey: ${AWS_SECRET_KEY}
+      accessKey: AKIA4TBH5MFOAQDVBEP7
+      secretKey: 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
     s3:
       bucket: beotkkotthon-s3
     region:
