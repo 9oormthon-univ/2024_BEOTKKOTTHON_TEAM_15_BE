@@ -19,5 +19,6 @@ public class NewsCheckResponseDto {
         Long newsId;
         CheckStatus checkStatus;
         Long checkTime;
+        String username;
     }
 }

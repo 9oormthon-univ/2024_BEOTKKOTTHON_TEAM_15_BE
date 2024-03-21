@@ -32,6 +32,7 @@ public enum ErrorStatus implements BaseErrorCode {
 
     // MemberTeam Error
     MEMBERTEAM_NOT_FOUND(HttpStatus.NOT_FOUND, "MEMBERTEAM4000", "MEMBERTEAM not found"),
+    NOT_AUTHORIZED(HttpStatus.BAD_REQUEST, "MEMBERTEAM4001", "ROLE is wrong"),
 
     // Participation Error
     PARTICIPATION_NOT_FOUND(HttpStatus.NOT_FOUND, "PARTICIPATION4000", "PARTICIPATION not found"),

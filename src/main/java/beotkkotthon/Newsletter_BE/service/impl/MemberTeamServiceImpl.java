@@ -17,6 +17,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -75,5 +77,10 @@ public class MemberTeamServiceImpl implements MemberTeamService {
                 throw new GeneralException(ErrorStatus.BAD_REQUEST, "그룹 탈퇴 권한 ERROR - MEMBER는 타인 퇴출 불가능");
             }
         }
+    }
+
+    @Override
+    public List<MemberTeam> findByTeamId(Long teamId) {
+        return memberTeamRepository.findByTeamId(teamId);
     }
 }
