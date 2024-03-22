@@ -195,13 +195,11 @@ public class NewsServiceImpl implements NewsService {
 
         if (teamId != null) {
             Team team = teamService.findById(teamId);
-            if (team == memberTeamService.findByMemberAndTeam(member, team).getTeam()) {
-                if (member.getMemberTeamList().stream().anyMatch(mt -> mt.getTeam().getId().equals(teamId))) {
+            if (member.getMemberTeamList().stream().anyMatch(mt -> mt.getTeam().getId().equals(teamId))) {
                     return team.getNewsList().stream()
                             .sorted(Comparator.comparing(News::getId))
                             .sorted(Comparator.comparing(News::getModifiedTime, Comparator.reverseOrder()))
                             .collect(Collectors.toList());
-                }
             } else {
                 throw new GeneralException(ErrorStatus.MEMBERTEAM_NOT_FOUND);
             }
@@ -217,7 +215,6 @@ public class NewsServiceImpl implements NewsService {
                     .collect(Collectors.toList());
 
         }
-        throw new GeneralException(ErrorStatus.TEAM_NOT_FOUND);
     }
 
     @Override
