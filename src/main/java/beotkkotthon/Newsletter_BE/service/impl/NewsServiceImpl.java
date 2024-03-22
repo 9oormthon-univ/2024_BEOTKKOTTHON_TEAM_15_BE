@@ -207,11 +207,8 @@ public class NewsServiceImpl implements NewsService {
                 throw new GeneralException(ErrorStatus.MEMBERTEAM_NOT_FOUND);
             }
         } else {
-            List<Team> teams = member.getMemberTeamList().stream()
+            return member.getMemberTeamList().stream()
                     .map(MemberTeam::getTeam)
-                    .collect(Collectors.toList());
-
-            return teams.stream()
                     .flatMap(team -> team.getNewsList().stream())
                     .sorted(Comparator.comparing(News::getId))
                     .sorted(Comparator.comparing(News::getModifiedTime, Comparator.reverseOrder()))
