@@ -2,8 +2,10 @@ package beotkkotthon.Newsletter_BE.web.controller;
 
 import beotkkotthon.Newsletter_BE.config.security.util.SecurityUtil;
 import beotkkotthon.Newsletter_BE.converter.TeamConverter;
+import beotkkotthon.Newsletter_BE.domain.News;
 import beotkkotthon.Newsletter_BE.domain.Team;
 import beotkkotthon.Newsletter_BE.payload.ApiResponse;
+import beotkkotthon.Newsletter_BE.service.NewsService;
 import beotkkotthon.Newsletter_BE.service.TeamService;
 import beotkkotthon.Newsletter_BE.web.dto.request.TeamSaveRequestDto;
 import beotkkotthon.Newsletter_BE.web.dto.response.TeamResponseDto;
@@ -12,7 +14,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
@@ -24,6 +25,7 @@ import java.util.List;
 public class TeamController {
 
     private final TeamService teamService;
+    private final NewsService newsService;
 
     // !!! 임시 에러 해결. 차후 수정 반드시 필요 !!!
     @PostMapping(value = "/teams", consumes = {MediaType.APPLICATION_JSON_VALUE , MediaType.MULTIPART_FORM_DATA_VALUE}, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -41,5 +43,12 @@ public class TeamController {
 
         List<TeamResponseDto> teamResponseDtos = teamService.findTeamsByMember(name, link);
         return ApiResponse.onSuccess(teamResponseDtos);
+    }
+
+    @GetMapping("/teams/{teamId}")
+    @Operation(summary = "개별 팀 조회 [jwt O]")
+    public ApiResponse<TeamResponseDto.ShowTeamDto> findTeamById(@PathVariable(name = "teamId") Long teamId) {
+        List<News> newsList = newsService.findAllNewsByMember(SecurityUtil.getCurrentMemberId(), teamId);
+        return ApiResponse.onSuccess(teamService.showTeamById(SecurityUtil.getCurrentMemberId(), teamId, newsList));
     }
 }
