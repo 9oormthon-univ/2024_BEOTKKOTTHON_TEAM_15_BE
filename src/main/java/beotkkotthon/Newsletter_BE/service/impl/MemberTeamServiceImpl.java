@@ -25,7 +25,6 @@ import java.util.List;
 public class MemberTeamServiceImpl implements MemberTeamService {
 
     private final MemberTeamRepository memberTeamRepository;
-    private final TeamService teamService;
     private final MemberService memberService;
 
 
@@ -37,9 +36,8 @@ public class MemberTeamServiceImpl implements MemberTeamService {
 
     @Transactional
     @Override
-    public void deleteMemberTeam(Long teamId, Long memberId) {  // 그룹의 멤버 탈퇴 (MEMBER 및 LEADER 본인 탈퇴는 가능. CREATOR 본인 탈퇴는 불가능. 멤버 탈퇴는 LEADER와 CREATOR만 가능. 리더 탈퇴는 CREATOR만 가능.)
+    public void deleteMemberTeam(Team team, Long memberId) {  // 그룹의 멤버 탈퇴 (MEMBER 및 LEADER 본인 탈퇴는 가능. CREATOR 본인 탈퇴는 불가능. 멤버 탈퇴는 LEADER와 CREATOR만 가능. 리더 탈퇴는 CREATOR만 가능.)
         // 탈퇴하고자하는 사용자
-        Team team = teamService.findById(teamId);
         Member member = memberService.findById(memberId);
         MemberTeam memberTeam = findByMemberAndTeam(member, team);
         Role outRole = memberTeam.getRole();  // 탈퇴시키고자 하는 사용자의 Role

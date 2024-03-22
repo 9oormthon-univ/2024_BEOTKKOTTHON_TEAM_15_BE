@@ -1,12 +1,14 @@
 package beotkkotthon.Newsletter_BE.web.dto.response;
 
 import beotkkotthon.Newsletter_BE.domain.Team;
+import beotkkotthon.Newsletter_BE.domain.enums.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -43,5 +45,20 @@ public class TeamResponseDto {
         private Integer teamSize;
         private String imageUrl;
         private String link;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class ShowTeamDto{
+        private Long id;
+        private String name;
+        private String description;
+        private Integer teamSize;
+        private String imageUrl;
+        private String link;
+        private List<NewsResponseDto.ShowNewsDto> showNewsDtoList;
+        private Role role;
     }
 }

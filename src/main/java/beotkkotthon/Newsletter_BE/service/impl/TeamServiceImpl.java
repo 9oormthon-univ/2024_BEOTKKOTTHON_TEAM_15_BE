@@ -1,6 +1,7 @@
 package beotkkotthon.Newsletter_BE.service.impl;
 
 import beotkkotthon.Newsletter_BE.config.security.util.SecurityUtil;
+import beotkkotthon.Newsletter_BE.converter.TeamConverter;
 import beotkkotthon.Newsletter_BE.domain.Member;
 import beotkkotthon.Newsletter_BE.domain.News;
 import beotkkotthon.Newsletter_BE.domain.Team;
@@ -13,6 +14,7 @@ import beotkkotthon.Newsletter_BE.repository.MemberTeamRepository;
 import beotkkotthon.Newsletter_BE.repository.TeamRepository;
 import beotkkotthon.Newsletter_BE.service.ImageUploadService;
 import beotkkotthon.Newsletter_BE.service.MemberService;
+import beotkkotthon.Newsletter_BE.service.MemberTeamService;
 import beotkkotthon.Newsletter_BE.service.TeamService;
 import beotkkotthon.Newsletter_BE.web.dto.request.TeamSaveRequestDto;
 import beotkkotthon.Newsletter_BE.web.dto.response.NewsResponseDto;
@@ -38,6 +40,7 @@ public class TeamServiceImpl implements TeamService {
     private final MemberTeamRepository memberTeamRepository;
     private final ImageUploadService imageUploadService;
     private final MemberService memberService;
+    private final MemberTeamService memberTeamService;
 
 
     @Override
@@ -144,5 +147,15 @@ public class TeamServiceImpl implements TeamService {
         else {  // 잘못된 url
             throw new GeneralException(ErrorStatus.BAD_REQUEST);
         }
+    }
+
+    @Override
+    public TeamResponseDto.ShowTeamDto showTeamById(Long memberId, Long teamId, List<News> newsList) {
+        Member member = memberService.findById(memberId);
+        Team team = findById(teamId);
+        MemberTeam memberTeam = memberTeamService.findByMemberAndTeam(member, team);
+        Role role = memberTeam.getRole();
+
+        return TeamConverter.toShowTeamDto(team, role, newsList);
     }
 }
