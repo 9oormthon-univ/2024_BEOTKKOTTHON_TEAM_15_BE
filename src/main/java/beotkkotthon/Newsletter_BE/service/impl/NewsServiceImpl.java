@@ -115,6 +115,8 @@ public class NewsServiceImpl implements NewsService {
     public ShowNewsDto getShowNewsDto(Long memberId, Long teamId, Long newsId, int count) {
         News news = findById(newsId);
         Team team = teamService.findById(teamId);
+        Member member = memberService.findById(memberId);
+        Optional<NewsCheck> newsCheck = newsCheckRepository.findByMemberAndNews(member, news);
         count = countReadMember(memberId, teamId, newsId);
 
         return ShowNewsDto.builder()
@@ -127,6 +129,7 @@ public class NewsServiceImpl implements NewsService {
                 .limitTime(news.getLimitTime())
                 .readMemberCount(count)
                 .notReadMemberCount(team.getTeamSize() - count)
+                .checkStatus(newsCheck.get().getCheckStatus())
                 .build();
     }
 

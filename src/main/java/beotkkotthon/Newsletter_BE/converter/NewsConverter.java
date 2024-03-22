@@ -1,7 +1,9 @@
 package beotkkotthon.Newsletter_BE.converter;
 
+import beotkkotthon.Newsletter_BE.config.security.util.SecurityUtil;
 import beotkkotthon.Newsletter_BE.domain.News;
 import beotkkotthon.Newsletter_BE.domain.NewsCheck;
+import beotkkotthon.Newsletter_BE.domain.enums.CheckStatus;
 import beotkkotthon.Newsletter_BE.web.dto.response.NewsCheckResponseDto;
 import beotkkotthon.Newsletter_BE.web.dto.response.NewsResponseDto;
 import beotkkotthon.Newsletter_BE.web.dto.response.NewsResponseDto.ShowNewsDto;
@@ -22,6 +24,7 @@ public class NewsConverter {
                 .limitTime(news.getLimitTime())
                 .readMemberCount(0)
                 .notReadMemberCount(news.getTeam().getTeamSize())
+                .checkStatus(CheckStatus.NOT_READ)
                 .build();
     }
 
