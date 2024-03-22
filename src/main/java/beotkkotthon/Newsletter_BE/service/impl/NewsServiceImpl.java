@@ -54,7 +54,7 @@ public class NewsServiceImpl implements NewsService {
 
     @Transactional
     @Override
-    public News createNews(Long teamId, MultipartFile image1, MultipartFile image2, NewsSaveRequestDto newsSaveRequestDto) throws IOException {
+    public News createNews(Long teamId, NewsSaveRequestDto newsSaveRequestDto) throws IOException {
         Team team = teamService.findById(teamId);
 
         Long loginMemberId = SecurityUtil.getCurrentMemberId();
@@ -62,8 +62,8 @@ public class NewsServiceImpl implements NewsService {
         MemberTeam loginMemberTeam = memberTeamService.findByMemberAndTeam(writer, team);
         Role loginRole = loginMemberTeam.getRole();
 
-        String imageUrl1 = imageUploadService.uploadImage(image1);
-        String imageUrl2 = imageUploadService.uploadImage(image2);
+        String imageUrl1 = imageUploadService.uploadImage(newsSaveRequestDto.getImage1());
+        String imageUrl2 = imageUploadService.uploadImage(newsSaveRequestDto.getImage2());
 
         if (loginRole.equals(Role.LEADER) || loginRole.equals(Role.CREATOR)) {
             News news = newsSaveRequestDto.toEntity(writer, team, imageUrl1, imageUrl2);
@@ -86,7 +86,7 @@ public class NewsServiceImpl implements NewsService {
                     }
                 }
             }
-
+            System.out.println("생성된 뉴스: " +news.getTitle());
             return news;
         } else {
             throw new GeneralException(ErrorStatus.NOT_AUTHORIZED, "리더 권한 없음");
