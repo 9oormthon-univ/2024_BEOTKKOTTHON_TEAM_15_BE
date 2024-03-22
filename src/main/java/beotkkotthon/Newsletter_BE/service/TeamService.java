@@ -12,6 +12,8 @@ import java.util.List;
 public interface TeamService {
     Team findById(Long id);
 
-    TeamResponseDto createTeam(TeamSaveRequestDto teamSaveRequestDto) throws IOException;
+//    TeamResponseDto createTeam(TeamSaveRequestDto teamSaveRequestDto) throws IOException;
     List<TeamResponseDto> findTeamsByMember(String name, String link);
+
+    Team createTeam(Long memberId, TeamSaveRequestDto teamSaveRequestDto) throws IOException;
 }

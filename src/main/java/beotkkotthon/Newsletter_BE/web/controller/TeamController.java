@@ -1,5 +1,8 @@
 package beotkkotthon.Newsletter_BE.web.controller;
 
+import beotkkotthon.Newsletter_BE.config.security.util.SecurityUtil;
+import beotkkotthon.Newsletter_BE.converter.TeamConverter;
+import beotkkotthon.Newsletter_BE.domain.Team;
 import beotkkotthon.Newsletter_BE.payload.ApiResponse;
 import beotkkotthon.Newsletter_BE.service.TeamService;
 import beotkkotthon.Newsletter_BE.web.dto.request.TeamSaveRequestDto;
@@ -25,9 +28,9 @@ public class TeamController {
     // !!! 임시 에러 해결. 차후 수정 반드시 필요 !!!
     @PostMapping(value = "/teams", consumes = {MediaType.APPLICATION_JSON_VALUE , MediaType.MULTIPART_FORM_DATA_VALUE}, produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "CREATOR로써 그룹 생성 [jwt O]")
-    public ApiResponse<TeamResponseDto> createTeam(TeamSaveRequestDto teamSaveRequestDto) throws IOException {
-        TeamResponseDto teamResponseDto = teamService.createTeam(teamSaveRequestDto);
-        return ApiResponse.onCreate(teamResponseDto);
+    public ApiResponse<TeamResponseDto.TeamDto> createTeam(@RequestBody TeamSaveRequestDto teamSaveRequestDto) throws IOException {
+        Team team = teamService.createTeam(SecurityUtil.getCurrentMemberId(), teamSaveRequestDto);
+        return ApiResponse.onCreate(TeamConverter.toTeamResultDto(team));
     }
 
     @GetMapping("/teams")

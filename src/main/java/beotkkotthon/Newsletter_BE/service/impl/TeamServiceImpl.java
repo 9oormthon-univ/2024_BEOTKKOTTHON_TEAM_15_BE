@@ -46,9 +46,40 @@ public class TeamServiceImpl implements TeamService {
                 () -> new GeneralException(ErrorStatus.TEAM_NOT_FOUND));
     }
 
-    @Transactional
+//    @Transactional
+//    @Override
+//    public TeamResponseDto createTeam(TeamSaveRequestDto teamSaveRequestDto) throws IOException {
+//        String imageUrl = imageUploadService.uploadImage(teamSaveRequestDto.getImage());
+//
+//        String uuid = UUID.randomUUID().toString();
+//        // 20자리의 UUID 생성.
+//        long l = ByteBuffer.wrap(uuid.getBytes()).getLong();
+//        String link = "/teams?link=" + Long.toString(l, 9);
+////        // 10자리의 UUID 생성.
+////        int l = ByteBuffer.wrap(uuid.getBytes()).getInt();
+////        String link = "/teams?link=" + Integer.toString(l, 9);
+//
+//        Team team = teamSaveRequestDto.toEntity(imageUrl, link);
+//        teamRepository.save(team);
+//
+//        Long loginMemberId = SecurityUtil.getCurrentMemberId();
+//        Member loginMember = memberService.findById(loginMemberId);
+//
+//        // 그룹에 CREATOR로 save 시킴
+//        Role role = Role.CREATOR;
+//        MemberTeam memberTeam = MemberTeam.MemberTeamSaveBuilder()
+//                .role(role)
+//                .member(loginMember)
+//                .team(team)
+//                .build();
+//        memberTeamRepository.save(memberTeam);
+//
+//        return new TeamResponseDto(team);
+//    }
+
+
     @Override
-    public TeamResponseDto createTeam(TeamSaveRequestDto teamSaveRequestDto) throws IOException {
+    public Team createTeam(Long memberId, TeamSaveRequestDto teamSaveRequestDto) throws IOException {
         String imageUrl = imageUploadService.uploadImage(teamSaveRequestDto.getImage());
 
         String uuid = UUID.randomUUID().toString();
@@ -74,7 +105,7 @@ public class TeamServiceImpl implements TeamService {
                 .build();
         memberTeamRepository.save(memberTeam);
 
-        return new TeamResponseDto(team);
+        return team;
     }
 
     @Transactional
