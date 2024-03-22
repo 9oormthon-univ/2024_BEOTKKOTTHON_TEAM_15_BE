@@ -61,6 +61,6 @@ public class TeamResponseDto {
         private Role role;
         int leaderCount;
         int memberCount;
-        private List<NewsResponseDto.ShowNewsDto> showNewsDtoList;
+        private List<NewsResponseDto> showNewsDtoList;
     }
 }

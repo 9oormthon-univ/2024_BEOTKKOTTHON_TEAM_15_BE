@@ -18,5 +18,5 @@ public interface TeamService {
 
     Team createTeam(Long memberId, TeamSaveRequestDto teamSaveRequestDto) throws IOException;
 
-    TeamResponseDto.ShowTeamDto showTeamById(Long memberId, Long teamId, List<News> newsList);
+    TeamResponseDto.ShowTeamDto showTeamById(Long memberId, Long teamId, List<NewsResponseDto> newsList);
 }
