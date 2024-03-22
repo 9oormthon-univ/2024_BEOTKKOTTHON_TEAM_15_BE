@@ -19,6 +19,7 @@ public class NewsConverter {
                 .title(news.getTitle())
                 .writer(news.getMember().getUsername())
                 .content(news.getContent())
+                .teamName(news.getTeam().getName())
                 .imageUrl1(news.getImageUrl1())
                 .imageUrl2(news.getImageUrl2())
                 .limitTime(news.getLimitTime())
