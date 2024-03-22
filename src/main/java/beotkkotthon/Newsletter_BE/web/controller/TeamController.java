@@ -31,7 +31,7 @@ public class TeamController {
     }
 
     @GetMapping("/teams")
-    @Operation(summary = "nameO linkX 그룹명 검색 / nameX linkO 초대링크 클릭 / nameX linkX 내가 가입한 팀 목록 조회 [jwt O]")
+    @Operation(summary = "?name=test nameO linkX 그룹명 검색 / nameX linkO 초대링크 클릭 / nameX linkX 내가 가입한 팀 목록 조회 [jwt O]")
     public ApiResponse<List<TeamResponseDto>> findTeamsByMember(  // 그룹명 검색 or 초대링크 클릭 or 내가 가입한 팀 목록 조회
             @RequestParam(value = "name", required = false) String name,
             @RequestParam(value = "link", required = false) String link) {  // 이번 해커톤에서는 MVP로써, link는 사용하지 않을 예정임.
