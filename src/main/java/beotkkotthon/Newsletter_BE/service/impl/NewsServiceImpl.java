@@ -131,6 +131,7 @@ public class NewsServiceImpl implements NewsService {
                 .build();
     }
 
+    @Transactional
     @Override
     public List<NewsResponseDto> notReadNewslist(Long memberId, Long teamId) {
         Member member = memberService.findById(memberId);
@@ -158,6 +159,7 @@ public class NewsServiceImpl implements NewsService {
         return notReadNewsDtos;
     }
 
+    @Transactional
     @Override
     public List<NewsResponseDto> findNewsByMember(Long memberId, Long teamId) {
         Member member = memberService.findById(memberId);
