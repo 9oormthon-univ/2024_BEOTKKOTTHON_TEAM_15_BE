@@ -32,7 +32,7 @@ public class TeamController {
     @PostMapping(value = "/teams", consumes = {MediaType.APPLICATION_JSON_VALUE , MediaType.MULTIPART_FORM_DATA_VALUE}, produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "CREATOR로써 그룹 생성 [jwt O]")
     public ApiResponse<TeamResponseDto.TeamDto> createTeam(@RequestPart(name = "request") TeamSaveRequestDto teamSaveRequestDto,
-                                                           @RequestParam(value = "image", required = false) MultipartFile image) throws IOException {
+                                                           @RequestPart(value = "image", required = false) MultipartFile image) throws IOException {
         Team team = teamService.createTeam(SecurityUtil.getCurrentMemberId(), teamSaveRequestDto, image);
         return ApiResponse.onCreate(TeamConverter.toTeamResultDto(team));
     }
