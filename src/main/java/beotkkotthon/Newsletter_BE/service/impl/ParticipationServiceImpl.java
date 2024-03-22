@@ -2,6 +2,8 @@ package beotkkotthon.Newsletter_BE.service.impl;
 
 import beotkkotthon.Newsletter_BE.config.security.util.SecurityUtil;
 import beotkkotthon.Newsletter_BE.domain.Member;
+import beotkkotthon.Newsletter_BE.domain.News;
+import beotkkotthon.Newsletter_BE.domain.NewsCheck;
 import beotkkotthon.Newsletter_BE.domain.Team;
 import beotkkotthon.Newsletter_BE.domain.enums.RequestRole;
 import beotkkotthon.Newsletter_BE.domain.enums.Role;
@@ -10,6 +12,7 @@ import beotkkotthon.Newsletter_BE.domain.mapping.Participation;
 import beotkkotthon.Newsletter_BE.payload.exception.GeneralException;
 import beotkkotthon.Newsletter_BE.payload.status.ErrorStatus;
 import beotkkotthon.Newsletter_BE.repository.MemberTeamRepository;
+import beotkkotthon.Newsletter_BE.repository.NewsCheckRepository;
 import beotkkotthon.Newsletter_BE.repository.ParticipationRepository;
 import beotkkotthon.Newsletter_BE.service.*;
 import beotkkotthon.Newsletter_BE.web.dto.request.ParticipationRequestDto;
@@ -37,6 +40,7 @@ public class ParticipationServiceImpl implements ParticipationService {
     private final MemberService memberService;
     private final MemberTeamService memberTeamService;
     private final NotificationService notificationService;
+    private final NewsCheckRepository newsCheckRepository;
 
 
     @Override
@@ -97,6 +101,14 @@ public class ParticipationServiceImpl implements ParticipationService {
                     .team(team)
                     .build();
             memberTeamRepository.save(memberTeamEntity);
+
+            List<News> teamNewsList = team.getNewsList();
+
+            // 새로운 멤버에 대한 각 뉴스 newsCheck 생성
+            teamNewsList.stream().forEach(news -> {
+                NewsCheck newsCheck = NewsCheck.NewsCheckCreateBuilder().news(news).member(member).build();
+                newsCheckRepository.save(newsCheck);
+            });
 
             // 방금한 가입한 본인 및 MEMBER들을 제외하고, LEADER & CREATOR 들에게 푸시 알림 발송.
             List<MemberTeam> memberTeams = memberTeamService.findAllByTeam(team);

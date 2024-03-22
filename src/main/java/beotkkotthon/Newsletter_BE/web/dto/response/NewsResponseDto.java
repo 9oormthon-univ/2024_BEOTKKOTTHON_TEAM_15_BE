@@ -18,6 +18,7 @@ public class NewsResponseDto {
     private String content;
     private LocalDateTime limitTime;
     private String writer;
+    private String teamName;
     private String imageUrl1;
     private String imageUrl2;
     private LocalDateTime createdTime;
@@ -29,6 +30,7 @@ public class NewsResponseDto {
         this.content = entity.getContent();
         this.limitTime = entity.getLimitTime();
         this.writer = entity.getMember().getUsername();
+        this.teamName = entity.getTeam().getName();
         this.imageUrl1 = entity.getImageUrl1();
         this.imageUrl2 = entity.getImageUrl2();
         this.createdTime = entity.getCreatedTime();
