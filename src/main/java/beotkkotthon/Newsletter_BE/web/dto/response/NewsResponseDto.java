@@ -54,6 +54,7 @@ public class NewsResponseDto {
         String title;
         String content;
         String writer;
+        Long teamId;
         String teamName;
         String imageUrl1;
         String imageUrl2;

@@ -8,6 +8,7 @@ import beotkkotthon.Newsletter_BE.payload.ApiResponse;
 import beotkkotthon.Newsletter_BE.service.NewsService;
 import beotkkotthon.Newsletter_BE.service.TeamService;
 import beotkkotthon.Newsletter_BE.web.dto.request.TeamSaveRequestDto;
+import beotkkotthon.Newsletter_BE.web.dto.response.NewsResponseDto;
 import beotkkotthon.Newsletter_BE.web.dto.response.TeamResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -49,7 +50,7 @@ public class TeamController {
     @GetMapping("/teams/{teamId}")
     @Operation(summary = "개별 팀 조회 [jwt O]")
     public ApiResponse<TeamResponseDto.ShowTeamDto> findTeamById(@PathVariable(name = "teamId") Long teamId) {
-        List<News> newsList = newsService.findAllNewsByMember(SecurityUtil.getCurrentMemberId(), teamId);
+        List<NewsResponseDto> newsList = newsService.findNewsByTeam(teamId);
         return ApiResponse.onSuccess(teamService.showTeamById(SecurityUtil.getCurrentMemberId(), teamId, newsList));
     }
 }

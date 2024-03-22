@@ -148,7 +148,7 @@ public class TeamServiceImpl implements TeamService {
 
     @Transactional
     @Override
-    public TeamResponseDto.ShowTeamDto showTeamById(Long memberId, Long teamId, List<News> newsList) {
+    public TeamResponseDto.ShowTeamDto showTeamById(Long memberId, Long teamId, List<NewsResponseDto> newsList) {
         Member member = memberService.findById(memberId);
         Team team = findById(teamId);
         MemberTeam memberTeam = memberTeamService.findByMemberAndTeam(member, team);

@@ -121,6 +121,8 @@ public class NewsServiceImpl implements NewsService {
         return ShowNewsDto.builder()
                 .newsId(news.getId())
                 .title(news.getTitle())
+                .teamId(news.getTeam().getId())
+                .teamName(news.getTeam().getName())
                 .writer(news.getMember().getUsername())
                 .content(news.getContent())
                 .imageUrl1(news.getImageUrl1())

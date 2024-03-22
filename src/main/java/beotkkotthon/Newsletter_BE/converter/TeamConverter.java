@@ -23,10 +23,7 @@ public class TeamConverter {
                 .build();
     }
 
-    public static TeamResponseDto.ShowTeamDto toShowTeamDto(Team team, Role role, List<News> newsList, int leaderCount, int memberCount) {
-        List<NewsResponseDto.ShowNewsDto> showNewsDtoList = newsList.stream()
-                .map(NewsConverter::toShowNewsDto)
-                .collect(Collectors.toList());
+    public static TeamResponseDto.ShowTeamDto toShowTeamDto(Team team, Role role, List<NewsResponseDto> newsList, int leaderCount, int memberCount) {
 
         return TeamResponseDto.ShowTeamDto.builder()
                 .id(team.getId())
@@ -38,7 +35,7 @@ public class TeamConverter {
                 .role(role)
                 .leaderCount(leaderCount)
                 .memberCount(memberCount)
-                .showNewsDtoList(showNewsDtoList)
+                .showNewsDtoList(newsList)
                 .build();
     }
 }
