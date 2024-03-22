@@ -37,8 +37,10 @@ public class NewsController {
     @Parameter(name = "teamId", description = "팀의 아이디, path variable 입니다.")
     public ApiResponse<NewsResponseDto> createNews(
             @PathVariable(name = "teamId") Long teamId,
-            NewsSaveRequestDto newsSaveRequestDto) throws IOException {
-        NewsResponseDto newsResponseDto = newsService.createNews(teamId, newsSaveRequestDto.getImage1(), newsSaveRequestDto.getImage2(), newsSaveRequestDto);
+            @RequestPart(name = "image1") MultipartFile image1,
+            @RequestPart(name = "image2") MultipartFile image2,
+            @RequestPart(name = "request") NewsSaveRequestDto newsSaveRequestDto) throws IOException {
+        NewsResponseDto newsResponseDto = newsService.createNews(teamId, image1, image2, newsSaveRequestDto);
         return ApiResponse.onCreate(newsResponseDto);
     }
 

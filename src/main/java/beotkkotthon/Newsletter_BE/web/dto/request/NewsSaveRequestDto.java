@@ -15,16 +15,12 @@ public class NewsSaveRequestDto {
     private String title;
     private String content;
     private Integer minute;
-    private MultipartFile image1;
-    private MultipartFile image2;
 
     @Builder
-    public NewsSaveRequestDto(String title, String content, Integer minute, MultipartFile image1, MultipartFile image2) {
+    public NewsSaveRequestDto (String title, String content, Integer minute) {
         this.title = title;
         this.content = content;
         this.minute = minute;
-        this.image1 = image1;
-        this.image2 = image2;
     }
 
     public News toEntity(Member member, Team team, String imageUrl1, String imageUrl2) {

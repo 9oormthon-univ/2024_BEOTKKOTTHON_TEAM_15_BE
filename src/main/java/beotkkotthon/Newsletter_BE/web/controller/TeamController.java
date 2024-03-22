@@ -14,6 +14,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
@@ -30,8 +31,9 @@ public class TeamController {
     // !!! 임시 에러 해결. 차후 수정 반드시 필요 !!!
     @PostMapping(value = "/teams", consumes = {MediaType.APPLICATION_JSON_VALUE , MediaType.MULTIPART_FORM_DATA_VALUE}, produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "CREATOR로써 그룹 생성 [jwt O]")
-    public ApiResponse<TeamResponseDto.TeamDto> createTeam(@RequestBody TeamSaveRequestDto teamSaveRequestDto) throws IOException {
-        Team team = teamService.createTeam(SecurityUtil.getCurrentMemberId(), teamSaveRequestDto);
+    public ApiResponse<TeamResponseDto.TeamDto> createTeam(@RequestPart(name = "request") TeamSaveRequestDto teamSaveRequestDto,
+                                                           @RequestParam(value = "image", required = false) MultipartFile image) throws IOException {
+        Team team = teamService.createTeam(SecurityUtil.getCurrentMemberId(), teamSaveRequestDto, image);
         return ApiResponse.onCreate(TeamConverter.toTeamResultDto(team));
     }
 
