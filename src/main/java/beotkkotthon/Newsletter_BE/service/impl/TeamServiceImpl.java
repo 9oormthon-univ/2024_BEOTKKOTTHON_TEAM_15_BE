@@ -26,10 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -154,8 +151,20 @@ public class TeamServiceImpl implements TeamService {
         Member member = memberService.findById(memberId);
         Team team = findById(teamId);
         MemberTeam memberTeam = memberTeamService.findByMemberAndTeam(member, team);
-        Role role = memberTeam.getRole();
 
-        return TeamConverter.toShowTeamDto(team, role, newsList);
+        List<MemberTeam> memberTeamList = memberTeamService.findAllByTeam(team);
+
+        Map<Role, Long> roleCounts = memberTeamList.stream()
+                .collect(Collectors.groupingBy(MemberTeam::getRole, Collectors.counting()));
+
+        // MEMBER, LEADER, CREATOR의 카운트를 구함
+        long memberCount = roleCounts.getOrDefault(Role.MEMBER, 0L);
+        long leaderCount = roleCounts.entrySet().stream()
+                .filter(entry -> entry.getKey() == Role.LEADER || entry.getKey() == Role.CREATOR)
+                .mapToLong(Map.Entry::getValue)
+                .sum();
+
+        // ShowTeamDto로 변환하여 반환
+        return TeamConverter.toShowTeamDto(team, memberTeam.getRole(), newsList, (int) leaderCount, (int) memberCount);
     }
 }

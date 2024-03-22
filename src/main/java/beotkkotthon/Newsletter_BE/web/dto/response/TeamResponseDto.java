@@ -58,7 +58,9 @@ public class TeamResponseDto {
         private Integer teamSize;
         private String imageUrl;
         private String link;
-        private List<NewsResponseDto.ShowNewsDto> showNewsDtoList;
         private Role role;
+        int leaderCount;
+        int memberCount;
+        private List<NewsResponseDto.ShowNewsDto> showNewsDtoList;
     }
 }
