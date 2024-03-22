@@ -86,7 +86,6 @@ public class NewsServiceImpl implements NewsService {
                     }
                 }
             }
-            System.out.println("생성된 뉴스: " +news.getTitle());
             return news;
         } else {
             throw new GeneralException(ErrorStatus.NOT_AUTHORIZED, "리더 권한 없음");
@@ -195,11 +194,11 @@ public class NewsServiceImpl implements NewsService {
 
         if (teamId != null) {
             Team team = teamService.findById(teamId);
-            if (member.getMemberTeamList().stream().anyMatch(mt -> mt.getTeam().getId().equals(teamId))) {
-                    return team.getNewsList().stream()
-                            .sorted(Comparator.comparing(News::getId))
-                            .sorted(Comparator.comparing(News::getModifiedTime, Comparator.reverseOrder()))
-                            .collect(Collectors.toList());
+            if (member.getMemberTeamList().stream().anyMatch(mt -> mt.getTeam().equals(team))) {
+                return team.getNewsList().stream()
+                        .sorted(Comparator.comparing(News::getId))
+                        .sorted(Comparator.comparing(News::getModifiedTime, Comparator.reverseOrder()))
+                        .collect(Collectors.toList());
             } else {
                 throw new GeneralException(ErrorStatus.MEMBERTEAM_NOT_FOUND);
             }
@@ -213,10 +212,8 @@ public class NewsServiceImpl implements NewsService {
                     .sorted(Comparator.comparing(News::getId))
                     .sorted(Comparator.comparing(News::getModifiedTime, Comparator.reverseOrder()))
                     .collect(Collectors.toList());
-
         }
     }
-
     @Override
     public int countReadMember(Long memberId, Long teamId, Long newsId) {
         Member member = memberService.findById(memberId);
