@@ -24,7 +24,7 @@ public class TeamController {
 
     @PostMapping(value = "/teams", consumes = {MediaType.APPLICATION_JSON_VALUE , MediaType.MULTIPART_FORM_DATA_VALUE}, produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "CREATOR로써 그룹 생성 [jwt O]")
-    public ApiResponse<TeamResponseDto> createTeam(@RequestBody TeamSaveRequestDto teamSaveRequestDto) throws IOException {
+    public ApiResponse<TeamResponseDto> createTeam(TeamSaveRequestDto teamSaveRequestDto) throws IOException {
         TeamResponseDto teamResponseDto = teamService.createTeam(teamSaveRequestDto);
         return ApiResponse.onCreate(teamResponseDto);
     }
