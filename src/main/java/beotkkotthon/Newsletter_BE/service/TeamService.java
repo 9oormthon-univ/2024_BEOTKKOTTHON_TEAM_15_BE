@@ -16,7 +16,7 @@ public interface TeamService {
 //    TeamResponseDto createTeam(TeamSaveRequestDto teamSaveRequestDto) throws IOException;
     List<TeamResponseDto> findTeamsByMember(String name, String link);
 
-    Team createTeam(Long memberId, TeamSaveRequestDto teamSaveRequestDto) throws IOException;
+    Team createTeam(Long memberId, TeamSaveRequestDto teamSaveRequestDto, MultipartFile image) throws IOException;
 
     TeamResponseDto.ShowTeamDto showTeamById(Long memberId, Long teamId, List<News> newsList);
 }
