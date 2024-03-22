@@ -146,6 +146,7 @@ public class TeamServiceImpl implements TeamService {
         }
     }
 
+    @Transactional
     @Override
     public TeamResponseDto.ShowTeamDto showTeamById(Long memberId, Long teamId, List<News> newsList) {
         Member member = memberService.findById(memberId);
@@ -160,7 +161,7 @@ public class TeamServiceImpl implements TeamService {
         // MEMBER, LEADER, CREATOR의 카운트를 구함
         long memberCount = roleCounts.getOrDefault(Role.MEMBER, 0L);
         long leaderCount = roleCounts.entrySet().stream()
-                .filter(entry -> entry.getKey() == Role.LEADER || entry.getKey() == Role.CREATOR)
+                .filter(entry -> entry.getKey().equals(Role.LEADER) || entry.getKey().equals(Role.CREATOR))
                 .mapToLong(Map.Entry::getValue)
                 .sum();
 
