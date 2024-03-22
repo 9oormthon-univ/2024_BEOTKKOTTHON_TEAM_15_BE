@@ -53,7 +53,7 @@ public class NewsServiceImpl implements NewsService {
 
     @Transactional
     @Override
-    public NewsResponseDto createNews(Long teamId, MultipartFile image1, MultipartFile image2, NewsSaveRequestDto newsSaveRequestDto) throws IOException {
+    public News createNews(Long teamId, MultipartFile image1, MultipartFile image2, NewsSaveRequestDto newsSaveRequestDto) throws IOException {
         Team team = teamService.findById(teamId);
 
         Long loginMemberId = SecurityUtil.getCurrentMemberId();
@@ -86,7 +86,7 @@ public class NewsServiceImpl implements NewsService {
                 }
             }
 
-            return new NewsResponseDto(news);
+            return news;
         } else {
             throw new GeneralException(ErrorStatus.NOT_AUTHORIZED, "리더 권한 없음");
         }

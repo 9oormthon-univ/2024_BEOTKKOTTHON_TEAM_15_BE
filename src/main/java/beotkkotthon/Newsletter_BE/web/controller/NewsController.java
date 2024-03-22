@@ -33,11 +33,11 @@ public class NewsController {
     @PostMapping(value = "/teams/{teamId}/news", consumes = {MediaType.APPLICATION_JSON_VALUE , MediaType.MULTIPART_FORM_DATA_VALUE})
     @Operation(summary = "가정통신문 발행 & 발행자 제외한 그룹 전인원에게 푸시 알림 [jwt O]")
     @Parameter(name = "teamId", description = "팀의 아이디, path variable 입니다.")
-    public ApiResponse<NewsResponseDto> createNews(
+    public ApiResponse<NewsResponseDto.NewsDto> createNews(
             @PathVariable(name = "teamId") Long teamId,
-            NewsSaveRequestDto newsSaveRequestDto) throws IOException {
-        NewsResponseDto newsResponseDto = newsService.createNews(teamId, newsSaveRequestDto.getImage1(), newsSaveRequestDto.getImage2(), newsSaveRequestDto);
-        return ApiResponse.onCreate(newsResponseDto);
+            @RequestBody NewsSaveRequestDto newsSaveRequestDto) throws IOException {
+        News news = newsService.createNews(teamId, newsSaveRequestDto.getImage1(), newsSaveRequestDto.getImage2(), newsSaveRequestDto);
+        return ApiResponse.onCreate(NewsConverter.toNewsDto(news));
     }
 
     @GetMapping("/teams/news")
