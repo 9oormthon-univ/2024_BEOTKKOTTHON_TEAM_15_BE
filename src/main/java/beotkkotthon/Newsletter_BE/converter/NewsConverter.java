@@ -1,6 +1,5 @@
 package beotkkotthon.Newsletter_BE.converter;
 
-import beotkkotthon.Newsletter_BE.config.security.util.SecurityUtil;
 import beotkkotthon.Newsletter_BE.domain.News;
 import beotkkotthon.Newsletter_BE.domain.NewsCheck;
 import beotkkotthon.Newsletter_BE.domain.enums.CheckStatus;
@@ -12,6 +11,20 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class NewsConverter {
+
+    public static NewsResponseDto.NewsDto toNewsDto(News news) {
+        return NewsResponseDto.NewsDto.builder()
+                .newsId(news.getId())
+                .title(news.getTitle())
+                .content(news.getContent())
+                .writer(news.getMember().getUsername())
+                .content(news.getContent())
+                .teamName(news.getTeam().getName())
+                .imageUrl1(news.getImageUrl1())
+                .imageUrl2(news.getImageUrl2())
+                .limitTime(news.getLimitTime())
+                .build();
+    }
 
     public static NewsResponseDto.ShowNewsDto toShowNewsDto(News news) {
         return ShowNewsDto.builder()

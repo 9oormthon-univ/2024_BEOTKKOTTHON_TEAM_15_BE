@@ -49,6 +49,21 @@ public class NewsResponseDto {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
+    public static class NewsDto {
+        Long newsId;
+        String title;
+        String content;
+        String writer;
+        String teamName;
+        LocalDateTime limitTime;
+        String imageUrl1;
+        String imageUrl2;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class ShowNewsDto {
         Long newsId;
         String title;
