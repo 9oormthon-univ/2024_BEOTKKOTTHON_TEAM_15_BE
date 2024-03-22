@@ -14,4 +14,6 @@ public class TokenDto {  // jwt Token ResponseDto (+ login username)
 
     @Setter
     private String username;
+    @Setter
+    private String email;
 }
