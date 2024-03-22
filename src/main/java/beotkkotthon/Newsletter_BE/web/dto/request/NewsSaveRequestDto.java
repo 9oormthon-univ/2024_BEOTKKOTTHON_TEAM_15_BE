@@ -15,19 +15,23 @@ public class NewsSaveRequestDto {
     private String title;
     private String content;
     private Integer minute;
+    private MultipartFile image1;
+    private MultipartFile image2;
 
     @Builder
-    public NewsSaveRequestDto (String title, String content, Integer minute) {
+    public NewsSaveRequestDto (String title, String content, Integer minute, MultipartFile image1, MultipartFile image2) {
         this.title = title;
         this.content = content;
         this.minute = minute;
+        this.image1 = image1;
+        this.image2 = image2;
     }
 
     public News toEntity(Member member, Team team, String imageUrl1, String imageUrl2) {
         return News.NewsSaveBuilder()
                 .title(title)
                 .content(content)
-                .minute(minute)
+                .minute(0)
                 .imageUrl1(imageUrl1)
                 .imageUrl2(imageUrl2)
                 .member(member)

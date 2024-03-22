@@ -82,8 +82,8 @@ public class TeamServiceImpl implements TeamService {
 
 
     @Override
-    public Team createTeam(Long memberId, TeamSaveRequestDto teamSaveRequestDto, MultipartFile image) throws IOException {
-        String imageUrl = imageUploadService.uploadImage(image);
+    public Team createTeam(Long memberId, TeamSaveRequestDto teamSaveRequestDto) throws IOException {
+        String imageUrl = imageUploadService.uploadImage(teamSaveRequestDto.getImage());
 
         String uuid = UUID.randomUUID().toString();
         // 20자리의 UUID 생성.
