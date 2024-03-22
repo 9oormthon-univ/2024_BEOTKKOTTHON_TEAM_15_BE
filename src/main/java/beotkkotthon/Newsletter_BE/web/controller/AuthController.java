@@ -50,10 +50,10 @@ public class AuthController {
         return ApiResponse.onSuccess(tokenDto);
     }
 
-    @DeleteMapping("/logout")
+    @GetMapping("/auth/logout")
     @Operation(summary = "로그아웃 [jwt O]")
     public ApiResponse logout() {  // 로그아웃 시, fcm토큰 DB에서 삭제.
         notificationService.deleteNotification();
-        return ApiResponse.onUpdateDelete(null);
+        return ApiResponse.onSuccess(null);
     }
 }
