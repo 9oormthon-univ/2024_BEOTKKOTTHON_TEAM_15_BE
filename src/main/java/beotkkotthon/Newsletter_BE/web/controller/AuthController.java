@@ -1,5 +1,10 @@
 package beotkkotthon.Newsletter_BE.web.controller;
 
+import beotkkotthon.Newsletter_BE.domain.Member;
+import beotkkotthon.Newsletter_BE.payload.exception.GeneralException;
+import beotkkotthon.Newsletter_BE.payload.status.ErrorStatus;
+import beotkkotthon.Newsletter_BE.repository.MemberRepository;
+import beotkkotthon.Newsletter_BE.service.MemberService;
 import beotkkotthon.Newsletter_BE.service.NotificationService;
 import beotkkotthon.Newsletter_BE.web.dto.request.FcmTokenRequestDto;
 import beotkkotthon.Newsletter_BE.web.dto.response.TokenDto;
@@ -22,6 +27,8 @@ public class AuthController {
     private final AuthService authService;
     private final NotificationService notificationService;
 
+    private final MemberRepository memberRepository;
+
 
     @PostMapping("/signup")
     @Operation(summary = "회원가입 [jwt X]")
@@ -34,6 +41,11 @@ public class AuthController {
     @Operation(summary = "로그인 [jwt X]")
     public ApiResponse<TokenDto> login(@RequestBody MemberLoginRequestDto memberLoginRequestDto) {
         TokenDto tokenDto = authService.login(memberLoginRequestDto);  // 로그인.
+
+        Member member = memberRepository.findByEmail(memberLoginRequestDto.getEmail()).orElseThrow(
+                () -> new GeneralException(ErrorStatus.MEMBER_NOT_FOUND));
+        tokenDto.setUsername(member.getUsername());
+
         return ApiResponse.onSuccess(tokenDto);
     }
 

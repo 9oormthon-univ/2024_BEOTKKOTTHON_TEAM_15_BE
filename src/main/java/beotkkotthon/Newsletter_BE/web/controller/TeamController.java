@@ -22,6 +22,7 @@ public class TeamController {
 
     private final TeamService teamService;
 
+    // !!! 임시 에러 해결. 차후 수정 반드시 필요 !!!
     @PostMapping(value = "/teams", consumes = {MediaType.APPLICATION_JSON_VALUE , MediaType.MULTIPART_FORM_DATA_VALUE}, produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "CREATOR로써 그룹 생성 [jwt O]")
     public ApiResponse<TeamResponseDto> createTeam(TeamSaveRequestDto teamSaveRequestDto) throws IOException {
