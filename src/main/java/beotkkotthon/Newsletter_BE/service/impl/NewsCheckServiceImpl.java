@@ -26,7 +26,6 @@ public class NewsCheckServiceImpl implements NewsCheckService {
     private final NewsCheckRepository newsCheckRepository;
     private final MemberService memberService;
     private final NewsService newsService;
-    private final TeamService teamService;
 
     @Transactional
     @Override
