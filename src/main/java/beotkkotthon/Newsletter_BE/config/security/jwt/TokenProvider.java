@@ -62,6 +62,7 @@ public class TokenProvider {  // JWT를 생성하고 검증하는 역할을 하�
                 .accessToken(accessToken)
                 .tokenExpiresIn(tokenExpiresIn.getTime())
                 .username(null)  // 임시
+                .email(null)  // 임시
                 .build();
     }
 
