@@ -14,7 +14,7 @@ public class NewsConverter {
 
     public static NewsResponseDto.ShowNewsDto toShowNewsDto(News news) {
         return ShowNewsDto.builder()
-                .newsId(news.getId())
+                .id(news.getId())
                 .title(news.getTitle())
                 .writer(news.getMember().getUsername())
                 .content(news.getContent())

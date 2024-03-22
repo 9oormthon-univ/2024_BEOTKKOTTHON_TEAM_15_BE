@@ -119,7 +119,7 @@ public class NewsServiceImpl implements NewsService {
         count = countReadMember(memberId, teamId, newsId);
 
         return ShowNewsDto.builder()
-                .newsId(news.getId())
+                .id(news.getId())
                 .title(news.getTitle())
                 .teamId(news.getTeam().getId())
                 .teamName(news.getTeam().getName())

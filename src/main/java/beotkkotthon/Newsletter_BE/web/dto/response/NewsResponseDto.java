@@ -20,7 +20,8 @@ public class NewsResponseDto {
     private String content;
     private LocalDateTime limitTime;
     private String writer;
-    private String teamName;
+    Long teamId;
+    String teamName;
     private String imageUrl1;
     private String imageUrl2;
     int readMemberCount;
@@ -35,6 +36,7 @@ public class NewsResponseDto {
         this.content = entity.getContent();
         this.limitTime = entity.getLimitTime();
         this.writer = entity.getMember().getUsername();
+        this.teamId = entity.getTeam().getId();
         this.teamName = entity.getTeam().getName();
         this.imageUrl1 = entity.getImageUrl1();
         this.imageUrl2 = entity.getImageUrl2();
@@ -50,15 +52,15 @@ public class NewsResponseDto {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class ShowNewsDto {
-        Long newsId;
+        Long id;
         String title;
         String content;
+        LocalDateTime limitTime;
         String writer;
         Long teamId;
         String teamName;
         String imageUrl1;
         String imageUrl2;
-        LocalDateTime limitTime;
         int readMemberCount;
         int notReadMemberCount;
         CheckStatus checkStatus;
