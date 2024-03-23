@@ -12,13 +12,11 @@ public class TeamSaveRequestDto {
 
     private String name;
     private String description;
-    private MultipartFile image;
 
     @Builder
-    public TeamSaveRequestDto(String name, String description, MultipartFile image) {
+    public TeamSaveRequestDto(String name, String description) {
         this.name = name;
         this.description = description;
-        this.image = image;
     }
 
     public Team toEntity(String imageUrl, String link) {
