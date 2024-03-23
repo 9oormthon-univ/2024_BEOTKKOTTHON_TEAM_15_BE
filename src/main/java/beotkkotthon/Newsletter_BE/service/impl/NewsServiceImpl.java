@@ -170,7 +170,10 @@ public class NewsServiceImpl implements NewsService {
                         NewsCheck newsCheck = newsCheckRepository.findByMemberAndNews(member, news).orElse(null);
                         return newsCheck.getCheckStatus().equals(CheckStatus.NOT_READ);
                     })
-                    .map(NewsConverter::toShowNewsDto)
+                    .map(news -> {
+                        news.getMember();
+                        return NewsConverter.toShowNewsDto(news);
+                    })
                     .sorted(Comparator.comparing(ShowNewsDto::getId))
                     .sorted(Comparator.comparing(ShowNewsDto::getModifiedTime, Comparator.reverseOrder()))
                     .collect(Collectors.toList());
