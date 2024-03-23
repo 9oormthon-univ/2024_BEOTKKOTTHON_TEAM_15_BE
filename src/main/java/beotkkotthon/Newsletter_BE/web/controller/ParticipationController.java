@@ -14,7 +14,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@CrossOrigin(origins = "https://goormnotification.vercel.app", allowedHeaders = "*")
+// @CrossOrigin(origins = "https://goormnotification.vercel.app", allowedHeaders = "*")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @Tag(name = "Participation")
 @RestController
 @RequiredArgsConstructor
