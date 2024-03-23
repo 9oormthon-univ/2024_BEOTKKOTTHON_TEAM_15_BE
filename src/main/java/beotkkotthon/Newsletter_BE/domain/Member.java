@@ -76,4 +76,7 @@ public class Member extends BaseEntity implements Serializable {
     public void updateUsername(String username) {  // 사용자이름 변경 기능
         this.username = username;
     }
+    public void updateNoticeStatus(NoticeStatus noticeStatus) {  // 알림허용여부 변경 기능
+        this.noticeStatus = noticeStatus;
+    }
 }
