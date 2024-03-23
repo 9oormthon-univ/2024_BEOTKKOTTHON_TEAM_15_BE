@@ -14,5 +14,6 @@ public interface NewsCheckRepository extends JpaRepository<NewsCheck, Long> {
     Optional<NewsCheck> findByMemberAndNews(Member member, News news);
     List<NewsCheck> findByMember(Member member);
 
+    @EntityGraph(attributePaths = "news")
     List<NewsCheck> findByNews(News news);
 }
