@@ -13,7 +13,7 @@ public class NewsConverter {
 
     public static NewsResponseDto.ShowNewsDto toShowNewsDto(News news) {
         int readMemberCount = countReadMember(news);
-        int notReadMemberCount = news.getTeam().getTeamSize();
+        int notReadMemberCount = news.getTeam().getTeamSize() - readMemberCount;
 
         return ShowNewsDto.builder()
                 .id(news.getId())
