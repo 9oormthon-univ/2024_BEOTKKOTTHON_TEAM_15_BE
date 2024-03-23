@@ -16,7 +16,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-@CrossOrigin(origins = "https://goormnotification.vercel.app", allowedHeaders = "*")
+// @CrossOrigin(origins = "https://goormnotification.vercel.app", allowedHeaders = "*")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @Tag(name = "Auth")
 @RestController
 @RequiredArgsConstructor
