@@ -2,15 +2,14 @@ package beotkkotthon.Newsletter_BE.web.controller;
 
 import beotkkotthon.Newsletter_BE.config.security.util.SecurityUtil;
 import beotkkotthon.Newsletter_BE.converter.NewsConverter;
-import beotkkotthon.Newsletter_BE.domain.Member;
 import beotkkotthon.Newsletter_BE.domain.News;
-import beotkkotthon.Newsletter_BE.domain.mapping.MemberTeam;
 import beotkkotthon.Newsletter_BE.payload.ApiResponse;
-import beotkkotthon.Newsletter_BE.service.MemberService;
 import beotkkotthon.Newsletter_BE.service.NewsCheckService;
 import beotkkotthon.Newsletter_BE.service.NewsService;
 import beotkkotthon.Newsletter_BE.web.dto.request.NewsSaveRequestDto;
 import beotkkotthon.Newsletter_BE.web.dto.response.NewsCheckResponseDto.NewsCheckDto;
+import beotkkotthon.Newsletter_BE.web.dto.response.NewsResponseDto;
+import beotkkotthon.Newsletter_BE.web.dto.response.NewsResponseDto.ShowNewsListDto;
 import beotkkotthon.Newsletter_BE.web.dto.response.NewsResponseDto.ShowNewsDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -58,9 +57,9 @@ public class NewsController {
 
     @GetMapping("/teams/news")
     @Operation(summary = "가정통신문 목록 모두 조회(하단그룹-메인) [jwt O]")
-    public ApiResponse<List<ShowNewsDto>> findAllNews(@RequestParam(name = "teamId", required = false) Long teamId){
-        List<ShowNewsDto> newsList = newsService.findNewsByTeam(teamId);
-        return ApiResponse.onSuccess(newsList);
+    public ApiResponse<ShowNewsListDto> findAllNews(){
+        List<News> newsList = newsService.findAllNewsByMemberTeam(SecurityUtil.getCurrentMemberId());
+        return ApiResponse.onSuccess(NewsConverter.toShowNewsDtoList(newsList));
     }
 
 
