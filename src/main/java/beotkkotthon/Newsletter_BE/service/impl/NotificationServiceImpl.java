@@ -92,7 +92,7 @@ public class NotificationServiceImpl implements NotificationService {
         }
     }
 
-    // @Transactional
+    @Transactional
     @Override
     public void deleteNotification() {  // 로그아웃 시, fcm토큰 DB에서 삭제.
         Member member = memberRepository.findById(SecurityUtil.getCurrentMemberId())

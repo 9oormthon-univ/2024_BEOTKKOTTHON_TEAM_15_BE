@@ -35,6 +35,7 @@ public class NewsCheckServiceImpl implements NewsCheckService {
     private final NewsService newsService;
     private final MemberTeamService memberTeamService;
 
+    @Transactional
     @Override
     public NewsCheckDto readNews(Long memberId, Long newsId) {
         Member member = memberService.findById(memberId);
