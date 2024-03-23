@@ -10,9 +10,6 @@ import java.time.LocalDateTime;
 
 public class NewsCheckResponseDto {
 
-    private CheckStatus checkStatus;
-    private Long checkTime;
-
     @Builder
     @Getter
     @NoArgsConstructor

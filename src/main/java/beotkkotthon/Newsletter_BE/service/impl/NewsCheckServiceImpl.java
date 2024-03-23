@@ -56,6 +56,7 @@ public class NewsCheckServiceImpl implements NewsCheckService {
                 .build();
     }
 
+    @Transactional
     @Override
     public List<NewsCheckDto> findByNews(Long memberId, Long newsId) {
         Member member = memberService.findById(memberId);
@@ -65,11 +66,10 @@ public class NewsCheckServiceImpl implements NewsCheckService {
         MemberTeam loginMemberTeam = memberTeamService.findByMemberAndTeam(member, team);
         Role loginRole = loginMemberTeam.getRole();
 
-        List<NewsCheck> newsChecks;
+        List<NewsCheck> newsChecks = newsCheckRepository.findByNews(news);
+        newsChecks.forEach(NewsCheck::getMember);
 
         if (!loginRole.equals(Role.MEMBER)) {
-            newsChecks = newsCheckRepository.findByNews(news);
-
             return newsChecks.stream()
                     .map(NewsCheckConverter::toNewsCheckDto)
                     .collect(Collectors.toList());
