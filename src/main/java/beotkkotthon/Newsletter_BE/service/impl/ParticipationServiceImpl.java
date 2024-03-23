@@ -116,12 +116,12 @@ public class ParticipationServiceImpl implements ParticipationService {
                 if(memberTeam.getMember().getId() != loginMemberId && (!memberTeam.getRole().equals(Role.MEMBER))) {
                     String title = "새로운 멤버가 가입했습니다.";
                     String message = "'" + team.getName() + "' 그룹에 '" + member.getUsername() + "'님이 참여했습니다.";
-                    Optional<NotificationDto> opNotificationDto = notificationService.makeMessage(member.getId(), title, message);
+                    Optional<NotificationDto> opNotificationDto = notificationService.makeMessage(memberTeam.getMember().getId(), title, message);
 
                     if (opNotificationDto.isPresent()) {
                         NotificationDto notificationDto = opNotificationDto.get();
                         try {
-                            notificationService.sendNotification(notificationDto);
+                            notificationService.sendNotification(memberTeam.getMember().getId(), notificationDto);
                         } catch (ExecutionException | InterruptedException ex) {
                             throw new GeneralException(ErrorStatus.INTERNAL_ERROR, ex.getMessage());
                         }
@@ -141,7 +141,7 @@ public class ParticipationServiceImpl implements ParticipationService {
         if(opNotificationDto.isPresent()) {
             NotificationDto notificationDto = opNotificationDto.get();
             try {
-                notificationService.sendNotification(notificationDto);
+                notificationService.sendNotification(member.getId(), notificationDto);
             }
             catch (ExecutionException | InterruptedException ex) {
                 throw new GeneralException(ErrorStatus.INTERNAL_ERROR, ex.getMessage());
@@ -183,7 +183,7 @@ public class ParticipationServiceImpl implements ParticipationService {
                 if (opNotificationDto.isPresent()) {
                     NotificationDto notificationDto = opNotificationDto.get();
                     try {
-                        notificationService.sendNotification(notificationDto);
+                        notificationService.sendNotification(memberTeam.getMember().getId(), notificationDto);
                     } catch (ExecutionException | InterruptedException ex) {
                         throw new GeneralException(ErrorStatus.INTERNAL_ERROR, ex.getMessage());
                     }
