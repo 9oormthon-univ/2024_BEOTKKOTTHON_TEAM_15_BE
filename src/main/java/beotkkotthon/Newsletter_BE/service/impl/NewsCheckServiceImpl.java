@@ -6,17 +6,21 @@ import beotkkotthon.Newsletter_BE.domain.News;
 import beotkkotthon.Newsletter_BE.domain.NewsCheck;
 import beotkkotthon.Newsletter_BE.domain.Team;
 import beotkkotthon.Newsletter_BE.domain.enums.CheckStatus;
+import beotkkotthon.Newsletter_BE.domain.enums.Role;
+import beotkkotthon.Newsletter_BE.domain.mapping.MemberTeam;
+import beotkkotthon.Newsletter_BE.payload.exception.GeneralException;
+import beotkkotthon.Newsletter_BE.payload.status.ErrorStatus;
 import beotkkotthon.Newsletter_BE.repository.NewsCheckRepository;
 import beotkkotthon.Newsletter_BE.service.*;
 import beotkkotthon.Newsletter_BE.web.dto.response.NewsCheckResponseDto;
 import beotkkotthon.Newsletter_BE.web.dto.response.NewsCheckResponseDto.NewsCheckDto;
-import beotkkotthon.Newsletter_BE.web.dto.response.NewsResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -29,6 +33,7 @@ public class NewsCheckServiceImpl implements NewsCheckService {
     private final NewsCheckRepository newsCheckRepository;
     private final MemberService memberService;
     private final NewsService newsService;
+    private final MemberTeamService memberTeamService;
 
     @Transactional
     @Override
@@ -67,5 +72,27 @@ public class NewsCheckServiceImpl implements NewsCheckService {
         return newsChecks.stream()
                 .map(NewsCheckConverter::toNewsCheckDto)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<NewsCheckDto> findByNews(Long memberId, Long newsId) {
+        Member member = memberService.findById(memberId);
+        News news = newsService.findById(newsId);
+        Team team = news.getTeam();
+
+        MemberTeam loginMemberTeam = memberTeamService.findByMemberAndTeam(member, team);
+        Role loginRole = loginMemberTeam.getRole();
+
+        List<NewsCheck> newsChecks = new ArrayList<>();
+
+        if (!loginRole.equals(Role.MEMBER)) {
+            newsChecks = newsCheckRepository.findByNews(news);
+
+            return newsChecks.stream()
+                    .map(NewsCheckConverter::toNewsCheckDto)
+                    .collect(Collectors.toList());
+        } else {
+            throw new GeneralException(ErrorStatus.NOT_AUTHORIZED);
+        }
     }
 }

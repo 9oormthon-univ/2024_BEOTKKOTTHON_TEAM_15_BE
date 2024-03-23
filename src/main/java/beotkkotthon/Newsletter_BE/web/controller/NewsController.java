@@ -7,7 +7,7 @@ import beotkkotthon.Newsletter_BE.payload.ApiResponse;
 import beotkkotthon.Newsletter_BE.service.NewsCheckService;
 import beotkkotthon.Newsletter_BE.service.NewsService;
 import beotkkotthon.Newsletter_BE.web.dto.request.NewsSaveRequestDto;
-import beotkkotthon.Newsletter_BE.web.dto.response.NewsCheckResponseDto;
+import beotkkotthon.Newsletter_BE.web.dto.response.NewsCheckResponseDto.NewsCheckDto;
 import beotkkotthon.Newsletter_BE.web.dto.response.NewsResponseDto;
 import beotkkotthon.Newsletter_BE.web.dto.response.NewsResponseDto.ShowNewsListDto;
 import beotkkotthon.Newsletter_BE.web.dto.response.NewsResponseDto.ShowNewsDto;
@@ -67,19 +67,24 @@ public class NewsController {
     }
 
     @GetMapping("/teams/{teamId}/news/{newsId}")
-    @Operation(summary = "가정통신문 상세 조회와 인원수 [jwt O]")
+    @Operation(summary = "가정통신문 상세 조회 [jwt O]")
     @Parameters({
             @Parameter(name = "teamId", description = "팀의 아이디, path variable 입니다."),
             @Parameter(name = "newsId", description = "가정통신문의 아이디, path variable 입니다.")
     })
-    public ApiResponse<NewsDetailDto> findNewsById(@PathVariable(name = "teamId") Long teamId,
-                                                                 @PathVariable(name = "newsId") Long newsId) {
+    public ApiResponse<ShowNewsDto> findNewsById(@PathVariable(name = "teamId") Long teamId,
+                                                   @PathVariable(name = "newsId") Long newsId) {
         Long memberId = SecurityUtil.getCurrentMemberId();
         ShowNewsDto showNewsDto = newsService.getShowNewsDto(memberId, teamId, newsId, 0);
-        List<NewsCheckResponseDto.NewsCheckDto> newsCheckDto = newsCheckService.findByMemberAndTeamAndNews(memberId, teamId, newsId);
-        return ApiResponse.onSuccess(new NewsResponseDto.NewsDetailDto(showNewsDto, newsCheckDto));
+        return ApiResponse.onSuccess(showNewsDto);
     }
 
+    @GetMapping("/news/{newsId}/checklist")
+    @Operation(summary = "가정통신문 확인/미확인 리스트")
+    public ApiResponse<List<NewsCheckDto>> newsCheckMember(@PathVariable(name = "newsId") Long newsId) {
+        Long memberId = SecurityUtil.getCurrentMemberId();
+        return ApiResponse.onSuccess(newsCheckService.findByNews(memberId, newsId));
+    }
     @GetMapping("/news")
     @Operation(summary = "미확인 가정통신문 전체/팀별 목록 조회 + ?teamId=1 [jwt O] +")
     public ApiResponse<List<ShowNewsDto>> notReadNews(@RequestParam(name = "teamId", required = false) Long teamId) {
