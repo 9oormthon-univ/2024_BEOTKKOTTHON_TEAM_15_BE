@@ -47,8 +47,8 @@ public class NotificationServiceImpl implements NotificationService {
 
         Notification notification = Notification.builder()
                 .token(fcmTokenRequestDto.getToken())
+                .member(member)
                 .build();
-        notification.confirmUser(member);
 
         notificationRepository.save(notification);
     }
@@ -67,7 +67,7 @@ public class NotificationServiceImpl implements NotificationService {
 
     // @Transactional
     @Override
-    public void sendNotification(Long memberId, NotificationDto notificationDto) throws ExecutionException, InterruptedException {
+    public void sendNotification(Long memberId, NotificationDto notificationDto) throws ExecutionException, InterruptedException {  // 알림을 보내게될 사용자 memberId임.
 
         // 로그인사용자가 계정에 알림설정을 꺼두었다면, 알림 전달 막기. (= 알림설정 켜둔경우에만 알림 응답 가능.)
         Member member = memberRepository.findById(memberId)
@@ -105,7 +105,7 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
-    public Optional<NotificationDto> makeMessage(Long memberId, String title, String message) {
+    public Optional<NotificationDto> makeMessage(Long memberId, String title, String message) {  // 알림을 보내게될 사용자 memberId임.
         if(memberRepository.existsById(memberId)) {  // 해당 사용자가 존재할때
             Member member = memberRepository.findById(memberId)
                     .orElseThrow(() -> new GeneralException(ErrorStatus.MEMBER_NOT_FOUND));

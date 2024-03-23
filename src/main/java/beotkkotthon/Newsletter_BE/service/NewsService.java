@@ -25,7 +25,5 @@ public interface NewsService {
 
     int countReadMember(Long memberId, Long teamId, Long newsId);
 
-    List<News> findAllNewsByMemberTeam(Long memberId);
-
     List<ShowNewsDto> allNewslist(Long memberId);
 }

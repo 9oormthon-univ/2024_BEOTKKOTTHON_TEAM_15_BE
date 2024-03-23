@@ -113,18 +113,6 @@ public class NewsServiceImpl implements NewsService {
         return showNewsDtos;
     }
 
-    //가입한 팀의 모든공지, ?teamId=1 팀별 공지 목록 조회
-    @Override
-    public List<News> findAllNewsByMemberTeam(Long memberId) {
-        Member member = memberService.findById(memberId);
-        List<MemberTeam> memberTeamList = memberTeamRepository.findAllByMember(member);
-
-        return memberTeamList.stream()
-                .map(MemberTeam::getTeam)
-                .flatMap(team -> team.getNewsList().stream())
-                .collect(Collectors.toList());
-    }
-
     @Override
     public ShowNewsDto getShowNewsDto(Long memberId, Long teamId, Long newsId, int count) {
         News news = findById(newsId);
@@ -165,14 +153,14 @@ public class NewsServiceImpl implements NewsService {
                         news.getMember();
                         return NewsConverter.toShowNewsDto(news);
                     })
-                    .sorted(Comparator.comparing(ShowNewsDto::getId))
+                    .sorted(Comparator.comparing(ShowNewsDto::getId, Comparator.reverseOrder()))
                     .sorted(Comparator.comparing(ShowNewsDto::getModifiedTime, Comparator.reverseOrder()))
                     .collect(Collectors.toList());
         } else {
             notReadNewsDtos = newsCheckRepository.findByMember(member).stream()
                     .filter(newsCheck -> newsCheck.getCheckStatus() == CheckStatus.NOT_READ)
                     .map(newsCheck -> NewsConverter.toShowNewsDto(newsCheck.getNews()))
-                    .sorted(Comparator.comparing(ShowNewsDto::getId))
+                    .sorted(Comparator.comparing(ShowNewsDto::getId, Comparator.reverseOrder()))
                     .sorted(Comparator.comparing(ShowNewsDto::getModifiedTime, Comparator.reverseOrder()))
                     .collect(Collectors.toList());
         }
@@ -186,7 +174,7 @@ public class NewsServiceImpl implements NewsService {
 
         allReadNewsDtos = newsCheckRepository.findByMember(member).stream()
                 .map(newsCheck -> NewsConverter.toShowNewsDto(newsCheck.getNews()))
-                .sorted(Comparator.comparing(ShowNewsDto::getId))
+                .sorted(Comparator.comparing(ShowNewsDto::getId, Comparator.reverseOrder()))
                 .sorted(Comparator.comparing(ShowNewsDto::getModifiedTime, Comparator.reverseOrder()))
                 .collect(Collectors.toList());
         return allReadNewsDtos;
@@ -204,7 +192,7 @@ public class NewsServiceImpl implements NewsService {
             showNewsDtos = team.getNewsList().stream()
                     .filter(news -> news.getMember().getId().equals(member.getId()))
                     .map(NewsConverter::toShowNewsDto)
-                    .sorted(Comparator.comparing(ShowNewsDto::getId))
+                    .sorted(Comparator.comparing(ShowNewsDto::getId, Comparator.reverseOrder()))
                     .sorted(Comparator.comparing(ShowNewsDto::getModifiedTime, Comparator.reverseOrder()))
                     .collect(Collectors.toList());
         } else {
@@ -214,7 +202,7 @@ public class NewsServiceImpl implements NewsService {
 
             showNewsDtos = newsList.stream()
                     .map(NewsConverter::toShowNewsDto)
-                    .sorted(Comparator.comparing(ShowNewsDto::getId))
+                    .sorted(Comparator.comparing(ShowNewsDto::getId, Comparator.reverseOrder()))
                     .sorted(Comparator.comparing(ShowNewsDto::getModifiedTime, Comparator.reverseOrder()))
                     .collect(Collectors.toList());
         }

@@ -1,9 +1,7 @@
 package beotkkotthon.Newsletter_BE.domain;
 
-import beotkkotthon.Newsletter_BE.domain.Member;
 import beotkkotthon.Newsletter_BE.domain.common.BaseEntity;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,11 +23,8 @@ public class Notification extends BaseEntity {
 
 
     @Builder
-    public Notification(String token) {
+    public Notification(String token, Member member) {
         this.token = token;
-    }
-
-    public void confirmUser(Member member) {
         this.member = member;
     }
 }
