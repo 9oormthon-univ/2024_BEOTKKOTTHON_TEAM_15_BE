@@ -132,25 +132,6 @@ public class NewsServiceImpl implements NewsService {
 
     @Transactional
     @Override
-    public List<ShowNewsDto> findNewsByMemberTeam(Long memberId) {
-        Member member = memberService.findById(memberId);
-        List<MemberTeam> memberTeamList = memberTeamRepository.findAllByMember(member);
-
-        List<News> allNews = memberTeamList.stream()
-                .flatMap(memberTeam -> {
-                    Team team = memberTeam.getTeam();
-                    Hibernate.initialize(team.getNewsList());
-                    return team.getNewsList().stream();
-                })
-                .collect(Collectors.toList());
-
-        return allNews.stream()
-                .map(NewsConverter::toShowNewsDto)
-                .collect(Collectors.toList());
-    }
-
-    @Transactional
-    @Override
     public ShowNewsDto getShowNewsDto(Long memberId, Long teamId, Long newsId, int count) {
         News news = findById(newsId);
         Team team = teamService.findById(teamId);
