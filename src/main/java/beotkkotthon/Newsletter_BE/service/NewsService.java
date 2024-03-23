@@ -27,4 +27,6 @@ public interface NewsService {
 
     List<News> findAllNewsByMemberTeam(Long memberId);
 
+    List<ShowNewsDto> findNewsByMemberTeam(Long memberId);
+
 }
