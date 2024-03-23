@@ -74,7 +74,7 @@ public class NewsServiceImpl implements NewsService {
                 setNewsCheck(memberTeam.getMember(), news);
 
                 // 가정통신문 발행자를 제외한 나머지 그룹원들에게 fcm 푸시 알림 발송.
-                String title = "공지 발생", message = "'" + team.getName() + "' 그룹의 공지가 올라왔습니다.";
+                String title = "새 공지가 등록되었습니다.", message = "'" + team.getName() + "' 그룹의 새 공지를 확인해주세요.";
                 Optional<NotificationDto> opNotificationDto = notificationService.makeMessage(memberTeam.getMember().getId(), title, message);
                 if(memberTeam.getMember().getId() != loginMemberId && opNotificationDto.isPresent()) {
                     NotificationDto notificationDto = opNotificationDto.get();
