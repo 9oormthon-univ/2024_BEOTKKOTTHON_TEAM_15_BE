@@ -114,7 +114,7 @@ public class ParticipationServiceImpl implements ParticipationService {
             List<MemberTeam> memberTeams = memberTeamService.findAllByTeam(team);
             for (MemberTeam memberTeam : memberTeams) {
                 if(memberTeam.getMember().getId() != loginMemberId && (!memberTeam.getRole().equals(Role.MEMBER))) {
-                    String title = "그룹 신규인원 발생";
+                    String title = "새로운 멤버가 가입했습니다.";
                     String message = "'" + team.getName() + "' 그룹에 '" + member.getUsername() + "'님이 참여했습니다.";
                     Optional<NotificationDto> opNotificationDto = notificationService.makeMessage(member.getId(), title, message);
 
@@ -171,6 +171,25 @@ public class ParticipationServiceImpl implements ParticipationService {
                 .team(team)
                 .build();
         participationRepository.save(participation);
+
+        // 그룹신청 발생을 리더에게 푸시 알림 발송.
+        List<MemberTeam> memberTeams = memberTeamService.findAllByTeam(team);
+        for (MemberTeam memberTeam : memberTeams) {
+            if(memberTeam.getRole().equals(Role.LEADER) || memberTeam.getRole().equals(Role.CREATOR)) {
+                String title = "그룹 가입요청";
+                String message = "'" + loginMember.getUsername() + "'님이 '" + team.getName() + "' 그룹에 가입을 요청했습니다.";
+                Optional<NotificationDto> opNotificationDto = notificationService.makeMessage(memberTeam.getMember().getId(), title, message);
+
+                if (opNotificationDto.isPresent()) {
+                    NotificationDto notificationDto = opNotificationDto.get();
+                    try {
+                        notificationService.sendNotification(notificationDto);
+                    } catch (ExecutionException | InterruptedException ex) {
+                        throw new GeneralException(ErrorStatus.INTERNAL_ERROR, ex.getMessage());
+                    }
+                }
+            }
+        }
 
         ParticipationResponseDto participationResponseDto = new ParticipationResponseDto(
                 participation.getId(), participation.getRequestRole(), participation.getCreatedTime(),
