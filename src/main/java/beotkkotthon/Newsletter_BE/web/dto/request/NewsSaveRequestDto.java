@@ -6,7 +6,6 @@ import beotkkotthon.Newsletter_BE.domain.Team;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 @NoArgsConstructor
@@ -15,16 +14,12 @@ public class NewsSaveRequestDto {
     private String title;
     private String content;
     private Integer minute;
-    private MultipartFile image1;
-    private MultipartFile image2;
 
     @Builder
-    public NewsSaveRequestDto (String title, String content, Integer minute, MultipartFile image1, MultipartFile image2) {
+    public NewsSaveRequestDto (String title, String content, Integer minute) {
         this.title = title;
         this.content = content;
         this.minute = minute;
-        this.image1 = image1;
-        this.image2 = image2;
     }
 
     public News toEntity(Member member, Team team, Integer minute, String imageUrl1, String imageUrl2) {
