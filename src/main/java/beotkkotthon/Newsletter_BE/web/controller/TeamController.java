@@ -29,7 +29,7 @@ public class TeamController {
     private final NewsService newsService;
 
     // !!! 임시 에러 해결. 차후 수정 반드시 필요 !!!
-    @PostMapping(value = "/teams", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE}, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/teams", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "CREATOR로써 그룹 생성 [jwt O]")
     public ApiResponse<TeamResponseDto.TeamDto> createTeam(@RequestPart(value="imageFile") MultipartFile imageFile, @RequestPart(value="teamSaveRequestDto") TeamSaveRequestDto teamSaveRequestDto) throws IOException {
         Team team = teamService.createTeam(SecurityUtil.getCurrentMemberId(), teamSaveRequestDto, imageFile);
