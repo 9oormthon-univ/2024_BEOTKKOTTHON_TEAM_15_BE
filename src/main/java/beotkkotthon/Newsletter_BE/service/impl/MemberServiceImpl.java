@@ -10,18 +10,18 @@ import beotkkotthon.Newsletter_BE.payload.status.ErrorStatus;
 import beotkkotthon.Newsletter_BE.repository.MemberRepository;
 import beotkkotthon.Newsletter_BE.repository.TeamRepository;
 import beotkkotthon.Newsletter_BE.service.MemberService;
+import beotkkotthon.Newsletter_BE.web.dto.request.NotificationAllowRequestDto;
 import beotkkotthon.Newsletter_BE.web.dto.response.MemberListResponseDto;
 import beotkkotthon.Newsletter_BE.web.dto.response.MemberResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -73,5 +73,12 @@ public class MemberServiceImpl implements MemberService {
                 .thenComparing(MemberResponseDto::getId, Comparator.reverseOrder()));
 
         return new MemberListResponseDto(leaderList, memberList, leaderCount, memberCount, myRole);
+    }
+
+    @Transactional
+    @Override
+    public void allowNotification(@RequestBody NotificationAllowRequestDto notificationAllowRequestDto) {
+        Member member = findById(SecurityUtil.getCurrentMemberId());
+        member.updateNoticeStatus(notificationAllowRequestDto.getNoticeStatus());
     }
 }
