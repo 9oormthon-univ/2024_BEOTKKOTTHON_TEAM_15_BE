@@ -114,11 +114,12 @@ public class NewsServiceImpl implements NewsService {
     public List<News> findAllNewsByMemberTeam(Long memberId, Long teamId) {
         Member member = memberService.findById(memberId);
 
-        //teamId 있음
         if (teamId != null) {
             Team team = teamService.findById(teamId);
             if (member.getMemberTeamList().stream().anyMatch(mt -> mt.getTeam().getId().equals(teamId))) {
                 return team.getNewsList();
+            } else {
+                throw new GeneralException(ErrorStatus.MEMBERTEAM_NOT_FOUND);
             }
         } else {
             List<News> allNews = new ArrayList<>();
@@ -128,7 +129,6 @@ public class NewsServiceImpl implements NewsService {
             }
             return allNews;
         }
-        return null;
     }
 
     @Override
