@@ -24,5 +24,5 @@ public interface NewsService {
 
     int countReadMember(Long memberId, Long teamId, Long newsId);
 
-    List<News> findAllNewsByMember(Long memberId, Long teamId);
+    List<News> findAllNewsByMemberTeam(Long memberId, Long teamId);
 }

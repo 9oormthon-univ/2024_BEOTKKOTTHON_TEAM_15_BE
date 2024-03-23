@@ -103,11 +103,33 @@ public class NewsServiceImpl implements NewsService {
 
         Team team = teamService.findById(teamId);
         List<NewsResponseDto> newsResponseDtos = team.getNewsList().stream().map(NewsResponseDto::new)
-                .sorted(Comparator.comparing(NewsResponseDto::getId, Comparator.reverseOrder()))  // id 내림차순 정렬 후 (최신 생성순)
-                .sorted(Comparator.comparing(NewsResponseDto::getModifiedTime, Comparator.reverseOrder()))  // 수정날짜 내림차순 정렬 (최신 수정순)
-                .collect(Collectors.toList());  // 정렬 완료한 리스트 반환 (연속sorted 정렬은 마지막 순서의 기준이 가장 주요된 기준임.)
+                .sorted(Comparator.comparing(NewsResponseDto::getId, Comparator.reverseOrder()))
+                .sorted(Comparator.comparing(NewsResponseDto::getModifiedTime, Comparator.reverseOrder()))
+                .collect(Collectors.toList());
 
         return newsResponseDtos;
+    }
+
+    //가입한 팀의 모든공지, ?teamId=1 팀별 공지 목록 조회
+    @Override
+    public List<News> findAllNewsByMemberTeam(Long memberId, Long teamId) {
+        Member member = memberService.findById(memberId);
+
+        //teamId 있음
+        if (teamId != null) {
+            Team team = teamService.findById(teamId);
+            if (member.getMemberTeamList().stream().anyMatch(mt -> mt.getTeam().getId().equals(teamId))) {
+                return team.getNewsList();
+            }
+        } else {
+            List<News> allNews = new ArrayList<>();
+            for (MemberTeam memberTeam : member.getMemberTeamList()) {
+                Team team = memberTeam.getTeam();
+                allNews.addAll(team.getNewsList());
+            }
+            return allNews;
+        }
+        return null;
     }
 
     @Override
@@ -191,30 +213,6 @@ public class NewsServiceImpl implements NewsService {
         return newsResponseDtos;
     }
 
-    //가입한 팀의 모든공지, ?teamId=1 팀별 공지 목록 조회
-    @Override
-    public List<News> findAllNewsByMember(Long memberId, Long teamId) {
-        Member member = memberService.findById(memberId);
-
-        if (teamId != null) {
-            Team team = teamService.findById(teamId);
-            if (member.getMemberTeamList().stream().anyMatch(mt -> mt.getTeam().equals(team))) {
-                return team.getNewsList().stream()
-                        .sorted(Comparator.comparing(News::getId))
-                        .sorted(Comparator.comparing(News::getModifiedTime, Comparator.reverseOrder()))
-                        .collect(Collectors.toList());
-            } else {
-                throw new GeneralException(ErrorStatus.MEMBERTEAM_NOT_FOUND);
-            }
-        } else {
-            return member.getMemberTeamList().stream()
-                    .map(MemberTeam::getTeam)
-                    .flatMap(team -> team.getNewsList().stream())
-                    .sorted(Comparator.comparing(News::getId))
-                    .sorted(Comparator.comparing(News::getModifiedTime, Comparator.reverseOrder()))
-                    .collect(Collectors.toList());
-        }
-    }
     @Override
     public int countReadMember(Long memberId, Long teamId, Long newsId) {
         Member member = memberService.findById(memberId);
