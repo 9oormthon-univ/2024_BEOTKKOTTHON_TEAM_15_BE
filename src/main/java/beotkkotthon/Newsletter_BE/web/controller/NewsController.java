@@ -21,7 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.List;
 
-@CrossOrigin(origins = "https://goormnotlfication.vercel.app", allowedHeaders = "*")
+@CrossOrigin(origins = "https://goormnotification.vercel.app", allowedHeaders = "*")
 @Tag(name = "News")
 @RestController
 @RequiredArgsConstructor
