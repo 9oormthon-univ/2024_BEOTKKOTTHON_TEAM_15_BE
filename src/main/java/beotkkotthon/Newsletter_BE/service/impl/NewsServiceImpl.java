@@ -22,6 +22,7 @@ import beotkkotthon.Newsletter_BE.web.dto.response.NewsResponseDto;
 import beotkkotthon.Newsletter_BE.web.dto.response.NewsResponseDto.ShowNewsDto;
 import beotkkotthon.Newsletter_BE.web.dto.response.NotificationDto;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.Hibernate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -123,13 +124,14 @@ public class NewsServiceImpl implements NewsService {
             Team team = teamService.findById(teamId);
             return team.getNewsList();
         } else {
-            return memberTeamList.stream()
-                    .map(memberTeam -> {
+            List<News> allNews = memberTeamList.stream()
+                    .flatMap(memberTeam -> {
                         Team team = memberTeam.getTeam();
+                        Hibernate.initialize(team.getNewsList());
                         return team.getNewsList().stream();
                     })
-                    .flatMap(newsStream -> newsStream)
                     .collect(Collectors.toList());
+            return allNews;
         }
     }
 
