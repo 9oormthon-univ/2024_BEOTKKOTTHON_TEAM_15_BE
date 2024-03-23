@@ -101,8 +101,9 @@ public class NewsServiceImpl implements NewsService {
     @Transactional(readOnly = true)
     @Override
     public List<ShowNewsDto> findNewsByTeam(Long teamId) {
-
         Team team = teamService.findById(teamId);
+        team.getNewsList().forEach(news -> news.getMember());
+
         List<ShowNewsDto> showNewsDtos = team.getNewsList().stream().map(NewsConverter::toShowNewsDto)
                 .sorted(Comparator.comparing(ShowNewsDto::getId, Comparator.reverseOrder()))
                 .sorted(Comparator.comparing(ShowNewsDto::getModifiedTime, Comparator.reverseOrder()))
