@@ -73,6 +73,7 @@ public class NotificationServiceImpl implements NotificationService {
                         .setNotification(WebpushNotification.builder()
                                 .setTitle(notificationDto.getTitle())
                                 .setBody(notificationDto.getMessage())
+                                .setImage(notificationDto.getImage())
                                 .build())
                         .build())
                 .setToken(notificationDto.getToken())  // 수신할 기기의 토큰을 설정
@@ -115,6 +116,7 @@ public class NotificationServiceImpl implements NotificationService {
                         .title(title)
                         .token(notification.getToken())
                         .message(message)
+                        .image("https://goormnotification.vercel.app/img/fcmLogo.png")
                         .build();
                 return Optional.of(notificationDto);
             }

@@ -10,12 +10,14 @@ public class NotificationDto {  // notificationService.sendNotification()의 파
 
     private String title;
     private String message;
+    private String image;
     private String token;
 
     @Builder
-    public NotificationDto(String title, String message, String token) {
+    public NotificationDto(String title, String message, String image, String token) {
         this.title = title;
         this.message = message;
+        this.image = image;
         this.token = token;
     }
 }
