@@ -116,7 +116,7 @@ public class NotificationServiceImpl implements NotificationService {
                         .title(title)
                         .token(notification.getToken())
                         .message(message)
-                        .image("https://goormnotification.vercel.app/img/fcmLogo.png")
+                        .image("https://goormnotification.vercel.app/img/fcmLogo2.png")
                         .build();
                 return Optional.of(notificationDto);
             }
