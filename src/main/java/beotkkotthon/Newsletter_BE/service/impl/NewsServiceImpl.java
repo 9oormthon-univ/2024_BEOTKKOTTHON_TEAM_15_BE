@@ -117,21 +117,15 @@ public class NewsServiceImpl implements NewsService {
     public List<News> findAllNewsByMemberTeam(Long memberId, Long teamId) {
         Member member = memberService.findById(memberId);
         List<MemberTeam> memberTeamList = memberTeamRepository.findAllByMember(member);
-        List<News> newsList = new ArrayList<>();
 
         if (teamId != null) {
             Team team = teamService.findById(teamId);
-            if (member.getMemberTeamList().stream().anyMatch(mt -> mt.getTeam().getId().equals(teamId))) {
-                return team.getNewsList();
-            } else {
-                throw new GeneralException(ErrorStatus.MEMBERTEAM_NOT_FOUND);
-            }
+            return team.getNewsList();
         } else {
-            List<News> allNews = memberTeamList.stream()
+            return memberTeamList.stream()
                     .map(MemberTeam::getTeam)
                     .flatMap(team -> team.getNewsList().stream())
                     .collect(Collectors.toList());
-            return allNews;
         }
     }
 
