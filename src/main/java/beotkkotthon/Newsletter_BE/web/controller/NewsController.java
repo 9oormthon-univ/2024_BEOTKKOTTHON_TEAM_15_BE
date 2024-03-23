@@ -10,6 +10,7 @@ import beotkkotthon.Newsletter_BE.web.dto.request.NewsSaveRequestDto;
 import beotkkotthon.Newsletter_BE.web.dto.response.NewsCheckResponseDto.NewsCheckDto;
 import beotkkotthon.Newsletter_BE.web.dto.response.NewsResponseDto.ShowNewsListDto;
 import beotkkotthon.Newsletter_BE.web.dto.response.NewsResponseDto.ShowNewsDto;
+import com.google.protobuf.Api;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
@@ -54,11 +55,18 @@ public class NewsController {
         return ApiResponse.onCreate(NewsConverter.toShowNewsDto(news));
     }
 
+//    @GetMapping("/teams/news")
+//    @Operation(summary = "가정통신문 목록 모두 조회(하단그룹-메인) [jwt O]")
+//    public ApiResponse<ShowNewsListDto> findAllNews(){
+//        List<News> newsList = newsService.findAllNewsByMemberTeam(SecurityUtil.getCurrentMemberId());
+//        return ApiResponse.onSuccess(NewsConverter.toShowNewsDtoList(newsList));
+//    }
+
     @GetMapping("/teams/news")
     @Operation(summary = "가정통신문 목록 모두 조회(하단그룹-메인) [jwt O]")
-    public ApiResponse<ShowNewsListDto> findAllNews(){
-        List<News> newsList = newsService.findAllNewsByMemberTeam(SecurityUtil.getCurrentMemberId());
-        return ApiResponse.onSuccess(NewsConverter.toShowNewsDtoList(newsList));
+    public ApiResponse<List<ShowNewsDto>> findAllNews() {
+        List<ShowNewsDto> showNewsDtos = newsService.findNewsByMemberTeam(SecurityUtil.getCurrentMemberId());
+        return ApiResponse.onSuccess(showNewsDtos);
     }
 
     @GetMapping("/teams/{teamId}/news")
