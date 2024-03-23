@@ -185,34 +185,6 @@ public class NewsServiceImpl implements NewsService {
         return notReadNewsDtos;
     }
 
-    //    @Transactional
-//    @Override
-//    public List<NewsResponseDto> notReadNewslist(Long memberId, Long teamId) {
-//        Member member = memberService.findById(memberId);
-//        List<NewsResponseDto> notReadNewsDtos;
-//
-//        if (teamId != null) {
-//            Team team = teamService.findById(teamId);
-//            notReadNewsDtos = team.getNewsList().stream()
-//                    .filter(news -> {
-//                        NewsCheck newsCheck = newsCheckRepository.findByMemberAndNews(member, news).orElse(null);
-//                        return newsCheck != null && newsCheck.getCheckStatus() == CheckStatus.NOT_READ;
-//                    })
-//                    .map(NewsResponseDto::new)
-//                    .sorted(Comparator.comparing(NewsResponseDto::getId))
-//                    .sorted(Comparator.comparing(NewsResponseDto::getModifiedTime, Comparator.reverseOrder()))
-//                    .collect(Collectors.toList());
-//        } else {
-//            notReadNewsDtos = newsCheckRepository.findByMember(member).stream()
-//                    .filter(newsCheck -> newsCheck.getCheckStatus() == CheckStatus.NOT_READ)
-//                    .map(newsCheck -> new NewsResponseDto(newsCheck.getNews()))
-//                    .sorted(Comparator.comparing(NewsResponseDto::getId))
-//                    .sorted(Comparator.comparing(NewsResponseDto::getModifiedTime, Comparator.reverseOrder()))
-//                    .collect(Collectors.toList());
-//        }
-//        return notReadNewsDtos;
-//    }
-
     @Transactional
     @Override
     public List<ShowNewsDto> findNewsByMember(Long memberId, Long teamId) {

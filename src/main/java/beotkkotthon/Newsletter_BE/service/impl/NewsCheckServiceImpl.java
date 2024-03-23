@@ -65,7 +65,7 @@ public class NewsCheckServiceImpl implements NewsCheckService {
         MemberTeam loginMemberTeam = memberTeamService.findByMemberAndTeam(member, team);
         Role loginRole = loginMemberTeam.getRole();
 
-        List<NewsCheck> newsChecks = new ArrayList<>();
+        List<NewsCheck> newsChecks;
 
         if (!loginRole.equals(Role.MEMBER)) {
             newsChecks = newsCheckRepository.findByNews(news);
