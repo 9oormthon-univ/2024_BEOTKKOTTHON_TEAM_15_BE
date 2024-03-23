@@ -23,6 +23,7 @@ import beotkkotthon.Newsletter_BE.web.dto.response.NotificationDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -54,7 +55,7 @@ public class NewsServiceImpl implements NewsService {
 
     @Transactional
     @Override
-    public News createNews(Long teamId, NewsSaveRequestDto newsSaveRequestDto) throws IOException {
+    public News createNews(Long teamId, MultipartFile imageFile1, MultipartFile imageFile2, NewsSaveRequestDto newsSaveRequestDto) throws IOException {
         Team team = teamService.findById(teamId);
 
         Long loginMemberId = SecurityUtil.getCurrentMemberId();
@@ -62,8 +63,8 @@ public class NewsServiceImpl implements NewsService {
         MemberTeam loginMemberTeam = memberTeamService.findByMemberAndTeam(writer, team);
         Role loginRole = loginMemberTeam.getRole();
 
-        String imageUrl1 = imageUploadService.uploadImage(newsSaveRequestDto.getImage1());
-        String imageUrl2 = imageUploadService.uploadImage(newsSaveRequestDto.getImage2());
+        String imageUrl1 = imageUploadService.uploadImage(imageFile1);
+        String imageUrl2 = imageUploadService.uploadImage(imageFile2);
 
         if (loginRole.equals(Role.LEADER) || loginRole.equals(Role.CREATOR)) {
             News news = newsSaveRequestDto.toEntity(writer, team, newsSaveRequestDto.getMinute(), imageUrl1, imageUrl2);

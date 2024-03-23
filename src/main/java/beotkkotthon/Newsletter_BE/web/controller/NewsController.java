@@ -17,6 +17,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.io.IOException;
 import java.util.List;
 
@@ -35,8 +37,10 @@ public class NewsController {
     @Parameter(name = "teamId", description = "팀의 아이디, path variable 입니다.")
     public ApiResponse<NewsResponseDto.ShowNewsDto> createNews(
             @PathVariable(name = "teamId") Long teamId,
-            @RequestBody NewsSaveRequestDto newsSaveRequestDto) throws IOException {
-        News news = newsService.createNews(teamId, newsSaveRequestDto);
+            @RequestPart(value = "imageFile1", required = false) MultipartFile imageFile1,
+            @RequestPart(value = "imageFile2", required = false) MultipartFile imageFile2,
+            @RequestPart(value = "newsSaveRequestDto") NewsSaveRequestDto newsSaveRequestDto) throws IOException {
+        News news = newsService.createNews(teamId, imageFile1, imageFile2, newsSaveRequestDto);
         return ApiResponse.onCreate(NewsConverter.toShowNewsDto(news));
     }
 
