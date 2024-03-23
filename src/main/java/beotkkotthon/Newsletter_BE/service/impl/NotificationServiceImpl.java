@@ -82,13 +82,13 @@ public class NotificationServiceImpl implements NotificationService {
         // 로그인사용자가 계정에 알림설정을 꺼두었다면, 알림 전달 막기. (= 알림설정 켜둔경우에만 알림 응답 가능.)
         Member member = memberRepository.findById(SecurityUtil.getCurrentMemberId())
                 .orElseThrow(() -> new GeneralException(ErrorStatus.MEMBER_NOT_FOUND));
-        String response = null;
         if(member.getNoticeStatus().equals(NoticeStatus.ALLOW)) {
-            response = FirebaseMessaging.getInstance().sendAsync(message).get();
+            String response = FirebaseMessaging.getInstance().sendAsync(message).get();
+            log.info("Send 성공 : " + response);
         }
-
-        if(response != null) log.info("Send 성공 : " + response);
-        else log.info("Send 불가능 : " + "알림설정 OFF 상태입니다.");
+        else {
+            log.info("Send 불가능 : " + "알림설정 OFF 상태입니다.");
+        }
     }
 
     // @Transactional
