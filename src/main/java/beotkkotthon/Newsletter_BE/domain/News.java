@@ -67,11 +67,4 @@ public class News extends BaseEntity implements Serializable {
         this.team = team;
         // changeTeam(team);
     }
-
-
-//    // News-Team 연관관계 편의 메소드
-//    public void changeTeam(Team team){
-//        this.team = team;
-//        team.getNewsList().add(this);
-//    }
 }

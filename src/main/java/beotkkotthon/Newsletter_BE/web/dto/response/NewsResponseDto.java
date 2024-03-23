@@ -68,13 +68,4 @@ public class NewsResponseDto {
     public static class ShowNewsListDto {
         List<ShowNewsDto> showNewsDtoList;
     }
-
-    @Builder
-    @Getter
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class NewsDetailDto{
-        ShowNewsDto showNewsDto;
-        List<NewsCheckResponseDto.NewsCheckDto> newsCheckDtoList;
-    }
 }
