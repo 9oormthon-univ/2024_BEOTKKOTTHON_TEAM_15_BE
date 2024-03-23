@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-@CrossOrigin(origins = "*", allowedHeaders = "*")
+@CrossOrigin(origins = "https://goormnotlfication.vercel.app", allowedHeaders = "*")
 @Tag(name = "NewsCheck")
 @RestController
 @RequiredArgsConstructor

@@ -10,7 +10,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-@CrossOrigin(origins = "*", allowedHeaders = "*")
+@CrossOrigin(origins = "https://goormnotlfication.vercel.app", allowedHeaders = "*")
 @Tag(name = "Notification")
 @RestController
 @RequiredArgsConstructor
