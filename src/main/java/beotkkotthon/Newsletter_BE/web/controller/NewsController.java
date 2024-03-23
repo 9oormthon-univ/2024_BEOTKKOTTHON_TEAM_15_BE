@@ -41,7 +41,13 @@ public class NewsController {
             @PathVariable(name = "teamId") Long teamId,
             @RequestPart(value = "imageFiles", required = false) List<MultipartFile> imageFiles,
             @RequestPart(value = "newsSaveRequestDto") NewsSaveRequestDto newsSaveRequestDto) throws IOException {
-        News news = newsService.createNews(teamId, imageFiles.get(0), imageFiles.get(1), newsSaveRequestDto);
+        MultipartFile imageFile1 = null, imageFile2 = null;
+        if(imageFiles.size() == 1) imageFile1 = imageFiles.get(0);
+        else if(imageFiles.size() == 2) {
+            imageFile1 = imageFiles.get(0);
+            imageFile2 = imageFiles.get(1);
+        }
+        News news = newsService.createNews(teamId, imageFile1, imageFile2, newsSaveRequestDto);
         return ApiResponse.onCreate(NewsConverter.toShowNewsDto(news));
     }
 
