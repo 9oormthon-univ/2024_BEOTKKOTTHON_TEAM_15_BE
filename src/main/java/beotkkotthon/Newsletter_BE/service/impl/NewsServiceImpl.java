@@ -22,9 +22,9 @@ import beotkkotthon.Newsletter_BE.web.dto.response.NotificationDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -65,7 +65,7 @@ public class NewsServiceImpl implements NewsService {
         String imageUrl2 = imageUploadService.uploadImage(newsSaveRequestDto.getImage2());
 
         if (loginRole.equals(Role.LEADER) || loginRole.equals(Role.CREATOR)) {
-            News news = newsSaveRequestDto.toEntity(writer, team, imageUrl1, imageUrl2);
+            News news = newsSaveRequestDto.toEntity(writer, team, newsSaveRequestDto.getMinute(), imageUrl1, imageUrl2);
             newsRepository.save(news);
 
             List<MemberTeam> memberTeams = memberTeamService.findAllByTeam(team);
