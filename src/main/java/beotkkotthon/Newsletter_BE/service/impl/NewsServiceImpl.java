@@ -120,14 +120,10 @@ public class NewsServiceImpl implements NewsService {
         Member member = memberService.findById(memberId);
         List<MemberTeam> memberTeamList = memberTeamRepository.findAllByMember(member);
 
-        List<News> allNews = memberTeamList.stream()
-                .flatMap(memberTeam -> {
-                    Team team = memberTeam.getTeam();
-                    Hibernate.initialize(team.getNewsList());
-                    return team.getNewsList().stream();
-                })
+        return memberTeamList.stream()
+                .map(MemberTeam::getTeam)
+                .flatMap(team -> team.getNewsList().stream())
                 .collect(Collectors.toList());
-        return allNews;
     }
 
     @Transactional
