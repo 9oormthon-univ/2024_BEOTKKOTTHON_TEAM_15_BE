@@ -8,10 +8,8 @@ import beotkkotthon.Newsletter_BE.service.NewsCheckService;
 import beotkkotthon.Newsletter_BE.service.NewsService;
 import beotkkotthon.Newsletter_BE.web.dto.request.NewsSaveRequestDto;
 import beotkkotthon.Newsletter_BE.web.dto.response.NewsCheckResponseDto.NewsCheckDto;
-import beotkkotthon.Newsletter_BE.web.dto.response.NewsResponseDto;
 import beotkkotthon.Newsletter_BE.web.dto.response.NewsResponseDto.ShowNewsListDto;
 import beotkkotthon.Newsletter_BE.web.dto.response.NewsResponseDto.ShowNewsDto;
-import beotkkotthon.Newsletter_BE.web.dto.response.NewsResponseDto.NewsDetailDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
@@ -79,16 +77,14 @@ public class NewsController {
     })
     public ApiResponse<ShowNewsDto> findNewsById(@PathVariable(name = "teamId") Long teamId,
                                                    @PathVariable(name = "newsId") Long newsId) {
-        Long memberId = SecurityUtil.getCurrentMemberId();
-        ShowNewsDto showNewsDto = newsService.getShowNewsDto(memberId, teamId, newsId, 0);
+        ShowNewsDto showNewsDto = newsService.getShowNewsDto(SecurityUtil.getCurrentMemberId(), teamId, newsId, 0);
         return ApiResponse.onSuccess(showNewsDto);
     }
 
     @GetMapping("/news/{newsId}/checklist")
     @Operation(summary = "가정통신문 확인/미확인 리스트")
     public ApiResponse<List<NewsCheckDto>> newsCheckMember(@PathVariable(name = "newsId") Long newsId) {
-        Long memberId = SecurityUtil.getCurrentMemberId();
-        return ApiResponse.onSuccess(newsCheckService.findByNews(memberId, newsId));
+        return ApiResponse.onSuccess(newsCheckService.findByNews(SecurityUtil.getCurrentMemberId(), newsId));
     }
     @GetMapping("/news")
     @Operation(summary = "미확인 가정통신문 전체/팀별 목록 조회 + ?teamId=1 [jwt O] +")
