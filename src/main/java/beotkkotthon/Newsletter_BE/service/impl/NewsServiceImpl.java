@@ -254,7 +254,7 @@ public class NewsServiceImpl implements NewsService {
         MemberTeam loginMemberTeam = memberTeamService.findByMemberAndTeam(member, team);
         Role loginRole = loginMemberTeam.getRole();
 
-        if (loginRole.equals(Role.LEADER) || loginRole.equals(Role.CREATOR)) {
+        if (!loginRole.equals(Role.MEMBER)) {
             checkedCount = (int) newsChecks.stream()
                     .filter(newsCheck -> newsCheck.getCheckStatus().equals(CheckStatus.READ))
                     .count();
