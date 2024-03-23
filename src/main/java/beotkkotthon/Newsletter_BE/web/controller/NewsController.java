@@ -2,15 +2,16 @@ package beotkkotthon.Newsletter_BE.web.controller;
 
 import beotkkotthon.Newsletter_BE.config.security.util.SecurityUtil;
 import beotkkotthon.Newsletter_BE.converter.NewsConverter;
+import beotkkotthon.Newsletter_BE.domain.Member;
 import beotkkotthon.Newsletter_BE.domain.News;
+import beotkkotthon.Newsletter_BE.domain.mapping.MemberTeam;
 import beotkkotthon.Newsletter_BE.payload.ApiResponse;
+import beotkkotthon.Newsletter_BE.service.MemberService;
 import beotkkotthon.Newsletter_BE.service.NewsCheckService;
 import beotkkotthon.Newsletter_BE.service.NewsService;
 import beotkkotthon.Newsletter_BE.web.dto.request.NewsSaveRequestDto;
 import beotkkotthon.Newsletter_BE.web.dto.response.NewsCheckResponseDto.NewsCheckDto;
-import beotkkotthon.Newsletter_BE.web.dto.response.NewsResponseDto.ShowNewsListDto;
 import beotkkotthon.Newsletter_BE.web.dto.response.NewsResponseDto.ShowNewsDto;
-import com.google.protobuf.Api;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
@@ -55,19 +56,13 @@ public class NewsController {
         return ApiResponse.onCreate(NewsConverter.toShowNewsDto(news));
     }
 
-//    @GetMapping("/teams/news")
-//    @Operation(summary = "가정통신문 목록 모두 조회(하단그룹-메인) [jwt O]")
-//    public ApiResponse<ShowNewsListDto> findAllNews(){
-//        List<News> newsList = newsService.findAllNewsByMemberTeam(SecurityUtil.getCurrentMemberId());
-//        return ApiResponse.onSuccess(NewsConverter.toShowNewsDtoList(newsList));
-//    }
-
     @GetMapping("/teams/news")
     @Operation(summary = "가정통신문 목록 모두 조회(하단그룹-메인) [jwt O]")
-    public ApiResponse<List<ShowNewsDto>> findAllNews() {
-        List<ShowNewsDto> showNewsDtos = newsService.findNewsByMemberTeam(SecurityUtil.getCurrentMemberId());
-        return ApiResponse.onSuccess(showNewsDtos);
+    public ApiResponse<List<ShowNewsDto>> findAllNews(@RequestParam(name = "teamId") Long teamId){
+        List<ShowNewsDto> newsList = newsService.findNewsByTeam(teamId);
+        return ApiResponse.onSuccess(newsList);
     }
+
 
     @GetMapping("/teams/{teamId}/news")
     @Operation(summary = "팀별 가정통신문 조회 [jwt O]")

@@ -11,6 +11,7 @@ import java.util.Optional;
 
 public interface NewsCheckRepository extends JpaRepository<NewsCheck, Long> {
 
+    @EntityGraph(attributePaths = "news")
     Optional<NewsCheck> findByMemberAndNews(Member member, News news);
     List<NewsCheck> findByMember(Member member);
 
