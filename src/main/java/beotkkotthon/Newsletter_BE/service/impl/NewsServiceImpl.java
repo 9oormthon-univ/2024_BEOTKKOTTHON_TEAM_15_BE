@@ -180,6 +180,20 @@ public class NewsServiceImpl implements NewsService {
     }
 
     @Override
+    public List<ShowNewsDto> allNewslist(Long memberId) {
+        Member member = memberService.findById(memberId);
+        List<ShowNewsDto> allReadNewsDtos;
+
+        allReadNewsDtos = newsCheckRepository.findByMember(member).stream()
+                .map(newsCheck -> NewsConverter.toShowNewsDto(newsCheck.getNews()))
+                .sorted(Comparator.comparing(ShowNewsDto::getId))
+                .sorted(Comparator.comparing(ShowNewsDto::getModifiedTime, Comparator.reverseOrder()))
+                .collect(Collectors.toList());
+        return allReadNewsDtos;
+}
+
+
+    @Override
     public List<ShowNewsDto> findNewsByMember(Long memberId, Long teamId) {
         Member member = memberService.findById(memberId);
 

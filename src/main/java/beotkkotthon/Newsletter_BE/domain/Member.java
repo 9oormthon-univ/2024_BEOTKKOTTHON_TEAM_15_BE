@@ -70,7 +70,6 @@ public class Member extends BaseEntity implements Serializable {
         this.username = username;
     }
 
-
     // 수정(업데이트) 기능
     public void updateUsername(String username) {  // 사용자이름 변경 기능
         this.username = username;
@@ -78,4 +77,6 @@ public class Member extends BaseEntity implements Serializable {
     public void updateNoticeStatus(NoticeStatus noticeStatus) {  // 알림허용여부 변경 기능
         this.noticeStatus = noticeStatus;
     }
+
+
 }
