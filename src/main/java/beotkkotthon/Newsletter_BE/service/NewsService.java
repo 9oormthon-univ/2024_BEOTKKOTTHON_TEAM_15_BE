@@ -2,6 +2,7 @@ package beotkkotthon.Newsletter_BE.service;
 
 import beotkkotthon.Newsletter_BE.domain.News;
 import beotkkotthon.Newsletter_BE.web.dto.request.NewsSaveRequestDto;
+import beotkkotthon.Newsletter_BE.web.dto.response.NewsResponseDto;
 import beotkkotthon.Newsletter_BE.web.dto.response.NewsResponseDto.ShowNewsDto;
 import org.springframework.web.multipart.MultipartFile;
 

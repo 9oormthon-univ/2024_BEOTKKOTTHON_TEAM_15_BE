@@ -11,6 +11,7 @@ import beotkkotthon.Newsletter_BE.web.dto.response.NewsCheckResponseDto;
 import beotkkotthon.Newsletter_BE.web.dto.response.NewsResponseDto;
 import beotkkotthon.Newsletter_BE.web.dto.response.NewsResponseDto.ShowNewsListDto;
 import beotkkotthon.Newsletter_BE.web.dto.response.NewsResponseDto.ShowNewsDto;
+import beotkkotthon.Newsletter_BE.web.dto.response.NewsResponseDto.NewsDetailDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
@@ -66,10 +67,10 @@ public class NewsController {
             @Parameter(name = "teamId", description = "팀의 아이디, path variable 입니다."),
             @Parameter(name = "newsId", description = "가정통신문의 아이디, path variable 입니다.")
     })
-    public ApiResponse<NewsResponseDto.NewsDetailDto> findNewsById(@PathVariable(name = "teamId") Long teamId,
+    public ApiResponse<NewsDetailDto> findNewsById(@PathVariable(name = "teamId") Long teamId,
                                                                  @PathVariable(name = "newsId") Long newsId) {
         Long memberId = SecurityUtil.getCurrentMemberId();
-        NewsResponseDto.ShowNewsDto showNewsDto = newsService.getShowNewsDto(memberId, teamId, newsId, 0);
+        ShowNewsDto showNewsDto = newsService.getShowNewsDto(memberId, teamId, newsId, 0);
         List<NewsCheckResponseDto.NewsCheckDto> newsCheckDto = newsCheckService.findByMemberAndTeamAndNews(memberId, teamId, newsId);
         return ApiResponse.onSuccess(new NewsResponseDto.NewsDetailDto(showNewsDto, newsCheckDto));
     }
