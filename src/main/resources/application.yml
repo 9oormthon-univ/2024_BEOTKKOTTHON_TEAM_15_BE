@@ -7,6 +7,12 @@ spring:
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
+  ## image
+  servlet:
+    multipart:
+      maxFileSize: 30MB
+      maxRequestSize: 30MB
+
 
 ## Logging Setting
 logging:
@@ -26,10 +32,3 @@ springdoc:
     # alpha: sort by Alphabet, method: sort by HTTP status code
     operations-sorter: method
   writer-with-default-pretty-printer: true
-
-## image
-spring:
-  servlet:
-    multipart:
-      maxFileSize: 30MB
-      maxRequestSize: 30MB

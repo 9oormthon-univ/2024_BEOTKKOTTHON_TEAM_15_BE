@@ -3,13 +3,11 @@ package beotkkotthon.Newsletter_BE.service.impl;
 import beotkkotthon.Newsletter_BE.config.security.util.SecurityUtil;
 import beotkkotthon.Newsletter_BE.converter.TeamConverter;
 import beotkkotthon.Newsletter_BE.domain.Member;
-import beotkkotthon.Newsletter_BE.domain.News;
 import beotkkotthon.Newsletter_BE.domain.Team;
 import beotkkotthon.Newsletter_BE.domain.enums.Role;
 import beotkkotthon.Newsletter_BE.domain.mapping.MemberTeam;
 import beotkkotthon.Newsletter_BE.payload.exception.GeneralException;
 import beotkkotthon.Newsletter_BE.payload.status.ErrorStatus;
-import beotkkotthon.Newsletter_BE.repository.MemberRepository;
 import beotkkotthon.Newsletter_BE.repository.MemberTeamRepository;
 import beotkkotthon.Newsletter_BE.repository.TeamRepository;
 import beotkkotthon.Newsletter_BE.service.ImageUploadService;
@@ -17,7 +15,7 @@ import beotkkotthon.Newsletter_BE.service.MemberService;
 import beotkkotthon.Newsletter_BE.service.MemberTeamService;
 import beotkkotthon.Newsletter_BE.service.TeamService;
 import beotkkotthon.Newsletter_BE.web.dto.request.TeamSaveRequestDto;
-import beotkkotthon.Newsletter_BE.web.dto.response.NewsResponseDto;
+import beotkkotthon.Newsletter_BE.web.dto.response.NewsResponseDto.ShowNewsDto;
 import beotkkotthon.Newsletter_BE.web.dto.response.TeamResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -148,7 +146,7 @@ public class TeamServiceImpl implements TeamService {
 
     @Transactional
     @Override
-    public TeamResponseDto.ShowTeamDto showTeamById(Long memberId, Long teamId, List<NewsResponseDto> newsList) {
+    public TeamResponseDto.ShowTeamDto showTeamById(Long memberId, Long teamId, List<ShowNewsDto> newsList) {
         Member member = memberService.findById(memberId);
         Team team = findById(teamId);
         MemberTeam memberTeam = memberTeamService.findByMemberAndTeam(member, team);

@@ -1,9 +1,7 @@
 package beotkkotthon.Newsletter_BE.converter;
 
 import beotkkotthon.Newsletter_BE.domain.News;
-import beotkkotthon.Newsletter_BE.domain.NewsCheck;
 import beotkkotthon.Newsletter_BE.domain.enums.CheckStatus;
-import beotkkotthon.Newsletter_BE.web.dto.response.NewsCheckResponseDto;
 import beotkkotthon.Newsletter_BE.web.dto.response.NewsResponseDto;
 import beotkkotthon.Newsletter_BE.web.dto.response.NewsResponseDto.ShowNewsDto;
 
@@ -26,21 +24,17 @@ public class NewsConverter {
                 .checkStatus(CheckStatus.NOT_READ)
                 .readMemberCount(0)
                 .notReadMemberCount(news.getTeam().getTeamSize())
+                .modifiedTime(news.getModifiedTime())
                 .build();
     }
 
-    public static NewsResponseDto.ShowNewsListDto toShowNewsDtoList(List<News> newsList, List<NewsCheck> newsCheckList) {
+    public static NewsResponseDto.ShowNewsListDto toShowNewsDtoList(List<News> newsList) {
         List<NewsResponseDto.ShowNewsDto> showNewsDtoList = newsList.stream()
                 .map(NewsConverter::toShowNewsDto)
                 .collect(Collectors.toList());
 
-        List<NewsCheckResponseDto.NewsCheckDto> newsCheckDtoList = newsCheckList.stream()
-                .map(NewsCheckConverter::toNewsCheckDto)
-                .collect(Collectors.toList());
-
         return NewsResponseDto.ShowNewsListDto.builder()
                 .showNewsDtoList(showNewsDtoList)
-                .newsCheckResponseDtoList(newsCheckDtoList)
                 .build();
     }
 }

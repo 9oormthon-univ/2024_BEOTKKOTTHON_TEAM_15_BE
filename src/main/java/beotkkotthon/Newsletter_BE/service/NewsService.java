@@ -2,7 +2,7 @@ package beotkkotthon.Newsletter_BE.service;
 
 import beotkkotthon.Newsletter_BE.domain.News;
 import beotkkotthon.Newsletter_BE.web.dto.request.NewsSaveRequestDto;
-import beotkkotthon.Newsletter_BE.web.dto.response.NewsResponseDto;
+import beotkkotthon.Newsletter_BE.web.dto.response.NewsResponseDto.ShowNewsDto;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -14,13 +14,13 @@ public interface NewsService {
 
     News createNews(Long teamId, MultipartFile imageFile1, MultipartFile imageFile2, NewsSaveRequestDto newsSaveRequestDto) throws IOException;
 
-    List<NewsResponseDto> findNewsByTeam(Long teamId);
+    List<ShowNewsDto> findNewsByTeam(Long teamId);
 
-    NewsResponseDto.ShowNewsDto getShowNewsDto(Long memberId, Long teamId, Long newsId, int count);
+    ShowNewsDto getShowNewsDto(Long memberId, Long teamId, Long newsId, int count);
 
-    List<NewsResponseDto> notReadNewslist(Long memberId, Long teamId);
+    List<ShowNewsDto> notReadNewslist(Long memberId, Long teamId);
 
-    List<NewsResponseDto> findNewsByMember(Long memberId, Long teamId);
+    List<ShowNewsDto> findNewsByMember(Long memberId, Long teamId);
 
     int countReadMember(Long memberId, Long teamId, Long newsId);
 
