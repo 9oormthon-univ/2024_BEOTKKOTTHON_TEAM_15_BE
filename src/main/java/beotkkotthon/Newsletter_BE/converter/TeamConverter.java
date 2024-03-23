@@ -1,14 +1,11 @@
 package beotkkotthon.Newsletter_BE.converter;
 
-import beotkkotthon.Newsletter_BE.config.security.util.SecurityUtil;
-import beotkkotthon.Newsletter_BE.domain.News;
 import beotkkotthon.Newsletter_BE.domain.Team;
 import beotkkotthon.Newsletter_BE.domain.enums.Role;
-import beotkkotthon.Newsletter_BE.web.dto.response.NewsResponseDto;
+import beotkkotthon.Newsletter_BE.web.dto.response.NewsResponseDto.ShowNewsDto;
 import beotkkotthon.Newsletter_BE.web.dto.response.TeamResponseDto;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class TeamConverter {
 
@@ -23,7 +20,7 @@ public class TeamConverter {
                 .build();
     }
 
-    public static TeamResponseDto.ShowTeamDto toShowTeamDto(Team team, Role role, List<NewsResponseDto> newsList, int leaderCount, int memberCount) {
+    public static TeamResponseDto.ShowTeamDto toShowTeamDto(Team team, Role role, List<ShowNewsDto> newsList, int leaderCount, int memberCount) {
 
         return TeamResponseDto.ShowTeamDto.builder()
                 .id(team.getId())

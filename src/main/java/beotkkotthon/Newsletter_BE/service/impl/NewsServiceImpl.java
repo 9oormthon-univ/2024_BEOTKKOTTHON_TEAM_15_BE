@@ -2,6 +2,7 @@ package beotkkotthon.Newsletter_BE.service.impl;
 
 import beotkkotthon.Newsletter_BE.config.security.util.SecurityUtil;
 
+import beotkkotthon.Newsletter_BE.converter.NewsConverter;
 import beotkkotthon.Newsletter_BE.domain.Member;
 import beotkkotthon.Newsletter_BE.domain.News;
 import beotkkotthon.Newsletter_BE.domain.NewsCheck;
@@ -99,19 +100,18 @@ public class NewsServiceImpl implements NewsService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<NewsResponseDto> findNewsByTeam(Long teamId) {
+    public List<ShowNewsDto> findNewsByTeam(Long teamId) {
 
         Team team = teamService.findById(teamId);
-        List<NewsResponseDto> newsResponseDtos = team.getNewsList().stream().map(NewsResponseDto::new)
-                .sorted(Comparator.comparing(NewsResponseDto::getId, Comparator.reverseOrder()))
-                .sorted(Comparator.comparing(NewsResponseDto::getModifiedTime, Comparator.reverseOrder()))
+        List<ShowNewsDto> showNewsDtos = team.getNewsList().stream().map(NewsConverter::toShowNewsDto)
+                .sorted(Comparator.comparing(ShowNewsDto::getId, Comparator.reverseOrder()))
+                .sorted(Comparator.comparing(ShowNewsDto::getModifiedTime, Comparator.reverseOrder()))
                 .collect(Collectors.toList());
 
-        return newsResponseDtos;
+        return showNewsDtos;
     }
 
     //가입한 팀의 모든공지, ?teamId=1 팀별 공지 목록 조회
-
     @Transactional
     @Override
     public List<News> findAllNewsByMemberTeam(Long memberId, Long teamId) {
@@ -123,8 +123,11 @@ public class NewsServiceImpl implements NewsService {
             return team.getNewsList();
         } else {
             return memberTeamList.stream()
-                    .map(MemberTeam::getTeam)
-                    .flatMap(team -> team.getNewsList().stream())
+                    .map(memberTeam -> {
+                        Team team = memberTeam.getTeam();
+                        return team.getNewsList().stream();
+                    })
+                    .flatMap(newsStream -> newsStream)
                     .collect(Collectors.toList());
         }
     }
@@ -154,61 +157,88 @@ public class NewsServiceImpl implements NewsService {
                 .build();
     }
 
-    @Transactional
     @Override
-    public List<NewsResponseDto> notReadNewslist(Long memberId, Long teamId) {
+    public List<ShowNewsDto> notReadNewslist(Long memberId, Long teamId) {
         Member member = memberService.findById(memberId);
-        List<NewsResponseDto> notReadNewsDtos;
+        List<ShowNewsDto> notReadNewsDtos;
 
-        if (teamId != null) {
+        if(teamId != null) {
             Team team = teamService.findById(teamId);
             notReadNewsDtos = team.getNewsList().stream()
                     .filter(news -> {
                         NewsCheck newsCheck = newsCheckRepository.findByMemberAndNews(member, news).orElse(null);
-                        return newsCheck != null && newsCheck.getCheckStatus() == CheckStatus.NOT_READ;
+                        return newsCheck.getCheckStatus().equals(CheckStatus.NOT_READ);
                     })
-                    .map(NewsResponseDto::new)
-                    .sorted(Comparator.comparing(NewsResponseDto::getId))
-                    .sorted(Comparator.comparing(NewsResponseDto::getModifiedTime, Comparator.reverseOrder()))
+                    .map(NewsConverter::toShowNewsDto)
+                    .sorted(Comparator.comparing(ShowNewsDto::getId))
+                    .sorted(Comparator.comparing(ShowNewsDto::getModifiedTime, Comparator.reverseOrder()))
                     .collect(Collectors.toList());
         } else {
             notReadNewsDtos = newsCheckRepository.findByMember(member).stream()
                     .filter(newsCheck -> newsCheck.getCheckStatus() == CheckStatus.NOT_READ)
-                    .map(newsCheck -> new NewsResponseDto(newsCheck.getNews()))
-                    .sorted(Comparator.comparing(NewsResponseDto::getId))
-                    .sorted(Comparator.comparing(NewsResponseDto::getModifiedTime, Comparator.reverseOrder()))
+                    .map(newsCheck -> NewsConverter.toShowNewsDto(newsCheck.getNews()))
+                    .sorted(Comparator.comparing(ShowNewsDto::getId))
+                    .sorted(Comparator.comparing(ShowNewsDto::getModifiedTime, Comparator.reverseOrder()))
                     .collect(Collectors.toList());
         }
         return notReadNewsDtos;
     }
 
+    //    @Transactional
+//    @Override
+//    public List<NewsResponseDto> notReadNewslist(Long memberId, Long teamId) {
+//        Member member = memberService.findById(memberId);
+//        List<NewsResponseDto> notReadNewsDtos;
+//
+//        if (teamId != null) {
+//            Team team = teamService.findById(teamId);
+//            notReadNewsDtos = team.getNewsList().stream()
+//                    .filter(news -> {
+//                        NewsCheck newsCheck = newsCheckRepository.findByMemberAndNews(member, news).orElse(null);
+//                        return newsCheck != null && newsCheck.getCheckStatus() == CheckStatus.NOT_READ;
+//                    })
+//                    .map(NewsResponseDto::new)
+//                    .sorted(Comparator.comparing(NewsResponseDto::getId))
+//                    .sorted(Comparator.comparing(NewsResponseDto::getModifiedTime, Comparator.reverseOrder()))
+//                    .collect(Collectors.toList());
+//        } else {
+//            notReadNewsDtos = newsCheckRepository.findByMember(member).stream()
+//                    .filter(newsCheck -> newsCheck.getCheckStatus() == CheckStatus.NOT_READ)
+//                    .map(newsCheck -> new NewsResponseDto(newsCheck.getNews()))
+//                    .sorted(Comparator.comparing(NewsResponseDto::getId))
+//                    .sorted(Comparator.comparing(NewsResponseDto::getModifiedTime, Comparator.reverseOrder()))
+//                    .collect(Collectors.toList());
+//        }
+//        return notReadNewsDtos;
+//    }
+
     @Transactional
     @Override
-    public List<NewsResponseDto> findNewsByMember(Long memberId, Long teamId) {
+    public List<ShowNewsDto> findNewsByMember(Long memberId, Long teamId) {
         Member member = memberService.findById(memberId);
 
-        List<NewsResponseDto> newsResponseDtos;
+        List<ShowNewsDto> showNewsDtos;
 
         if (teamId != null) {
             Team team = teamService.findById(teamId);
-            newsResponseDtos = team.getNewsList().stream()
+            showNewsDtos = team.getNewsList().stream()
                     .filter(news -> news.getMember().getId().equals(member.getId()))
-                    .map(NewsResponseDto::new)
-                    .sorted(Comparator.comparing(NewsResponseDto::getId))
-                    .sorted(Comparator.comparing(NewsResponseDto::getModifiedTime, Comparator.reverseOrder()))
+                    .map(NewsConverter::toShowNewsDto)
+                    .sorted(Comparator.comparing(ShowNewsDto::getId))
+                    .sorted(Comparator.comparing(ShowNewsDto::getModifiedTime, Comparator.reverseOrder()))
                     .collect(Collectors.toList());
         } else {
             List<News> newsList = newsRepository.findAll().stream()
                     .filter(news -> news.getMember().getId().equals(member.getId()))
                     .collect(Collectors.toList());
 
-            newsResponseDtos = newsList.stream()
-                    .map(NewsResponseDto::new)
-                    .sorted(Comparator.comparing(NewsResponseDto::getId))
-                    .sorted(Comparator.comparing(NewsResponseDto::getModifiedTime, Comparator.reverseOrder()))
+            showNewsDtos = newsList.stream()
+                    .map(NewsConverter::toShowNewsDto)
+                    .sorted(Comparator.comparing(ShowNewsDto::getId))
+                    .sorted(Comparator.comparing(ShowNewsDto::getModifiedTime, Comparator.reverseOrder()))
                     .collect(Collectors.toList());
         }
-        return newsResponseDtos;
+        return showNewsDtos;
     }
 
     @Override
@@ -225,7 +255,7 @@ public class NewsServiceImpl implements NewsService {
 
         if (loginRole.equals(Role.LEADER) || loginRole.equals(Role.CREATOR)) {
             checkedCount = (int) newsChecks.stream()
-                    .filter(newsCheck -> newsCheck.getCheckStatus() == CheckStatus.READ)
+                    .filter(newsCheck -> newsCheck.getCheckStatus().equals(CheckStatus.READ))
                     .count();
         }
         return checkedCount;
