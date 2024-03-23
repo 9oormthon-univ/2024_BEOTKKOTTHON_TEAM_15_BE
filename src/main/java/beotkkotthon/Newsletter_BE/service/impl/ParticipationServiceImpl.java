@@ -175,7 +175,7 @@ public class ParticipationServiceImpl implements ParticipationService {
         // 그룹신청 발생을 리더에게 푸시 알림 발송.
         List<MemberTeam> memberTeams = memberTeamService.findAllByTeam(team);
         for (MemberTeam memberTeam : memberTeams) {
-            if(memberTeam.getRole().equals(Role.LEADER) || memberTeam.getRole().equals(Role.CREATOR)) {
+            if(!memberTeam.getRole().equals(Role.MEMBER)) {
                 String title = "그룹 가입요청";
                 String message = "'" + loginMember.getUsername() + "'님이 '" + team.getName() + "' 그룹에 가입을 요청했습니다.";
                 Optional<NotificationDto> opNotificationDto = notificationService.makeMessage(memberTeam.getMember().getId(), title, message);
