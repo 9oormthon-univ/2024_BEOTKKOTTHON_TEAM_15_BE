@@ -22,6 +22,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@Transactional(readOnly = true)
 public class MemberTeamServiceImpl implements MemberTeamService {
 
     private final MemberTeamRepository memberTeamRepository;
@@ -77,7 +78,6 @@ public class MemberTeamServiceImpl implements MemberTeamService {
         }
     }
 
-    @Transactional(readOnly = true)
     @Override
     public List<MemberTeam> findAllByTeam(Team team) {
         return memberTeamRepository.findAllByTeam(team);

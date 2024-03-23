@@ -29,6 +29,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class TeamServiceImpl implements TeamService {
 
     private final TeamRepository teamRepository;
@@ -43,39 +44,7 @@ public class TeamServiceImpl implements TeamService {
         return teamRepository.findById(id).orElseThrow(
                 () -> new GeneralException(ErrorStatus.TEAM_NOT_FOUND));
     }
-
-//    @Transactional
-//    @Override
-//    public TeamResponseDto createTeam(TeamSaveRequestDto teamSaveRequestDto) throws IOException {
-//        String imageUrl = imageUploadService.uploadImage(teamSaveRequestDto.getImage());
-//
-//        String uuid = UUID.randomUUID().toString();
-//        // 20자리의 UUID 생성.
-//        long l = ByteBuffer.wrap(uuid.getBytes()).getLong();
-//        String link = "/teams?link=" + Long.toString(l, 9);
-////        // 10자리의 UUID 생성.
-////        int l = ByteBuffer.wrap(uuid.getBytes()).getInt();
-////        String link = "/teams?link=" + Integer.toString(l, 9);
-//
-//        Team team = teamSaveRequestDto.toEntity(imageUrl, link);
-//        teamRepository.save(team);
-//
-//        Long loginMemberId = SecurityUtil.getCurrentMemberId();
-//        Member loginMember = memberService.findById(loginMemberId);
-//
-//        // 그룹에 CREATOR로 save 시킴
-//        Role role = Role.CREATOR;
-//        MemberTeam memberTeam = MemberTeam.MemberTeamSaveBuilder()
-//                .role(role)
-//                .member(loginMember)
-//                .team(team)
-//                .build();
-//        memberTeamRepository.save(memberTeam);
-//
-//        return new TeamResponseDto(team);
-//    }
-
-
+    @Transactional
     @Override
     public Team createTeam(Long memberId,  TeamSaveRequestDto teamSaveRequestDto, MultipartFile imageFile) throws IOException {
         String imageUrl = imageUploadService.uploadImage(imageFile);
@@ -106,7 +75,6 @@ public class TeamServiceImpl implements TeamService {
         return team;
     }
 
-    @Transactional
     @Override
     public List<TeamResponseDto> findTeamsByMember(String name, String link) {  // 그룹명 검색 or 초대링크 클릭 or 내가 가입한 팀 목록 조회
 
@@ -144,7 +112,6 @@ public class TeamServiceImpl implements TeamService {
         }
     }
 
-    @Transactional
     @Override
     public TeamResponseDto.ShowTeamDto showTeamById(Long memberId, Long teamId, List<ShowNewsDto> newsList) {
         Member member = memberService.findById(memberId);

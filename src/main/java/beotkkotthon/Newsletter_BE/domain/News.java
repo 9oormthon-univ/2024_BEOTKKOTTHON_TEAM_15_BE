@@ -2,6 +2,7 @@ package beotkkotthon.Newsletter_BE.domain;
 
 import beotkkotthon.Newsletter_BE.domain.common.BaseEntity;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,8 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-@NoArgsConstructor
-
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "news")
 @Entity
 public class News extends BaseEntity implements Serializable {
@@ -67,4 +67,13 @@ public class News extends BaseEntity implements Serializable {
         this.team = team;
         // changeTeam(team);
     }
+
+//    public void setTeam(Team team) {
+//        this.team = team;
+//        team.getNewsList().add(this);
+//    }
+//
+//    public void addNewsCheck(NewsCheck newsCheck) {
+//        newsCheckList
+//    }
 }

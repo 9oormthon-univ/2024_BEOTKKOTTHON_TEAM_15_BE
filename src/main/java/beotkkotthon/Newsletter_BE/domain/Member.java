@@ -15,7 +15,6 @@ import java.util.List;
 
 @Getter
 @NoArgsConstructor
-
 @Table(name = "member")
 @Entity
 public class Member extends BaseEntity implements Serializable {
