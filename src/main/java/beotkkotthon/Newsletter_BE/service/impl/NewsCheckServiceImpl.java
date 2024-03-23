@@ -57,24 +57,6 @@ public class NewsCheckServiceImpl implements NewsCheckService {
     }
 
     @Override
-    public List<NewsCheck> findByMember(Long memberId) {
-        Member member = memberService.findById(memberId);
-        return newsCheckRepository.findByMember(member);
-    }
-
-    //공지 확인/미확인 리스트와 인원수
-    @Override
-    public List<NewsCheckDto> findByMemberAndTeamAndNews(Long memberId, Long teamId, Long newsId) {
-        News news = newsService.findById(newsId);
-
-        List<NewsCheck> newsChecks = newsCheckRepository.findByNews(news);
-
-        return newsChecks.stream()
-                .map(NewsCheckConverter::toNewsCheckDto)
-                .collect(Collectors.toList());
-    }
-
-    @Override
     public List<NewsCheckDto> findByNews(Long memberId, Long newsId) {
         Member member = memberService.findById(memberId);
         News news = newsService.findById(newsId);

@@ -9,9 +9,5 @@ public interface NewsCheckService {
 
     NewsCheckDto readNews(Long memberId, Long newsId);
 
-    List<NewsCheck> findByMember(Long memberId);
-
-    List<NewsCheckDto> findByMemberAndTeamAndNews(Long memberId, Long teamId, Long newsId);
-
     List<NewsCheckDto> findByNews(Long memberId, Long newsId);
 }
