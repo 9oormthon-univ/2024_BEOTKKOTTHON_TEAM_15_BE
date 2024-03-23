@@ -83,19 +83,19 @@ public class NewsController {
     }
 
     @GetMapping("/news/{newsId}/checklist")
-    @Operation(summary = "가정통신문 확인/미확인 리스트")
+    @Operation(summary = "가정통신문 확인/미확인 리스트 [jwt O]")
     public ApiResponse<List<NewsCheckDto>> newsCheckMember(@PathVariable(name = "newsId") Long newsId) {
         return ApiResponse.onSuccess(newsCheckService.findByNews(SecurityUtil.getCurrentMemberId(), newsId));
     }
     @GetMapping("/news")
-    @Operation(summary = "미확인 가정통신문 전체/팀별 목록 조회 + ?teamId=1 [jwt O] +")
+    @Operation(summary = "미확인 가정통신문 전체/팀별 목록 조회 [jwt O]")
     public ApiResponse<List<ShowNewsDto>> notReadNews(@RequestParam(name = "teamId", required = false) Long teamId) {
         List<ShowNewsDto> notReadNewsList = newsService.notReadNewslist(SecurityUtil.getCurrentMemberId(), teamId);
         return ApiResponse.onSuccess(notReadNewsList);
     }
 
     @GetMapping("/mynews")
-    @Operation(summary = "내가 발행한 가정통신문 전체/팀별 목록 조회 + ?teamId=1[jwt O]")
+    @Operation(summary = "내가 발행한 가정통신문 전체/팀별 목록 조회 [jwt O]")
     public ApiResponse<List<ShowNewsDto>> findNewsByWriter(@RequestParam(name = "teamId", required = false) Long teamId) {
         List<ShowNewsDto> newsResponseDtos = newsService.findNewsByMember(SecurityUtil.getCurrentMemberId(), teamId);
         return ApiResponse.onSuccess(newsResponseDtos);
