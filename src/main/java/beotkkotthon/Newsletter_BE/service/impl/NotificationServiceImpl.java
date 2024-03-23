@@ -34,8 +34,8 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Transactional
     @Override
-    public void saveNotification(FcmTokenRequestDto fcmTokenRequestDto) {  // 로그인 직후 바로, fcm토큰 DB에 저장.
-        Member member = memberRepository.findById(SecurityUtil.getCurrentMemberId())
+    public void saveNotification(Long memberId, FcmTokenRequestDto fcmTokenRequestDto) {  // 로그인 직후 바로, fcm토큰 DB에 저장.
+        Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new GeneralException(ErrorStatus.MEMBER_NOT_FOUND));
 
         // fcm토큰이 이미 존재할시, 덮어써서 재저장. => 사용자당 각각 가장 최근 로그인한 기기 1개로만 알림전송됨.

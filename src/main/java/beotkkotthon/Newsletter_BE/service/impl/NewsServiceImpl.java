@@ -81,7 +81,7 @@ public class NewsServiceImpl implements NewsService {
                 if(memberTeam.getMember().getId() != loginMemberId && opNotificationDto.isPresent()) {
                     NotificationDto notificationDto = opNotificationDto.get();
                     try {
-                        notificationService.sendNotification(notificationDto);
+                        notificationService.sendNotification(memberTeam.getMember().getId(), notificationDto);
                     }
                     catch (ExecutionException | InterruptedException ex) {
                         throw new GeneralException(ErrorStatus.INTERNAL_ERROR, ex.getMessage());
