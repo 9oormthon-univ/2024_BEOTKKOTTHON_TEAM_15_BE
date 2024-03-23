@@ -59,6 +59,7 @@ public class NewsResponseDto {
         String teamName;
         String imageUrl1;
         String imageUrl2;
+        CheckStatus checkStatus;
         int readMemberCount;
         int notReadMemberCount;
     }

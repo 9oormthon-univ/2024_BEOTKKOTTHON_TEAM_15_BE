@@ -111,6 +111,8 @@ public class NewsServiceImpl implements NewsService {
     }
 
     //가입한 팀의 모든공지, ?teamId=1 팀별 공지 목록 조회
+
+    @Transactional
     @Override
     public List<News> findAllNewsByMemberTeam(Long memberId, Long teamId) {
         Member member = memberService.findById(memberId);
@@ -133,6 +135,7 @@ public class NewsServiceImpl implements NewsService {
         }
     }
 
+    @Transactional
     @Override
     public ShowNewsDto getShowNewsDto(Long memberId, Long teamId, Long newsId, int count) {
         News news = findById(newsId);
@@ -151,6 +154,7 @@ public class NewsServiceImpl implements NewsService {
                 .imageUrl1(news.getImageUrl1())
                 .imageUrl2(news.getImageUrl2())
                 .limitTime(news.getLimitTime())
+                .checkStatus(newsCheck.get().getCheckStatus())
                 .readMemberCount(count)
                 .notReadMemberCount(team.getTeamSize() - count)
                 .build();
