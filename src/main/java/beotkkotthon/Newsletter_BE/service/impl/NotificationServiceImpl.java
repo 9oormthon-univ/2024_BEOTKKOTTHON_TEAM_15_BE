@@ -34,8 +34,8 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Transactional
     @Override
-    public void saveNotification(Long memberId, FcmTokenRequestDto fcmTokenRequestDto) {  // 로그인 직후 바로, fcm토큰 DB에 저장.
-        Member member = memberRepository.findById(memberId)
+    public void saveNotification(FcmTokenRequestDto fcmTokenRequestDto) {  // 로그인 직후 바로, fcm토큰 DB에 저장.
+        Member member = memberRepository.findById(SecurityUtil.getCurrentMemberId())
                 .orElseThrow(() -> new GeneralException(ErrorStatus.MEMBER_NOT_FOUND));
 
         // fcm토큰이 이미 존재할시, 덮어써서 재저장. => 사용자당 각각 가장 최근 로그인한 기기 1개로만 알림전송됨.
@@ -67,10 +67,10 @@ public class NotificationServiceImpl implements NotificationService {
 
     // @Transactional
     @Override
-    public void sendNotification(NotificationDto notificationDto) throws ExecutionException, InterruptedException {
+    public void sendNotification(Long memberId, NotificationDto notificationDto) throws ExecutionException, InterruptedException {
 
         // 로그인사용자가 계정에 알림설정을 꺼두었다면, 알림 전달 막기. (= 알림설정 켜둔경우에만 알림 응답 가능.)
-        Member member = memberRepository.findById(SecurityUtil.getCurrentMemberId())
+        Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new GeneralException(ErrorStatus.MEMBER_NOT_FOUND));
 
         if(member.getNoticeStatus().equals(NoticeStatus.ALLOW)) {
