@@ -65,7 +65,6 @@ public class NewsController {
     public ApiResponse<NewsResponseDto.NewsDetailDto> findNewsById(@PathVariable(name = "teamId") Long teamId,
                                                                  @PathVariable(name = "newsId") Long newsId) {
         Long memberId = SecurityUtil.getCurrentMemberId();
-        newsCheckService.readNews(memberId, newsId);
         NewsResponseDto.ShowNewsDto showNewsDto = newsService.getShowNewsDto(memberId, teamId, newsId, 0);
         List<NewsCheckResponseDto.NewsCheckDto> newsCheckDto = newsCheckService.findByMemberAndTeamAndNews(memberId, teamId, newsId);
         return ApiResponse.onSuccess(new NewsResponseDto.NewsDetailDto(showNewsDto, newsCheckDto));
