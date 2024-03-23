@@ -26,6 +26,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@Transactional(readOnly = true)
 public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
@@ -39,7 +40,6 @@ public class MemberServiceImpl implements MemberService {
                 () -> new GeneralException(ErrorStatus.MEMBER_NOT_FOUND));
     }
 
-    @Transactional(readOnly = true)
     @Override
     public MemberListResponseDto findMembersByTeam(Long teamId) {
         Long memberId = SecurityUtil.getCurrentMemberId();

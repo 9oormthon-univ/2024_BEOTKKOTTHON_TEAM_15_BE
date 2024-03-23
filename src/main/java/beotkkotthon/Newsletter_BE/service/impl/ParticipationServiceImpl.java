@@ -32,6 +32,7 @@ import java.util.concurrent.ExecutionException;
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@Transactional(readOnly = true)
 public class ParticipationServiceImpl implements ParticipationService {
 
     private final ParticipationRepository participationRepository;
@@ -49,7 +50,6 @@ public class ParticipationServiceImpl implements ParticipationService {
                 () -> new GeneralException(ErrorStatus.PARTICIPATION_NOT_FOUND));
     }
 
-    @Transactional(readOnly = true)
     @Override
     public List<ParticipationResponseDto> findParticipationByTeam(Long teamId) {
         Team team = teamService.findById(teamId);

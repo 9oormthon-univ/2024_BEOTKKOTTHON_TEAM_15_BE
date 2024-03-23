@@ -14,7 +14,6 @@ import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor
-
 @Table(name = "member_team")
 @Entity
 public class MemberTeam extends BaseEntity implements Serializable {

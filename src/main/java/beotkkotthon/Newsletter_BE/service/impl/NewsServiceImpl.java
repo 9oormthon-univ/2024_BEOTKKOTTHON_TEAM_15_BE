@@ -37,6 +37,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class NewsServiceImpl implements NewsService {
 
     private final NewsRepository newsRepository;
@@ -99,7 +100,6 @@ public class NewsServiceImpl implements NewsService {
         newsCheckRepository.save(newsCheck);
     }
 
-    @Transactional(readOnly = true)
     @Override
     public List<ShowNewsDto> findNewsByTeam(Long teamId) {
         Team team = teamService.findById(teamId);
@@ -114,7 +114,6 @@ public class NewsServiceImpl implements NewsService {
     }
 
     //가입한 팀의 모든공지, ?teamId=1 팀별 공지 목록 조회
-    @Transactional
     @Override
     public List<News> findAllNewsByMemberTeam(Long memberId) {
         Member member = memberService.findById(memberId);
@@ -126,7 +125,6 @@ public class NewsServiceImpl implements NewsService {
                 .collect(Collectors.toList());
     }
 
-    @Transactional
     @Override
     public ShowNewsDto getShowNewsDto(Long memberId, Long teamId, Long newsId, int count) {
         News news = findById(newsId);
@@ -151,7 +149,6 @@ public class NewsServiceImpl implements NewsService {
                 .build();
     }
 
-    @Transactional
     @Override
     public List<ShowNewsDto> notReadNewslist(Long memberId, Long teamId) {
         Member member = memberService.findById(memberId);
@@ -182,7 +179,6 @@ public class NewsServiceImpl implements NewsService {
         return notReadNewsDtos;
     }
 
-    @Transactional
     @Override
     public List<ShowNewsDto> findNewsByMember(Long memberId, Long teamId) {
         Member member = memberService.findById(memberId);

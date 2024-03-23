@@ -27,6 +27,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@Transactional(readOnly = true)
 public class NewsCheckServiceImpl implements NewsCheckService {
 
     private final NewsCheckRepository newsCheckRepository;
@@ -34,7 +35,6 @@ public class NewsCheckServiceImpl implements NewsCheckService {
     private final NewsService newsService;
     private final MemberTeamService memberTeamService;
 
-    @Transactional
     @Override
     public NewsCheckDto readNews(Long memberId, Long newsId) {
         Member member = memberService.findById(memberId);
@@ -55,7 +55,6 @@ public class NewsCheckServiceImpl implements NewsCheckService {
                 .build();
     }
 
-    @Transactional
     @Override
     public List<NewsCheckDto> findByNews(Long memberId, Long newsId) {
         Member member = memberService.findById(memberId);
