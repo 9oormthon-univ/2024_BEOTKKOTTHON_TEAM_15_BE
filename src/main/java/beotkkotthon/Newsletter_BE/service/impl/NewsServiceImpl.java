@@ -116,23 +116,18 @@ public class NewsServiceImpl implements NewsService {
     //가입한 팀의 모든공지, ?teamId=1 팀별 공지 목록 조회
     @Transactional
     @Override
-    public List<News> findAllNewsByMemberTeam(Long memberId, Long teamId) {
+    public List<News> findAllNewsByMemberTeam(Long memberId) {
         Member member = memberService.findById(memberId);
         List<MemberTeam> memberTeamList = memberTeamRepository.findAllByMember(member);
 
-        if (teamId != null) {
-            Team team = teamService.findById(teamId);
-            return team.getNewsList();
-        } else {
-            List<News> allNews = memberTeamList.stream()
-                    .flatMap(memberTeam -> {
-                        Team team = memberTeam.getTeam();
-                        Hibernate.initialize(team.getNewsList());
-                        return team.getNewsList().stream();
-                    })
-                    .collect(Collectors.toList());
-            return allNews;
-        }
+        List<News> allNews = memberTeamList.stream()
+                .flatMap(memberTeam -> {
+                    Team team = memberTeam.getTeam();
+                    Hibernate.initialize(team.getNewsList());
+                    return team.getNewsList().stream();
+                })
+                .collect(Collectors.toList());
+        return allNews;
     }
 
     @Transactional
