@@ -68,21 +68,22 @@ public class NotificationServiceImpl implements NotificationService {
     // @Transactional
     @Override
     public void sendNotification(NotificationDto notificationDto) throws ExecutionException, InterruptedException {
-        Message message = Message.builder()
-                .setWebpushConfig(WebpushConfig.builder()
-                        .setNotification(WebpushNotification.builder()
-                                .setTitle(notificationDto.getTitle())
-                                .setBody(notificationDto.getMessage())
-                                .setImage(notificationDto.getImage())
-                                .build())
-                        .build())
-                .setToken(notificationDto.getToken())  // 수신할 기기의 토큰을 설정
-                .build();
 
         // 로그인사용자가 계정에 알림설정을 꺼두었다면, 알림 전달 막기. (= 알림설정 켜둔경우에만 알림 응답 가능.)
         Member member = memberRepository.findById(SecurityUtil.getCurrentMemberId())
                 .orElseThrow(() -> new GeneralException(ErrorStatus.MEMBER_NOT_FOUND));
+
         if(member.getNoticeStatus().equals(NoticeStatus.ALLOW)) {
+            Message message = Message.builder()
+                    .setWebpushConfig(WebpushConfig.builder()
+                            .setNotification(WebpushNotification.builder()
+                                    .setTitle(notificationDto.getTitle())
+                                    .setBody(notificationDto.getMessage())
+                                    .setImage(notificationDto.getImage())
+                                    .build())
+                            .build())
+                    .setToken(notificationDto.getToken())  // 수신할 기기의 토큰을 설정
+                    .build();
             String response = FirebaseMessaging.getInstance().sendAsync(message).get();
             log.info("Send 성공 : " + response);
         }
