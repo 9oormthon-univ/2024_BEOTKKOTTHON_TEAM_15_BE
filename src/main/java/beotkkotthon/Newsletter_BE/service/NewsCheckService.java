@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface NewsCheckService {
 
-    void readNews(Long memberId, Long newsId);
+    NewsCheckDto readNews(Long memberId, Long newsId);
 
     List<NewsCheck> findByMember(Long memberId);
 

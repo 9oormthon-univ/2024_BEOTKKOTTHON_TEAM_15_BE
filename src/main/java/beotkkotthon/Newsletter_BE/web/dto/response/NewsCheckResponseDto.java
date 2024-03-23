@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 public class NewsCheckResponseDto {
 
     private CheckStatus checkStatus;
@@ -18,7 +20,7 @@ public class NewsCheckResponseDto {
     public static class NewsCheckDto {
         Long newsId;
         CheckStatus checkStatus;
-        Long checkTime;
+        LocalDateTime checkTime;
         String username;
     }
 }

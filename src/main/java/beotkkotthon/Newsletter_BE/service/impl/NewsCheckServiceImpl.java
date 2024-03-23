@@ -8,12 +8,15 @@ import beotkkotthon.Newsletter_BE.domain.Team;
 import beotkkotthon.Newsletter_BE.domain.enums.CheckStatus;
 import beotkkotthon.Newsletter_BE.repository.NewsCheckRepository;
 import beotkkotthon.Newsletter_BE.service.*;
+import beotkkotthon.Newsletter_BE.web.dto.response.NewsCheckResponseDto;
 import beotkkotthon.Newsletter_BE.web.dto.response.NewsCheckResponseDto.NewsCheckDto;
+import beotkkotthon.Newsletter_BE.web.dto.response.NewsResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -29,7 +32,7 @@ public class NewsCheckServiceImpl implements NewsCheckService {
 
     @Transactional
     @Override
-    public void readNews(Long memberId, Long newsId) {
+    public NewsCheckDto readNews(Long memberId, Long newsId) {
         Member member = memberService.findById(memberId);
         News news = newsService.findById(newsId);
 
@@ -40,6 +43,12 @@ public class NewsCheckServiceImpl implements NewsCheckService {
             newNewsCheck.updateStatus(CheckStatus.READ);
             newsCheckRepository.save(newNewsCheck);
         }
+        return NewsCheckResponseDto.NewsCheckDto.builder()
+                .checkStatus(newsCheck.get().getCheckStatus())
+                .username(member.getUsername())
+                .newsId(newsId)
+                .checkTime(LocalDateTime.now())
+                .build();
     }
 
     @Override
