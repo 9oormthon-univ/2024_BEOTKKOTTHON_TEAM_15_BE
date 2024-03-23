@@ -26,7 +26,6 @@ public class NewsResponseDto {
     private String imageUrl2;
     int readMemberCount;
     int notReadMemberCount;
-    CheckStatus checkStatus;
     private LocalDateTime createdTime;
     private LocalDateTime modifiedTime;
 
@@ -42,7 +41,6 @@ public class NewsResponseDto {
         this.imageUrl2 = entity.getImageUrl2();
         this.readMemberCount = 0;
         this.notReadMemberCount = entity.getTeam().getTeamSize();
-        this.checkStatus = CheckStatus.NOT_READ;
         this.createdTime = entity.getCreatedTime();
         this.modifiedTime = entity.getModifiedTime();
     }
@@ -63,7 +61,6 @@ public class NewsResponseDto {
         String imageUrl2;
         int readMemberCount;
         int notReadMemberCount;
-        CheckStatus checkStatus;
     }
 
     @Builder

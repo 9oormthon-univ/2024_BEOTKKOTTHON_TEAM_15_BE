@@ -25,7 +25,6 @@ public class NewsConverter {
                 .limitTime(news.getLimitTime())
                 .readMemberCount(0)
                 .notReadMemberCount(news.getTeam().getTeamSize())
-                .checkStatus(CheckStatus.NOT_READ)
                 .build();
     }
 

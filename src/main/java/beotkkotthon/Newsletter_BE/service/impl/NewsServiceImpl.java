@@ -12,6 +12,7 @@ import beotkkotthon.Newsletter_BE.domain.mapping.MemberTeam;
 import beotkkotthon.Newsletter_BE.payload.exception.GeneralException;
 import beotkkotthon.Newsletter_BE.payload.status.ErrorStatus;
 
+import beotkkotthon.Newsletter_BE.repository.MemberTeamRepository;
 import beotkkotthon.Newsletter_BE.repository.NewsCheckRepository;
 import beotkkotthon.Newsletter_BE.repository.NewsRepository;
 import beotkkotthon.Newsletter_BE.service.*;
@@ -43,7 +44,7 @@ public class NewsServiceImpl implements NewsService {
     private final NewsCheckRepository newsCheckRepository;
     private final MemberTeamService memberTeamService;
     private final NotificationService notificationService;
-
+    private final MemberTeamRepository memberTeamRepository;
 
     @Override
     public News findById(Long newsId) {
@@ -113,6 +114,8 @@ public class NewsServiceImpl implements NewsService {
     @Override
     public List<News> findAllNewsByMemberTeam(Long memberId, Long teamId) {
         Member member = memberService.findById(memberId);
+        List<MemberTeam> memberTeamList = memberTeamRepository.findAllByMember(member);
+        List<News> newsList = new ArrayList<>();
 
         if (teamId != null) {
             Team team = teamService.findById(teamId);
@@ -122,11 +125,10 @@ public class NewsServiceImpl implements NewsService {
                 throw new GeneralException(ErrorStatus.MEMBERTEAM_NOT_FOUND);
             }
         } else {
-            List<News> allNews = new ArrayList<>();
-            for (MemberTeam memberTeam : member.getMemberTeamList()) {
-                Team team = memberTeam.getTeam();
-                allNews.addAll(team.getNewsList());
-            }
+            List<News> allNews = memberTeamList.stream()
+                    .map(MemberTeam::getTeam)
+                    .flatMap(team -> team.getNewsList().stream())
+                    .collect(Collectors.toList());
             return allNews;
         }
     }
@@ -151,7 +153,6 @@ public class NewsServiceImpl implements NewsService {
                 .limitTime(news.getLimitTime())
                 .readMemberCount(count)
                 .notReadMemberCount(team.getTeamSize() - count)
-                .checkStatus(newsCheck.get().getCheckStatus())
                 .build();
     }
 
