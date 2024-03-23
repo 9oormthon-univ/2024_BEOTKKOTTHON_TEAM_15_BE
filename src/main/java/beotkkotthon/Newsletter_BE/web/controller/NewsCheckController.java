@@ -26,7 +26,7 @@ public class NewsCheckController {
 
     private final NewsCheckService newsCheckService;
     @GetMapping("news/{newsId}")
-    @Operation(summary = "가정통신문 조회 후 확인 버튼")
+    @Operation(summary = "가정통신문 조회 후 확인 버튼 [jwt O]")
     @Parameters({
             @Parameter(name = "newsId", description = "가정통신문의 아이디, path variable 입니다.")
     })
