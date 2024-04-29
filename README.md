@@ -225,6 +225,7 @@
 - `main` : 실제 배포 CI/CD용 branch
 - `develop` : 개발 CI/CD용 branch
 - `feature` : 기능 구현용 branch
+- `Issue_종류/Issue_번호` : branch 생성
 
 ### Git Issue
 | 종류        | 내용                                                                             |
@@ -239,7 +240,7 @@
 ### Git Commit Message
 - Pull Request만 날리고, 중요 Approve는 reviewer가 한다.
 ```
-[Issue_종류] 구현_내용 #이슈_번호
+[Issue_종류] 구현_내용 #Issue_번호
 ```
 
 ### BE Package Convention
