@@ -40,6 +40,11 @@
 <br>
 
 
+## 💻 Architecture
+![newsletter_architecture drawio](https://github.com/9oormthon-univ/2024_BEOTKKOTTHON_TEAM_15_BE/assets/56509933/778e092e-b088-4332-a6f9-6048e5b53719)
+<br><br>
+
+
 ## 💡 Tech Stack
 |Frontend|Backend|Deployment|Other|
 |:------:|:------:|:------:|:------:|
